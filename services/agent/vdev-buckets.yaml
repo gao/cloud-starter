@@ -1,0 +1,139 @@
+buckets:
+  src: # video src bucket (the bucket from jagadish with all of the video)
+    bucketName: jagadish-aug2017-ml
+    projectId: jagadish-aug2017
+    client_email: 'cstar-001@jagadish-aug2017.iam.gserviceaccount.com'
+    private_key: |
+      -----BEGIN PRIVATE KEY-----
+      MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDFak8RNqR1aUk1
+      TTzeiQ+eWaZQsAjO6Hd36o4MRTaCYLNljtKuKB/Qj4B7JNsC6T2tqjy/QpRsRy0M
+      PLoRfPQfpRbVG3/Dtl1u9fkDq59KG2JofpUJMimrG3lkag9gG/9PiTSo/sqwy/Ue
+      OqnSZnfRGNQ5foXhrvUehsRAI9e6ctc67owAntkumCWLsjnf4xRrOR64YlCqZQzd
+      et+uW5yJXNICIHDMGjDZS/XLAgUboUl+T/bqqWWNv2q0M1BcUy9ng6CAr5sYR+RT
+      BndM1W/Svn5uaUR/llqZq7bF5syb9eFf2+ahtY809SBQLyz54PHGiOklT9rnNwjP
+      zKsQXt+JAgMBAAECggEACavxZze822a22DZqQMHIwtqECChzqgVgEv8qCeZbKwyH
+      RXa3kiIzmtFo+z99PlmEdM1mD/24TUy4Y4TXHdO4FxPMuFCSVBmLXswMsNYX5fbM
+      /a8T6KEtQu2D5zw9+BivC6u+aXggIITBg8NefgkYniUgApgVAY9DgYUbOMQ4xbDU
+      EeheWsmBiYpZE+jjYZIGq4MUpNSUSUQnyYXYSnuBEjp74VCmrKTbTkzjsCqIsW3y
+      BdyvefOJD8G57u/YCiVdVt7TsK702e5a3OjpaWUXcsls58xbqwlkdkvfw+JVWSNT
+      Fb6GqS3czPSpFPXMNH8JNaiU/z+TRbdoW7A2fwj94QKBgQDvX7FLpLsbFppVhQWY
+      ymjaXbywC/H+rK9SS456//eEir601hUvejbIHtcePxG0WSKllfvQ/Oq4M32qgjN9
+      ZVq6QekwxnVp0fGf21iHN8/B6+YyWUwMgI2598UnnLOv57NoGtptk8YO8N2JE1YV
+      s94/X904q8FYQUFLmWb/fvv68QKBgQDTII0kXEyk6iJ63xwmvPtu+MunWa3N7VRf
+      H3oxG7hYrb6yILMXmLAgGYqW/8B8xlnEl9eoxzac+/Nb4RbE1UBgjqg0kLwnMpY6
+      o6tww+oVpJj5e2jOt+NLAUX5SKVo2cKGlE96eSdLk9jrFhuYIxasXaM+ylHQBmbL
+      GSE5sM0+GQKBgD3QnFxIYfkQ0TIcc+GNA57AbiWYMBnwRiYeVOD2kNita6oPTtE/
+      4j2zmSG6b7v++K+CF9FUPtjqkx0hGmLbdZ57vthVp6R4DsmVPztL8l7FqGCAJt9j
+      ozXPAh7EnLJkRzQvGxEJBDB/ivYHBEf+dvouq1YjJH7B+zammq6IAFJBAoGBAL+M
+      1QGcTF2Dn+zi5+OtqmGwkPUwxCQFo3r6UB6mC8dJO67ZRCOwgHtfMQJ23+lU/LUF
+      HsEenUoovU8rFUFYSaRRSgMHHe5iUzK4tB8HYSZpw/D2Ks0CwdGXQik94/URPRBl
+      FwcDTMehSDliQX7ytuuDuUyKu1eFt1WlYyO4aT5hAoGACoLG41pz5W8UM7QfgLVc
+      oLZTNLnCAQ5FF0UqPfi9/Tbj0k3V6nq1sojlav0XzR/xEetHLXQPIF61TuJ14YSD
+      qE1rcGtAhthVIZv+7/zy8TZV6IA1yGhM3FyBYDnOXaSIMT6ErMvZpOXfqzEKXr/N
+      monOshc8M4AM5pSezo35QOE=
+      -----END PRIVATE KEY-----
+
+  dev: # the main dev bucket
+    bucketName: cstar-dev-media-store-base
+    projectId: viva-dev
+    client_email: cstar-01@viva-dev.iam.gserviceaccount.com
+    private_key: |
+      -----BEGIN PRIVATE KEY-----
+      MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCsFZ/3dGVuA5F7
+      e0XCsiFdTrVDR4H3l9tqlfC553Zx71Tu/2XWb8CE/JAqJIAB/VMB5MMBTEy0Mzaz
+      zKNVq/wDLcMZ212laFw2Wk62e12s+TmfZuNHL+Ez64H9/W6uLhE7vd071h/xflX1
+      Dm1eqjsCVL5neLyooL4Jp8MgS2JIxuLMeCk840kJOZ4Vwar+FY8eoe3fc59KRiZ8
+      Ys/OK8Dtpue0IvBlYs6ejB+NDP0CJTgjBRprC/OUW82oo42LwgcssEQ4hDye7T4M
+      IhEFn3ZVRSUlQ1UQsDEASDYgDeD+exeaJKXB+wpHAgJhccIWbY4dP0fchqoKOAnP
+      0V1j8tKDAgMBAAECgf9wTPoBSWddDp3Y/M2NcnMe8tF8jc4cfFkOkTBCaxfb5SHF
+      EQ6lnlKN2+FPByJTw6h0d2AEVnb84eWowpIMo5LN8OWl0HZBn4gzSYRoFEGiN7gk
+      4Xdd4/H9DJTGdKbon6bqDut0B4/T//J9f+BcaF8c89qESJIO4b7IWCoxMYSIWu7X
+      aeZqQvWeBnTqQaxkji9OYsWwhhZcz0rDexWHbsMgAfoxG+4/V0UsRqxh1Ppsi/A+
+      nacN/G1z6v4OUaWk3bse5WL1gv1WXTdaPDcZ5rTjV4pJhK+nhM5sh/QyBgHUBQHP
+      9jeUbmhzI4s7sqCsioH+zrn/rOZk+4micgN9sU0CgYEA1dFViqJyXGbhxo3MRi9h
+      h+exb6ByxLHnTP9RDY3cDBMMSzuTWEq37KEUg9S4iYAI9hxZqXnjyAdcmO8n35Mw
+      T8RReoCh56/e9LPlNMxttSSIZCfOunDHN5Ykj7kQUfJ556msamMwey5I0zR6xpCx
+      /0obf/ckEWSw03cUvwOAWA0CgYEAzgiXkJI77V33vkp8yC4dUy5FpSBRrZwCP4aY
+      C32GwKFQh8Wi1z7z8qz4h2iOreD1aEg368DWjOmYBQEGjocEMrTEFxhus7ShjalE
+      dAIvS57BHW2cfoYvhG/IPkJxHVI/44PBwrQM6PomQbCM02IyDpHeoEKnKLx94a3F
+      rpBSIM8CgYEArXGTvFOuBPqH5vKbY8uHiCEQNAapUpklkbYCX8ZVW44QCO8YxSRH
+      MjIwXAgwcYlku4+fw/RWK6qdGInXhGr3Y51Sota5fyGQ8FsFcODrlWc/JE+OSHq3
+      f4XRvqxWasMQ1DU04U/4wdN3y6vkdDJn0TiiOhmWLm3JaqBMOe5zK/kCgYEAxu9W
+      4PnBsUSNBIjJiUO1fu5rwq+9DcNYDFx6DIYsiWx45E+5FtorE8NdyOj08wEGE6W/
+      kPvGbZLS/OnrmczWCduuhppJsWyUnMK2XMkLP5nO3wpKE4Se9uIz16GxtF0JYTWD
+      7eqJmJ6IN98vap8itBy2d8lDu7qcVT7DY/Tnx9MCgYEAvFXU1oLi3jfWLemGx5rz
+      92Xk1i/moSUNoLtg1oW5V7XWZpDkmu1uNnWAUmBDmXgD7eARjOEiJANSZ1eN1fV1
+      /xY620QMpxe/s1lqGxr79+VKlG3AyVgmL3qSVBMpIjagf7GJTRV483g7Kc0bRht3
+      gXxi3qMbYSW8VFZdkouzh9Q=
+      -----END PRIVATE KEY-----
+
+
+
+  sample-src: # the sample jc source
+    bucketName: cstar-jc-dev
+    projectId: jc-gcloud-01-test
+    client_email: dev-001@jc-gcloud-01-test.iam.gserviceaccount.com
+    private_key: |
+      -----BEGIN PRIVATE KEY-----
+      MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDSV6YorErK4XwZ
+      LHPCGTYCSQ7U7zMoiV0IrZAA17/A/OimuiGrKqsKmMa3+fRkZ6n9uJTZfMcW0ji/
+      i0iPZhNZO5QLcUE3gCGc3TaqLOI21NUnTqgp6EEp8B1guSLWv3lsps8ULzJCYrEO
+      3n14oUQXgaSpF+p7FZ+rMHPuLiCLiEeimAuprLQehWs7ibm7zAXS54D5jIO1ZG1v
+      zF41IOjTRg+9vcNP6b8VBgYqWUhecNESFggA2TQt4xM6L8/IN9QXP8GehFoMkSJj
+      gqTRmYuC5B4urUsJ9BUDTPkK/HftNonrETuBpsiArYO6QcY3GsE5mjeV4s1DUX+Z
+      RerkhrUzAgMBAAECggEAGagrUmbBsMGUW5W6gQCGP/0dXAfZW6Z1vKs/F3s5npa6
+      4ituE+zedCpygtpwXxbt+07aiTTZLAV0epjIvwUacxX7VvH3nId6kiHBmzxiU4He
+      hi7oAESePjlVvAiZIUy1yPUH6VRgcwyKwF+POnmhTqS3qxCJv33BviXo3jKuMZaz
+      U+Vfof4N3nhH7GOt5STlGQpcUf/JI4VT6vzIdPqzH30SrMmKE0gAtjdS/wCy7SfJ
+      5oGU4b6o7bL1nPaN6bxTvXauAToJz7s9k7MEQ2dE30f14ThNQzDFuq99EP8PLR9s
+      yxCLff9IPVT462CX5o25Q4b1ToLphQFgMh3D+RLcUQKBgQDu1WDA9acISvIJgI0W
+      gj75pEsi2kOKqS9+TiQffZLBOcSB2wzejHRkvlMTPkGBsZP006J+Xgv2ET0xIHKN
+      C109hmdviWicqEsWADTTvptVceb/bp5IKv7r7QYyyWMR51k8suqjP6/+ajtJdlHc
+      2lLCRnQrfbbGfqjfXbUzPFxb7wKBgQDhdgYumz7e2yDqUssejhGu7iG8dBTNIgg/
+      HgxOSc3Qri/zqY2jun07I+hj5Hsd6dBF6eysDSLacREfJAuxBOZ0Lb/OqKx0gyzV
+      6r8ebkbEz9NCc4PyjhBZ+Rh5xHIA4p5ovotz3GxPWhstowACwLVMumUbnGyV+3SE
+      MibHcyvG/QKBgQCpUNJH2Z8xzNfsDpt3MpzspCG0MqIhYjHOTB1lycNJgueh26Yy
+      +8XkSd1hTghopniq34JaLdgy+SO1eThcb4sJfAhGVVa5gMHCdiD9YCqFF7vYqBZE
+      OV8B6MY1KPo4DhgAZSLc2uCs76jaOqxscsaq/gGLd5MlA1Q7DhbQnOEpNwKBgEhb
+      oYZJqrbJKtopMikfPUuf/1HFC3v+RRlEonxpsVUc4iTYMK3wRwq47ndIt76U8JPP
+      jHZ3TM1AZldRMTNhuDhnClzfw2EtTDFnQmkYyTuW211DR4CL2XGWwSUrR89C68YA
+      CS9o+ZXJ/Fj8LB+2CzmRxKtE25CTAAUBN3LhYpZdAoGAf4qN5iPUnKNWOCKT3rQu
+      tvQkTqErIe+u2QisaeefAE//AdqZOXFoGQP+hEHcguK/dQ6xrMfeBx9ee88g1f4F
+      pMQ9fqCy3gCqXkBa4bUIWyx6obtgpNPqlo9TyjStlWAkW4CvGmJ5oB35cE0Y5Ikz
+      Rd3L8epOke8gtBgDQ3X+VmE=
+      -----END PRIVATE KEY-----
+      
+
+  store: # store bucket
+    bucketName: cstar-dev-media-store-base
+    projectId: viva-dev
+    client_email: cstar-01@viva-dev.iam.gserviceaccount.com
+    private_key: |
+      -----BEGIN PRIVATE KEY-----
+      MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCsFZ/3dGVuA5F7
+      e0XCsiFdTrVDR4H3l9tqlfC553Zx71Tu/2XWb8CE/JAqJIAB/VMB5MMBTEy0Mzaz
+      zKNVq/wDLcMZ212laFw2Wk62e12s+TmfZuNHL+Ez64H9/W6uLhE7vd071h/xflX1
+      Dm1eqjsCVL5neLyooL4Jp8MgS2JIxuLMeCk840kJOZ4Vwar+FY8eoe3fc59KRiZ8
+      Ys/OK8Dtpue0IvBlYs6ejB+NDP0CJTgjBRprC/OUW82oo42LwgcssEQ4hDye7T4M
+      IhEFn3ZVRSUlQ1UQsDEASDYgDeD+exeaJKXB+wpHAgJhccIWbY4dP0fchqoKOAnP
+      0V1j8tKDAgMBAAECgf9wTPoBSWddDp3Y/M2NcnMe8tF8jc4cfFkOkTBCaxfb5SHF
+      EQ6lnlKN2+FPByJTw6h0d2AEVnb84eWowpIMo5LN8OWl0HZBn4gzSYRoFEGiN7gk
+      4Xdd4/H9DJTGdKbon6bqDut0B4/T//J9f+BcaF8c89qESJIO4b7IWCoxMYSIWu7X
+      aeZqQvWeBnTqQaxkji9OYsWwhhZcz0rDexWHbsMgAfoxG+4/V0UsRqxh1Ppsi/A+
+      nacN/G1z6v4OUaWk3bse5WL1gv1WXTdaPDcZ5rTjV4pJhK+nhM5sh/QyBgHUBQHP
+      9jeUbmhzI4s7sqCsioH+zrn/rOZk+4micgN9sU0CgYEA1dFViqJyXGbhxo3MRi9h
+      h+exb6ByxLHnTP9RDY3cDBMMSzuTWEq37KEUg9S4iYAI9hxZqXnjyAdcmO8n35Mw
+      T8RReoCh56/e9LPlNMxttSSIZCfOunDHN5Ykj7kQUfJ556msamMwey5I0zR6xpCx
+      /0obf/ckEWSw03cUvwOAWA0CgYEAzgiXkJI77V33vkp8yC4dUy5FpSBRrZwCP4aY
+      C32GwKFQh8Wi1z7z8qz4h2iOreD1aEg368DWjOmYBQEGjocEMrTEFxhus7ShjalE
+      dAIvS57BHW2cfoYvhG/IPkJxHVI/44PBwrQM6PomQbCM02IyDpHeoEKnKLx94a3F
+      rpBSIM8CgYEArXGTvFOuBPqH5vKbY8uHiCEQNAapUpklkbYCX8ZVW44QCO8YxSRH
+      MjIwXAgwcYlku4+fw/RWK6qdGInXhGr3Y51Sota5fyGQ8FsFcODrlWc/JE+OSHq3
+      f4XRvqxWasMQ1DU04U/4wdN3y6vkdDJn0TiiOhmWLm3JaqBMOe5zK/kCgYEAxu9W
+      4PnBsUSNBIjJiUO1fu5rwq+9DcNYDFx6DIYsiWx45E+5FtorE8NdyOj08wEGE6W/
+      kPvGbZLS/OnrmczWCduuhppJsWyUnMK2XMkLP5nO3wpKE4Se9uIz16GxtF0JYTWD
+      7eqJmJ6IN98vap8itBy2d8lDu7qcVT7DY/Tnx9MCgYEAvFXU1oLi3jfWLemGx5rz
+      92Xk1i/moSUNoLtg1oW5V7XWZpDkmu1uNnWAUmBDmXgD7eARjOEiJANSZ1eN1fV1
+      /xY620QMpxe/s1lqGxr79+VKlG3AyVgmL3qSVBMpIjagf7GJTRV483g7Kc0bRht3
+      gXxi3qMbYSW8VFZdkouzh9Q=
+      -----END PRIVATE KEY-----

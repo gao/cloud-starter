@@ -1,0 +1,1 @@
+INSERT INTO "user" (id, username, pwd) VALUES (1, 'admin', 'welcome');

@@ -1,0 +1,51 @@
+@import "utils.pcss";
+
+.card{
+	@mixin elev-1{};
+	background: #fff;
+	display: grid;
+	grid-template-rows: auto 1fr auto;
+
+	header{
+		@mixin typo-h6{}; /* This is for inline header, when no h5/h6 */
+		padding: 1rem;
+		h5{
+			@mixin typo-h6{};
+		}
+
+		h6{
+			@mixin typo-sub1{};
+			color: rgba(0, 0, 0, .54);
+		}		
+	}
+
+	section.content{
+		@mixin typo-body1{};
+		padding: 0 1rem 8px 1rem;
+		color: rgba(0, 0, 0, .54);
+	}
+
+	footer{
+		min-height:  3rem;
+		display: flex;
+		align-items: center;
+		padding: 0 1rem;
+
+		&.split-2{
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+
+			& > div:nth-child(2){
+				display: flex;
+				justify-content: flex-end;
+				& > *{
+					margin-left: 1rem;
+				}				
+			}
+
+		}
+	}
+
+}
+
+

@@ -1,0 +1,32 @@
+.DemoButtonsView{
+	flex: 1;
+	padding: 2rem;
+	display: grid;
+	grid-gap: 2rem;
+	grid-template-columns: repeat(1, minmax(1fr, 20rem));
+
+
+	.card {
+		section.content{
+			display: grid;
+			grid-gap: 2rem;
+			grid-template-columns: 1fr 1fr;
+			grid-template-rows: repeat(auto-fill, minmax(4rem, 1fr));
+			/* display: flex;
+			flex-direction: column; */
+
+			& > h6{
+				display: flex;
+				align-items: flex-end;
+				justify-content: left;
+				padding: 1rem;
+				border-bottom: solid 1px #ddd;
+			}
+			& > div{
+				padding: 1rem 0;
+			}
+		}
+	}
+	
+
+}

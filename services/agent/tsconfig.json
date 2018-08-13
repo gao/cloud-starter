@@ -1,0 +1,47 @@
+{
+	"compilerOptions": {
+		// for node.js 8.4+, we can output to 2017 (Allow to have native async/await and all)
+		"target": "esNext",
+
+		// node.js does not support es2015, so, we tell typescript to output commonjs (we do not use rollup for server, just ts-node)
+		"module": "commonjs",
+		
+		// same as browser code, .js will be used 1% for gluing things together, no need to type it. 
+		"allowJs": false,
+		"checkJs": false,
+
+		"sourceMap": false,  // we do not need the sourcemap for server
+
+		// Since we are using ts-node, this is used only to check the js output when we do a "tsc", but won't be used for running code. 
+		"outDir": "~out/",  /* Redirect output structure to the directory. */
+
+		// This point to the "../" so that we can include common/
+		"rootDir": "../",  
+
+		// strict is the best way to extract the most value from TypeScript
+		"strict": true,
+
+		// same as with browser, need to use 3rd party modules
+		"moduleResolution": "node",
+
+		// TODO: need to add the baseURL (check if it works with VSCode, meaning, that vscode use this tsconfig and not the root config)
+		"baseUrl": "./src/",  /* Base directory to resolve non-absolute module names. */
+		"paths": {
+			"common/*": ["../../common/ts/*"]
+		}
+	},
+
+	// We want more control about which code we will compile and exclude
+	"include": [
+		"./src/**/*.ts", // we take all of the server code
+		"../common/**/*.ts" // plus the common/ code
+	],
+
+	// Excluding 
+	"exclude": [
+		"node_modules",
+		"queue",
+		"client", // we exclude the client code
+		".rpt2_cache" // this folder will be created by the rollup-typescript2, so, need to exlude it, can become confusing.
+	]
+}

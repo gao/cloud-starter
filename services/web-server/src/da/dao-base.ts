@@ -1,0 +1,63 @@
+import { getKnex } from './db';
+import { Dao } from './dao';
+import { Context } from '../context';
+import { Monitor } from '../perf';
+
+// Note: for now, the knex can take a generic I for where value
+// @annoC
+export class BaseDao<E, I> implements Dao<E, I> {
+	tableName: string;
+
+	constructor(tableName: string) {
+		this.tableName = tableName;
+	}
+
+	@Monitor()
+	async get(ctx: Context, id: number): Promise<E> {
+		const k = await getKnex();
+		const r = await k(this.tableName).where('id', id);
+		if (r.length === 0) {
+			throw new Error(`dao.get error, can't find ${this.tableName}[${id}]`);
+		}
+		return r[0] as E;
+	}
+
+	@Monitor()
+	async first(ctx: Context, data: Partial<E>): Promise<E> {
+		const k = await getKnex();
+		const r = await k(this.tableName).where(data);
+		if (r.length === 0) {
+			throw new Error(`dao.get error, can't find ${this.tableName}[${data}]`);
+		}
+		return r[0] as E;
+	}
+
+	@Monitor()
+	async create(ctx: Context, data: Partial<E>): Promise<I> {
+		const k = await getKnex();
+		const r = await k(this.tableName).insert(data).returning('id');
+		return r[0] as I;
+	}
+
+	@Monitor()
+	async update(ctx: Context, id: number, data: Partial<E>) {
+		const k = await getKnex();
+		const r = await k(this.tableName).update(data).where('id', id);
+		return r;
+	}
+
+	@Monitor()
+	async list(ctx: Context): Promise<E[]> {
+		const k = await getKnex();
+		const entities = await k(this.tableName);
+		return entities as E[];
+	}
+
+	@Monitor()
+	async remove(ctx: Context, id: number) {
+		const k = await getKnex();
+		return k(this.tableName).delete().where('id', id);
+	}
+
+}
+

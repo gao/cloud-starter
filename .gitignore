@@ -1,0 +1,37 @@
+# Ignore mac info files
+.DS_Store
+
+# Ignore .vscode
+.vscode/
+
+# ignore node things
+node_modules/
+npm-debug.log
+
+# Ignore gke-prod
+k8s/gke-prod
+
+# Ignore package-lock.json 
+# (this is debatable, but package-lock.json could pause more issues than anything else in certain scenarios)
+package-lock.json
+
+# rollup typescript error
+.rpt2_cache/
+
+# prevent all root folders and filenames starting with "~". By convension, they are local folders only
+# used for personal notes, data store, output dir, ...
+~*
+
+# prevent compiled css and js files
+services/web-server/web-folder/js/*.js
+services/web-server/web-folder/css/*.css
+services/web-server/web-folder/test/*.js
+services/web-server/web-folder/test/*.css
+
+# prevent the .map
+*.map
+
+
+
+# We ignore all dist folder
+dist/
