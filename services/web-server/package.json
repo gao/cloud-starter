@@ -17,7 +17,7 @@
   "dependencies": {
     "@types/cookie-parser": "^1.4.1",
     "@types/express": "^4.16.0",
-    "@types/knex": "^0.14.20",
+    "@types/knex": "^0.14.21",
     "@types/mocha": "^5.2.5",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
@@ -27,7 +27,7 @@
     "mocha": "^5.2.0",
     "node-simple-timer": "^0.1.1",
     "pg": "^7.4.3",
-    "ts-node": "^7.0.0",
+    "ts-node": "^7.0.1",
     "typescript": "^3.0.1"
   }
 }

@@ -1,0 +1,23 @@
+@import "mixins-all.pcss";
+
+
+ul, li{
+	margin: 0;
+	padding: 0;
+}
+
+ul{
+	li, a{
+		@mixin typo-label{};
+	}
+	li{
+		list-style: none;
+	}
+
+	a{
+		cursor: pointer;
+		&:hover{
+			background: var(--bkg-sel);
+		}
+	}
+}

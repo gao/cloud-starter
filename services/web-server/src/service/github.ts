@@ -23,8 +23,8 @@ export async function getUserInfo(access_token: string) {
 export async function getUserRepos(ctx: Context) {
 	const username = ctx.username; // TODO: we will need to get the github username (for now the same)
 	const access_token = await ctx.getAccessToken();
-
-	const result = await axios.get(apiUrl + `users/${username}/repos`, { params: { access_token } });
+	const type = 'private';
+	const result = await axios.get(apiUrl + `user/repos`, { params: { access_token, type } });
 	return result.data;
 }
 
