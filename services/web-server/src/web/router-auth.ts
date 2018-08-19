@@ -4,14 +4,15 @@ import { newContext } from '../context';
 import { extname } from 'path';
 import { userDao } from '../da/daos';
 import { User } from '../da/entities';
+import { cookieNameUserId, cookieNameAuthToken, setAuth, createAuthToken } from '../auth';
 import * as crypto from 'crypto';
 
 
 const _router = srouter();
 
 _router.post('/api/logoff', async function (req, res, next) {
-	res.clearCookie('userId');
-	res.clearCookie('authToken');
+	res.clearCookie(cookieNameUserId);
+	res.clearCookie(cookieNameAuthToken);
 	return { success: true };
 });
 
@@ -25,9 +26,8 @@ _router.get('/api/login', async function (req, res, next) {
 	if (userInfo && userInfo.pwd === pwd) {
 		const userId = userInfo.id;
 		const username = userInfo.username;
-		const oneWeek = 7 * 24 * 3600 * 1000;
-		res.cookie('userId', `${userId}`, { maxAge: oneWeek });
-		res.cookie('authToken', await createAuthToken(userId, userInfo.username, userInfo.pwd!));
+		const pwd = userInfo.pwd!;
+		await setAuth(res, { username, userId, pwd });
 		return { success: true, username, userId };
 	} else {
 		return { success: false, uname, message: `Wrong credential for user ${uname}` };
@@ -55,7 +55,7 @@ _router.use(async function (req: Request, res: Response, next: NextFunction) {
 
 		try {
 			const user = await authRequest(req);
-			req.context = await newContext(user.id);
+			req.context = await newContext(user.id, user);
 			next();
 			return;
 		} catch (ex) {
@@ -110,13 +110,7 @@ async function authRequest(req: Request): Promise<User> {
 
 }
 
-async function createAuthToken(userId: number, username: string, pwd: string): Promise<string> {
-	const pepper = ' -- yeah sure';
-	const secret = 'halo-rocks';
-	const val = username + ' -- ' + pwd + pepper;
-	const hash = crypto.createHmac('sha256', secret).update(val).digest('hex');
-	return hash;
-}
+
 //#endregion ---------- /Utils ---------- 
 
 

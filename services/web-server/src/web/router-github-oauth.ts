@@ -1,0 +1,65 @@
+import { srouter } from '../express-utils';
+import axios from 'axios';
+import { userDao, oauthDao } from '../da/daos';
+import { newContext } from '../context';
+import { setAuth } from '../auth';
+import { getAccessToken, getUserInfo } from '../service/github';
+
+const _router = srouter();
+
+
+
+_router.get('/gh-callback', async function (req, res, next) {
+
+	// get the access token
+	const access_token = await getAccessToken(req.query.code);
+
+	//// get user information
+	const { login, email, name } = await getUserInfo(access_token);
+
+	//#region    ---------- Create/Update user/oauth as needed ---------- 
+	const ctx = await newContext();
+	const token = access_token!;
+	const username = login;
+
+	const user = await userDao.getByUsername(ctx, username);
+	const pwd = (user) ? user.pwd! : token;
+	let userId: number;
+
+	let msg = '';
+
+	// if we have a user, we update the oauth
+	if (user) {
+		userId = user.id;
+		let oauthId: number;
+		const oauth = await oauthDao.first(ctx, { userId });
+		if (oauth) {
+			oauthId = await oauthDao.update(ctx, oauth.id, { token });
+		} else {
+			oauthId = await oauthDao.create(ctx, { userId, token });
+		}
+		msg += `user already existing: ${userId} oauthId: ${oauthId}`;
+	}
+	// if no user, create the new user and oauth
+	else {
+		// if new user, then the password with the token
+		// TODO: for now this means that the first token will be the pwd until user changes it. 
+		//       We need to decide if we want to update the pwd on subsequent oauth
+		userId = await userDao.create(ctx, { username, pwd });
+		const oauthId = await oauthDao.create(ctx, { userId, token });
+		msg += `new user userId: ${userId} oauthId: ${oauthId}`;
+	}
+	//#endregion ---------- /Create/Update user/oauth as needed ---------- 
+
+	// TODO: needs to add auth cookie here
+
+	await setAuth(res, { username, userId, pwd });
+
+	res.redirect('/');
+	// TODO: needs to redirect to home
+
+	return { success: true, msg };
+});
+
+
+export const router = _router;

@@ -23,7 +23,7 @@ The key code structure is as follow:
 
 - **services/** base folder contain each service of the system as well as common resources. For example `services/web-server` is the node js web API and application service, and `services/agent` is the agent micro-service which manage some devops operations during deployment. 
 
-- **web/** is the base folder for the web ui source code. During build process the distribution files (e.g., `app-bundle.js`) will get written in the `services/web-server/webfolder/` directory.
+- **web/** is the base folder for the web ui source code. During build process the distribution files (e.g., `app-bundle.js`) will get written in the `services/web-server/web-folder/` directory.
 
 ## Key Tech Stack
 

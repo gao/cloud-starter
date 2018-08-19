@@ -19,6 +19,7 @@
     "@types/express": "^4.16.0",
     "@types/knex": "^0.14.20",
     "@types/mocha": "^5.2.5",
+    "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
     "express": "^4.16.3",

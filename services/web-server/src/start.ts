@@ -4,6 +4,8 @@ import * as cookieParser from 'cookie-parser';
 import { router as routerAPI } from './web/router-api';
 import { router as routerAuth } from './web/router-auth';
 import { router as routerCrud } from './web/router-crud';
+import { router as routerGithubOauth } from './web/router-github-oauth';
+import { router as routerGithubApi } from './web/router-github-api';
 import * as bodyParser from 'body-parser';
 
 
@@ -23,8 +25,14 @@ async function main() {
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded());
 
+	// mount the github oauth router
+	app.use(routerGithubOauth.expressRouter);
+
 	// mount the auth router
 	app.use(routerAuth.expressRouter);
+
+	// mount github APIs
+	app.use(routerGithubApi.expressRouter);
 
 	// mount the API router
 	app.use('/api/', routerAPI.expressRouter);

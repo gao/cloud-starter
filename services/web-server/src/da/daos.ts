@@ -1,5 +1,5 @@
 import { BaseDao } from './dao-base';
-import { Project, User } from './entities';
+import { Project, User, OAuth } from './entities';
 import { Context } from '../context';
 import { AccessRequires } from './access';
 
@@ -41,6 +41,12 @@ class ProjectDao extends BaseDao<Project, number>{
 }
 export const projectDao = new ProjectDao();
 
+class OAuthDao extends BaseDao<OAuth, number>{
+	constructor() {
+		super('oauth');
+	}
+}
+export const oauthDao = new OAuthDao();
 
 class FeatureDao extends BaseDao<Project, number>{
 	constructor() {

@@ -6,6 +6,12 @@ export interface User {
 	pwd?: string;
 }
 
+export interface OAuth {
+	id: number;
+	userId: number;
+	token?: string;
+}
+
 export interface Project {
 	id: number;
 	name: string;

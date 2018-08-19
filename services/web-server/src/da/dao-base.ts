@@ -23,11 +23,11 @@ export class BaseDao<E, I> implements Dao<E, I> {
 	}
 
 	@Monitor()
-	async first(ctx: Context, data: Partial<E>): Promise<E> {
+	async first(ctx: Context, data: Partial<E>): Promise<E | null> {
 		const k = await getKnex();
 		const r = await k(this.tableName).where(data);
 		if (r.length === 0) {
-			throw new Error(`dao.get error, can't find ${this.tableName}[${data}]`);
+			return null;
 		}
 		return r[0] as E;
 	}
