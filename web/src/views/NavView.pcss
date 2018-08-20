@@ -19,8 +19,12 @@
 		padding-left: 2rem;
 		align-items: center;
 		color: #fff;
+		margin-bottom: 1rem;
 
 		&.sel{
+			background: rgba(255,255,255,.1);
+		}
+		&:hover{
 			background: rgba(255,255,255,.1);
 		}
 	}
@@ -29,13 +33,15 @@
 		header{
 			display: grid;
 			grid-template-columns: auto 3rem;
-			margin-top: 1rem;
+			margin: 1rem 0 1rem 0;
 			padding-left: 2rem;
 			border-bottom: solid 1px var(--bdr-dark);
+
 			h3{
 				@mixin typo-label{};
 				color: var(--txt-lighter);
 			}
+			
 			small {
 				color: var(--txt-lightest);
 				display: flex;

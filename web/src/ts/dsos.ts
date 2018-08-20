@@ -33,8 +33,8 @@ class BaseDso {
 	async create(props: any): Promise<number> {
 		const result = await webPost(`/api/crud/${this._entityType}`, props);
 		const entity = result.data;
-		dsoHub.pub('Project', 'create', entity);
 		if (result.success) {
+			dsoHub.pub('Project', 'create', entity);
 			return entity;
 		} else {
 			throw result;

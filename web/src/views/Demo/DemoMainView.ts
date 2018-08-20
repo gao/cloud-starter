@@ -34,7 +34,7 @@ export class DemoMainView extends BaseView {
 			return;
 		}
 
-		const newPath = this.getNewPath(1, defaultPath);
+		const newPath = this.hasNewPathAt(1, defaultPath);
 
 		// update this view/content only if the path has changed
 		if (newPath != null) {

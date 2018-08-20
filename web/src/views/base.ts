@@ -39,19 +39,21 @@ export class BaseView implements View {
 	}
 
 	// current path
-	private currentPath?: string = undefined;
+	private currentPaths: { [pathIdx: string]: string } = {};
 
 	/** Returns the path at the index if it has changed from last called. */
-	getNewPath(idx: number, defaultPath: string) {
+	hasNewPathAt(idx: number, defaultPath: string) {
 
 		const path = pathAt(idx) || defaultPath;
 
-		if (path !== this.currentPath) {
-			this.currentPath = path;
+		const currentPath = this.currentPaths[idx];
+		if (path !== currentPath) {
+			this.currentPaths[idx] = path;
 			return path;
 		} else {
 			return null;
 		}
+
 	}
 }
 

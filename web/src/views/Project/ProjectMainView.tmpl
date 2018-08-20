@@ -1,16 +1,23 @@
 <script id="ProjectMainView" type="text/html">
 <div class="ProjectMainView screen" data-entity="Project">
+
 	<header>
-		<h1 class="dx dx-name">{{name}}</h1>		
+
 	</header>
-	<div class="tab-bar">
-		<a href="#project/{{id}}/dash" class="sel">Dashboard</a>
-		<a href="#project/{{id}}/tickets">Tickets</a>	
-	</div>	
+
 	<section class="content">
 		
 	</section>
+
 </div>
+</script>
+
+<script id="ProjectMainView-header" type="text/html">
+	<h1>{{name}}</h1>
+	<div class="tab-bar">
+		<a href="#project/{{id}}/dash">Dashboard</a>
+		<a href="#project/{{id}}/tickets">Tickets</a>	
+	</div>
 </script>
 
 

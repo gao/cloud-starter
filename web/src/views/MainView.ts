@@ -79,12 +79,13 @@ export class MainView extends BaseView {
 	}
 
 	private refresh() {
-		const newPath = this.getNewPath(0, defaultPath);
+		const newPath = this.hasNewPathAt(0, defaultPath);
 
 		// update this view/content only if the path has changed
 		if (newPath != null) {
 			const subViewClass = pathToView[newPath];
 			if (subViewClass) {
+				empty(this.main);
 				display(subViewClass, this.main, null, 'empty');
 			} else {
 				console.log(`ERROR - No view found for path ${newPath}`);

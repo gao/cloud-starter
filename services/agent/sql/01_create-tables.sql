@@ -14,9 +14,13 @@ CREATE TABLE oauth (
 );
 ALTER SEQUENCE oauth_id_seq RESTART WITH 1000;
 
+
 CREATE TABLE "project" (
   id serial PRIMARY KEY,
-  name varchar(64)
+  name varchar(64), 
+  "ghRepoId" bigint,
+  "ghRepoName" varchar(64),
+  "ghRepoFullName" varchar(128)
 );
 
 ALTER SEQUENCE project_id_seq RESTART WITH 1000;

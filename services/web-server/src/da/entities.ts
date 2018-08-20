@@ -15,6 +15,9 @@ export interface OAuth {
 export interface Project {
 	id: number;
 	name: string;
+	ghRepoId?: number;
+	ghRepoName?: string;
+	ghRepoFullName?: string;
 }
 
 export interface Feature {

@@ -2,7 +2,7 @@ import { addDomEvents } from 'views/base';
 import { DialogBase } from 'views/Dialog/DialogBase';
 import { render } from 'ts/render';
 import { first, all, append, frag } from 'mvdom';
-import { getRepos } from 'ts/gh-api';
+import { getRepos, importRepo } from 'ts/gh-api';
 
 
 export class ProjectAddDialog extends DialogBase {
@@ -31,10 +31,20 @@ export class ProjectAddDialog extends DialogBase {
 
 	//#endregion ---------- /View DOM Events ---------- 
 	events = addDomEvents(this.events, {
+
+		// click on tab
 		'click; .content .tab-bar a': (evt) => {
 			const selectEl = evt.selectTarget;
 			const m = selectEl.classList.contains('tab-custom') ? 'custom' : 'github';
 			this.mode = m;
+		},
+
+		// click on github project
+		'click; section.github ul a': async (evt) => {
+			const selectEl = evt.selectTarget;
+			const repoFullName = selectEl.getAttribute('data-gh-repo')!;
+			const repo = await importRepo(repoFullName);
+			console.log(`Repo created ${repoFullName}`, repo);
 		}
 	});
 
@@ -55,12 +65,13 @@ export class ProjectAddDialog extends DialogBase {
 		const max = 5;
 		let c = 0;
 		// sort by updated_at
-		repos = repos.sort((a, b) => {
-			return (a.pushed_at === b.pushed_at) ? 0 : (a.pushed_at > b.pushed_at) ? -1 : 1;
-		});
-
+		// repos = repos.sort((a, b) => {
+		// 	return (a.pushed_at === b.pushed_at) ? 0 : (a.pushed_at > b.pushed_at) ? -1 : 1;
+		// });
+		console.log(`repos ${repos.length}`);
 		for (const repo of repos) {
-			html += `<a>${repo.name}</a>`;
+
+			html += `<a data-gh-repo="${repo.full_name}">${repo.full_name}</a>`;
 		}
 		append(this.reposUl, frag(html), 'empty');
 	}

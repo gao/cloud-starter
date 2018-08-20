@@ -23,8 +23,30 @@ export async function getUserInfo(access_token: string) {
 export async function getUserRepos(ctx: Context) {
 	const username = ctx.username; // TODO: we will need to get the github username (for now the same)
 	const access_token = await ctx.getAccessToken();
-	const type = 'private';
-	const result = await axios.get(apiUrl + `user/repos`, { params: { access_token, type } });
+	const type = 'all';
+	const sort = 'pushed';
+	const data: any[] = [];
+	const per_page = 100;
+	let page = 1;
+	const pathQuery = `user/repos`;
+	while (page < 100) {
+		const result = await axios.get(apiUrl + pathQuery, { params: { access_token, type, sort, page, per_page } });
+		data.push(...result.data);
+		if (result.data.length < 100) {
+			break;
+		}
+		page++;
+	}
+
+	return data;
+}
+
+export async function getRepo(ctx: Context, repoFullName: string) {
+	const username = ctx.username; // TODO: we will need to get the github username (for now the same)
+	const access_token = await ctx.getAccessToken();
+
+
+	const result = await axios.get(apiUrl + `repos/${repoFullName}`, { params: { access_token } });
 	return result.data;
 }
 
