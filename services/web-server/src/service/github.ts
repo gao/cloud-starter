@@ -1,18 +1,13 @@
-
-
-
-import { srouter } from '../express-utils';
+/**
+ * Module exposing  the github data APIs. 
+ * Currently using the REST / V3 github API. 
+ */
 import axios from 'axios';
-import { userDao, oauthDao } from '../da/daos';
-import { newContext, Context } from '../context';
-import { setAuth } from '../auth';
-
-const _router = srouter();
+import { Context } from '../context';
 
 const client_id = 'd4731366d9ef5840db33';
 const client_secret = '018d748a41d2e9cf76d554b2bc8da8dc904419de';
 const apiUrl = 'https://api.github.com/';
-
 
 
 export async function getUserInfo(access_token: string) {
@@ -45,8 +40,17 @@ export async function getRepo(ctx: Context, repoFullName: string) {
 	const username = ctx.username; // TODO: we will need to get the github username (for now the same)
 	const access_token = await ctx.getAccessToken();
 
+	const url = apiUrl + `repos/${repoFullName}`;
+	const result = await axios.get(url, { params: { access_token } });
+	return result.data;
+}
 
-	const result = await axios.get(apiUrl + `repos/${repoFullName}`, { params: { access_token } });
+export async function getIssues(ctx: Context, repoFullName: string) {
+	const username = ctx.username; // TODO: we will need to get the github username (for now the same)
+	const access_token = await ctx.getAccessToken();
+
+	const url = apiUrl + `repos/${repoFullName}/issues`;
+	const result = await axios.get(url, { params: { access_token } });
 	return result.data;
 }
 

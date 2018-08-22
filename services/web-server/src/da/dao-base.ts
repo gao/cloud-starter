@@ -47,9 +47,13 @@ export class BaseDao<E, I> implements Dao<E, I> {
 	}
 
 	@Monitor()
-	async list(ctx: Context): Promise<E[]> {
+	async list(ctx: Context, matching?: Partial<E>): Promise<E[]> {
 		const k = await getKnex();
-		const entities = await k(this.tableName);
+		let q = k(this.tableName);
+		if (matching) {
+			q = q.where(matching);
+		}
+		const entities = await q.then(); // TODO: need to check if this is the common way
 		return entities as E[];
 	}
 

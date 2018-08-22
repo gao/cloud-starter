@@ -45,6 +45,7 @@ export class ProjectAddDialog extends DialogBase {
 			const repoFullName = selectEl.getAttribute('data-gh-repo')!;
 			const repo = await importRepo(repoFullName);
 			console.log(`Repo created ${repoFullName}`, repo);
+			this.doClose();
 		}
 	});
 

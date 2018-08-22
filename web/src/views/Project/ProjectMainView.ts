@@ -2,10 +2,12 @@ import { BaseView, addHubEvents, addDomEvents } from 'views/base';
 import { frag, append, push, first, all } from 'mvdom';
 import { render } from 'ts/render';
 import { pathAsNum, pathAt } from 'ts/route';
-import { projectDso } from 'ts/dsos';
+import { projectDso, ticketDso } from 'ts/dsos';
+import { syncIssues } from 'ts/gh-api';
 
 
 export class ProjectMainView extends BaseView {
+	projectId?: number;
 
 	//// View key dom elements
 	private get header() { return first(this.el, '.screen header')! }
@@ -31,6 +33,10 @@ export class ProjectMainView extends BaseView {
 
 	//#region    ---------- View DOM Events ---------- 
 	events = addDomEvents(this.events, {
+		'click; .do-sync': async (evt) => {
+			const ids = await syncIssues(this.projectId!);
+			console.log(`Project ${this.projectId!} issues synced`, ids);
+		}
 	});
 	//#endregion ---------- /View DOM Events ---------- 
 
@@ -60,10 +66,12 @@ export class ProjectMainView extends BaseView {
 
 		const id = pathAsNum(1);
 
+
 		// first, we change the main project header if the project change
 		const newProjectId = this.hasNewPathAt(1, '' + id);
 
-		if (newProjectId) {
+		if (newProjectId != null) {
+			this.projectId = id!;
 			this.el.setAttribute('data-entity-id', `${id}`);
 			// get the project
 			const project = await projectDso.get(id!);
@@ -72,7 +80,9 @@ export class ProjectMainView extends BaseView {
 			append(this.header, render('ProjectMainView-header', project), 'empty');
 
 			// TODO: Update the content
-			this.content.innerHTML = `<div>This will be the content for ${project.name}</div>`;
+			const tickets = await ticketDso.list({ projectId: newProjectId });
+			console.log(tickets[0]);
+			append(this.content, render('ProjectMainView-tickets', { tickets }), 'empty');
 
 			this.mode = 'dash';
 		}

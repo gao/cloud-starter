@@ -20,8 +20,8 @@ class BaseDso {
 		}
 	}
 
-	async list(): Promise<any[]> {
-		const result = await webGet(`/api/crud/${this._entityType}`);
+	async list(params?: any): Promise<any[]> {
+		const result = await webGet(`/api/crud/${this._entityType}`, params);
 
 		if (result.success) {
 			return result.data as any[];
@@ -43,3 +43,6 @@ class BaseDso {
 }
 
 export const projectDso = new BaseDso('Project');
+
+
+export const ticketDso = new BaseDso('Ticket');

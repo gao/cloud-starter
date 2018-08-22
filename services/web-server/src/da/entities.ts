@@ -15,10 +15,20 @@ export interface OAuth {
 export interface Project {
 	id: number;
 	name: string;
-	ghRepoId?: number;
-	ghRepoName?: string;
-	ghRepoFullName?: string;
+	ghId?: number;
+	ghName?: string;
+	ghFullName?: string;
 }
+
+export interface Ticket {
+	id: number;
+	projectId: number;
+	title: string;
+	ghId?: number;
+	ghTitle?: string;
+	ghNumber?: number;
+}
+
 
 export interface Feature {
 	id: number;

@@ -17,3 +17,8 @@ export async function importRepo(repo: string): Promise<any> {
 		throw result.error;
 	}
 }
+
+export async function syncIssues(projectId: number): Promise<number[]> {
+	const result = await post('/api/github/sync-issues', { projectId });
+	return result.data;
+}

@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import * as cookieParser from 'cookie-parser';
 import { router as routerAPI } from './web/router-api';
 import { router as routerAuth } from './web/router-auth';
+import { router as routerCrudTicket } from './web/router-crud-ticket';
 import { router as routerCrud } from './web/router-crud';
 import { router as routerGithubOauth } from './web/router-github-oauth';
 import { router as routerGithubApi } from './web/router-github-api';
@@ -32,12 +33,16 @@ async function main() {
 	app.use(routerAuth.expressRouter);
 
 	// mount github APIs
-	app.use(routerGithubApi.expressRouter);
+	app.use('/api/', routerGithubApi.expressRouter);
 
 	// mount the API router
 	app.use('/api/', routerAPI.expressRouter);
 
+	app.use('/api/', routerCrudTicket.expressRouter);
+
 	app.use('/api/', routerCrud.expressRouter);
+
+
 
 	// fall back on the static
 	app.use(express.static(webDir));

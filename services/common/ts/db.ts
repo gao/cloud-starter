@@ -9,6 +9,7 @@ import { join as joinPath, } from 'path';
 // NOTE: this is not 100% safe for now, but we should be below the bigint for a while.
 //       and v8 added bigint, so, sont it will work
 types.setTypeParser(20, function (val: string) {
+	console.log('>>> type', val)
 	return parseInt(val)
 });
 
@@ -22,7 +23,6 @@ async function connect() {
 	const dbName = await getConf('dbName');
 	const dbUser = await getConf('dbUser');
 	const dbPassword = await getConf('dbPassword');
-
 	_knex = knexClient({
 		client: 'pg',
 		connection: {

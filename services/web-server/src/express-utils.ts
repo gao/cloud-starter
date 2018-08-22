@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction, Router, RequestHandler } from 'express';
 
+export { Request } from 'express';
 
 //// Simplified Router with full async / catch support, and will stream back return value by default
 
