@@ -39,6 +39,8 @@ export class BaseDao<E, I> implements Dao<E, I> {
 		return r[0] as I;
 	}
 
+	async ttt(data: Partial<E>) { }
+
 	@Monitor()
 	async update(ctx: Context, id: number, data: Partial<E>) {
 		const k = await getKnex();
@@ -47,11 +49,11 @@ export class BaseDao<E, I> implements Dao<E, I> {
 	}
 
 	@Monitor()
-	async list(ctx: Context, matching?: Partial<E>): Promise<E[]> {
+	async list(ctx: Context, filter?: { matching: Partial<E> }): Promise<E[]> {
 		const k = await getKnex();
 		let q = k(this.tableName);
-		if (matching) {
-			q = q.where(matching);
+		if (filter && filter.matching) {
+			q = q.where(filter.matching);
 		}
 		const entities = await q.then(); // TODO: need to check if this is the common way
 		return entities as E[];

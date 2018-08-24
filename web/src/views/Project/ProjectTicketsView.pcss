@@ -1,0 +1,24 @@
+@import "../pcss/mixins-all.pcss";
+
+
+.ProjectTicketsView{
+	display: grid;
+	grid-template-columns: 30rem;
+	grid-template-rows: 1fr;
+
+	.card > section {
+		display: flex;
+		padding-bottom: 2rem;
+
+		& > div.list{
+			position: relative;
+			flex: 1;
+
+			& > ul{
+				overflow: scroll;
+				@mixin fitparent{};
+			}
+
+		}
+	}
+}

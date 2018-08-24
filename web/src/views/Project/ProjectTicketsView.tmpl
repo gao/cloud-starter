@@ -1,0 +1,22 @@
+<script id="ProjectTicketsView">
+<div class="ProjectTicketsView">
+
+	<div class="card">
+		<header>Tickets</header>
+		<section>
+		</section>
+	</div>
+</div>
+</script>
+
+
+<script id="ProjectTicketsView-tickets" type="text/html">
+
+	<div class="list">
+		<ul>
+		{{#each tickets}}
+		<a href="#project/{{projectId}}/ticket/{{id}}">{{ghNumber}} - {{title}}</a>
+		{{/each}}
+		</ul>
+	<div>
+</script>

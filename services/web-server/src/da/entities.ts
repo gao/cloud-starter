@@ -38,7 +38,11 @@ export interface Feature {
 
 export interface Label {
 	id: number;
+	projectId: number;
 	name: string;
+	color: string;
+	ghId?: number;
+	ghColor?: string;
 }
 
 export interface FeatureLabel {

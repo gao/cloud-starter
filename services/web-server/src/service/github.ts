@@ -45,8 +45,15 @@ export async function getRepo(ctx: Context, repoFullName: string) {
 	return result.data;
 }
 
+export async function getLabels(ctx: Context, repoFullName: string) {
+	const access_token = await ctx.getAccessToken();
+
+	const url = apiUrl + `repos/${repoFullName}/labels`;
+	const result = await axios.get(url, { params: { access_token } });
+	return result.data;
+}
+
 export async function getIssues(ctx: Context, repoFullName: string) {
-	const username = ctx.username; // TODO: we will need to get the github username (for now the same)
 	const access_token = await ctx.getAccessToken();
 
 	const url = apiUrl + `repos/${repoFullName}/issues`;

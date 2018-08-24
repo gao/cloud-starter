@@ -16,15 +16,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/knex": "^0.14.20",
+    "@types/knex": "^0.14.21",
     "cmdrouter": "^0.3.1",
     "knex": "^0.15.2",
     "module-alias": "^2.1.0",
     "p-spawn": "^0.4.1",
     "pg": "^7.4.3",
     "redis": "^2.8.0",
-    "ts-node": "^7.0.0",
+    "ts-node": "^7.0.1",
     "typescript": "^3.0.1",
-    "vdev": "^0.7.9"
+    "vdev": "^0.8.0"
   }
 }

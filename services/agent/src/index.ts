@@ -1,9 +1,7 @@
 require("../../common/ts/common-alias"); // needs to be full relative path because it will set the alias. Call only once at start file.
 
 
-import * as path from 'path';
 import { getConf } from 'common/conf';
-import { getNewRedisClient } from 'common/predis';
 import { getKnex } from 'common/db';
 
 //main();

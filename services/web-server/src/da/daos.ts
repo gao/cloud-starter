@@ -1,6 +1,6 @@
 import { BaseDao } from './dao-base';
-import { Project, Ticket, User, OAuth } from './entities';
-import { Context } from '../context';
+import { Project, Ticket, User, OAuth, Label } from './entities';
+import { Context, newContext } from '../context';
 import { AccessRequires } from './access';
 
 export * from './entities';
@@ -47,7 +47,6 @@ class TicketDao extends BaseDao<Ticket, number>{
 }
 export const ticketDao = new TicketDao();
 
-
 class OAuthDao extends BaseDao<OAuth, number>{
 	constructor() { super('oauth') }
 }
@@ -60,7 +59,7 @@ class FeatureDao extends BaseDao<Project, number>{
 export const featureDao = new FeatureDao();
 
 
-class LabelDao extends BaseDao<Project, number>{
+class LabelDao extends BaseDao<Label, number>{
 	constructor() { super('label') }
 }
 export const labelDao = new LabelDao();
@@ -70,3 +69,4 @@ export const daoByEntity: { [type: string]: BaseDao<any, number> } = {
 	User: userDao,
 	Project: projectDao
 }
+

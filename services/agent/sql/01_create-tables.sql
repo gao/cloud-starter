@@ -22,7 +22,6 @@ CREATE TABLE "project" (
   "ghName" varchar(64),
   "ghFullName" varchar(128)
 );
-
 ALTER SEQUENCE project_id_seq RESTART WITH 1000;
 
 
@@ -34,5 +33,14 @@ CREATE TABLE "ticket" (
   "ghNumber" int,
   "ghTitle" varchar(128)
 );
-
 ALTER SEQUENCE ticket_id_seq RESTART WITH 1000;
+
+CREATE TABLE "label" (
+  id serial PRIMARY KEY,
+  "projectId" bigint,
+  name varchar(128), 
+  color varchar(32),
+  "ghId" bigint,
+  "ghColor" varchar(16)
+);
+ALTER SEQUENCE label_id_seq RESTART WITH 1000;

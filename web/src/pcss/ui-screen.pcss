@@ -1,7 +1,9 @@
 @import './mixins-all.pcss';
 
 .screen{
-	header{
+	display: flex;
+	flex-direction: column;
+	& > header{
 		background: #fff;
 		padding: 3rem 0 0 0rem;
 
@@ -14,5 +16,9 @@
 		.tab-bar{
 			padding-left: 3rem;
 		}
+	}
+
+	& > section {
+		flex: 1;
 	}
 }

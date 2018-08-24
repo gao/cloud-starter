@@ -18,6 +18,11 @@ export async function importRepo(repo: string): Promise<any> {
 	}
 }
 
+export async function sync(projectId: number): Promise<number[]> {
+	const result = await post('/api/github/sync', { projectId });
+	return result.data;
+}
+
 export async function syncIssues(projectId: number): Promise<number[]> {
 	const result = await post('/api/github/sync-issues', { projectId });
 	return result.data;

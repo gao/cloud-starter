@@ -1,17 +1,19 @@
-import { BaseView, addHubEvents, addDomEvents } from 'views/base';
-import { frag, append, push, first, all } from 'mvdom';
+import { all, append, display, empty, first } from 'mvdom';
+import { projectDso } from 'ts/dsos';
+import { sync } from 'ts/gh-api';
 import { render } from 'ts/render';
-import { pathAsNum, pathAt } from 'ts/route';
-import { projectDso, ticketDso } from 'ts/dsos';
-import { syncIssues } from 'ts/gh-api';
+import { pathAsNum } from 'ts/route';
+import { addDomEvents, addHubEvents, BaseView } from 'views/base';
+import { ProjectTicketsView } from './ProjectTicketsView';
 
+const defaultTab = 'tickets';
 
 export class ProjectMainView extends BaseView {
 	projectId?: number;
 
 	//// View key dom elements
 	private get header() { return first(this.el, '.screen header')! }
-	private get content() { return first(this.el, '.screen > section.content')! }
+	private get content() { return first(this.el, '.screen > section')! }
 
 	//// View state
 	private get mode() {
@@ -34,7 +36,7 @@ export class ProjectMainView extends BaseView {
 	//#region    ---------- View DOM Events ---------- 
 	events = addDomEvents(this.events, {
 		'click; .do-sync': async (evt) => {
-			const ids = await syncIssues(this.projectId!);
+			const ids = await sync(this.projectId!);
 			console.log(`Project ${this.projectId!} issues synced`, ids);
 		}
 	});
@@ -79,18 +81,19 @@ export class ProjectMainView extends BaseView {
 			// refresh the header
 			append(this.header, render('ProjectMainView-header', project), 'empty');
 
-			// TODO: Update the content
-			const tickets = await ticketDso.list({ projectId: newProjectId });
-			console.log(tickets[0]);
-			append(this.content, render('ProjectMainView-tickets', { tickets }), 'empty');
-
 			this.mode = 'dash';
 		}
 
 		// if new path
-		const newTab = this.hasNewPathAt(2, 'dash');
+		const newTab = this.hasNewPathAt(2, defaultTab);
 		if (newTab) {
 			this.mode = newTab;
+
+			if (this.mode === "tickets") {
+				display(ProjectTicketsView, this.content, { projectId: this.projectId }, 'empty');
+			} else {
+				empty(this.content);
+			}
 		}
 
 	}

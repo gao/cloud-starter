@@ -6,7 +6,7 @@
 	display: grid;
 	grid-template-rows: auto 1fr auto;
 
-	header{
+	& > header{
 		@mixin typo-h6{}; /* This is for inline header, when no h5/h6 */
 		padding: 1rem;
 		h5{
@@ -19,13 +19,13 @@
 		}		
 	}
 
-	section.content{
+	& > section{
 		@mixin typo-body1{};
 		padding: 0 1rem 8px 1rem;
 		color: rgba(0, 0, 0, .54);
 	}
 
-	footer{
+	& > footer{
 		min-height:  3rem;
 		display: flex;
 		align-items: center;
