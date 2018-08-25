@@ -67,6 +67,8 @@ export const labelDao = new LabelDao();
 
 export const daoByEntity: { [type: string]: BaseDao<any, number> } = {
 	User: userDao,
-	Project: projectDao
+	Project: projectDao,
+	Label: labelDao,
+	Ticket: ticketDao
 }
 

@@ -96,6 +96,7 @@ export class DialogBase extends BaseView {
 	//#endregion ---------- /Controller Methods ---------- 
 
 	protected async doCancel() {
+		trigger(this.el, 'CANCEL');
 		// by default, it will close
 		this.doClose();
 	}
@@ -103,7 +104,7 @@ export class DialogBase extends BaseView {
 	// by default, get the data, trigger the 'ok' event with the data in the event.details, and close
 	protected async doOk() {
 		const detail = pull(this.el);
-		trigger(this.el, 'ok', { cancelable: true, detail });
+		trigger(this.el, 'OK', { cancelable: true, detail });
 		this.doClose();
 	}
 

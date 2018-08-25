@@ -8,15 +8,26 @@
 
 	& > header{
 		@mixin typo-h6{}; /* This is for inline header, when no h5/h6 */
+		display: grid;
+		grid-template-columns: 2rem 1fr 2rem;
 		padding: 1rem;
+
 		h5{
 			@mixin typo-h6{};
+			grid-column: 1 / 3;
 		}
 
 		h6{
 			@mixin typo-sub1{};
 			color: rgba(0, 0, 0, .54);
-		}		
+			grid-column: 1 / 3;
+			grid-row: 2;
+		}
+		aside{
+			cursor: pointer;
+			grid-column: 3;
+			float: right;
+		}
 	}
 
 	& > section{

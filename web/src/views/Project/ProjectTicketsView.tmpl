@@ -1,22 +1,23 @@
-<script id="ProjectTicketsView">
-<div class="ProjectTicketsView">
-
-	<div class="card">
-		<header>Tickets</header>
-		<section>
-		</section>
+<script id="ProjectTicketsView" type="text/html">
+	<div class="ProjectTicketsView">
+	
+		<div class="card">
+			<header><h5>Tickets</h5><aside>{{{ico "ico-more"}}}</header>
+			<section>
+			</section>
+		</div>
 	</div>
-</div>
-</script>
-
-
-<script id="ProjectTicketsView-tickets" type="text/html">
-
-	<div class="list">
-		<ul>
-		{{#each tickets}}
-		<a href="#project/{{projectId}}/ticket/{{id}}">{{ghNumber}} - {{title}}</a>
-		{{/each}}
-		</ul>
-	<div>
-</script>
+	</script>
+	
+	
+	<script id="ProjectTicketsView-tickets" type="text/html">
+	
+		<div class="list">
+			<ul>
+			{{#each tickets}}
+			<a href="#project/{{projectId}}/ticket/{{id}}">{{ghNumber}} - {{title}}</a>
+			{{/each}}
+			</ul>
+		<div>
+	</script>
+	

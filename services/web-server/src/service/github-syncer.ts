@@ -27,8 +27,13 @@ export async function syncLabels(ctx: Context, projectId: number) {
 	for (const ghLabel of ghLabels) {
 		if (labelByGhId.get(ghLabel.id) == null) {
 			const name = (ghLabel.name) ? (<string>ghLabel.name).substring(0, 127) : `NO NAME LABEL (${ghLabel.id})`;
+			// FIXME: for now hardcode to exlude "IN-DROP..."
+			if (name.startsWith("IN-DROP")) {
+				continue;
+			}
 			const newLabelData: Partial<Label> = {
 				name,
+				projectId,
 				color: ghLabel.color || 'eeeeff',
 				ghId: ghLabel.id,
 				ghColor: ghLabel.color

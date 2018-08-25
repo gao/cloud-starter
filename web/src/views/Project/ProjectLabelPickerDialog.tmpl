@@ -1,0 +1,12 @@
+<script id="ProjectLabelPickerDialog-content" type="text/html">
+	<div class="ProjectLabelPickerDialog-content">
+		<ul>
+			{{#each labels}}
+				<li data-entity="Label" data-entity-id="{{id}}">
+					{{{check}}}
+					<span class='lbl' style="background: #{{color}}">{{name}}<span>
+				</li>
+			{{/each}}
+		</ul>
+	</div>
+</script>

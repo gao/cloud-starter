@@ -44,5 +44,6 @@ class BaseDso {
 
 export const projectDso = new BaseDso('Project');
 
-
 export const ticketDso = new BaseDso('Ticket');
+
+export const labelDso = new BaseDso('Label');

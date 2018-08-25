@@ -1,18 +1,16 @@
 import * as Handlebars from "handlebars";
+import { htmlSymbol, htmlIcon } from "./utils";
 
 Handlebars.registerHelper("echo", function (cond: string, val: any) {
 	return (cond) ? val : "";
 });
 
 Handlebars.registerHelper("ico", function (name: string, options: any) {
-	let html = '<i>';
-	html += iconSymbol(name);
-	html += '</i>';
-	return html;
+	return htmlIcon(name);
 });
 
 Handlebars.registerHelper("symbol", function (name: string, options: any) {
-	return iconSymbol(name);
+	return htmlSymbol(name);
 });
 
 // we can use like this {{{incl "tmpl-test" data ...}}}
@@ -27,12 +25,3 @@ Handlebars.registerHelper("incl", function (templateName: string, data: any, opt
 	return html;
 });
 
-
-//#region    Utils
-function iconSymbol(name: string) {
-	var html = ['<svg class="symbol ' + name + '">'];
-	html.push('<use xlink:href="#' + name + '"></use>');
-	html.push('</svg>');
-	return html.join('\n');
-}
-//#endregion Utils

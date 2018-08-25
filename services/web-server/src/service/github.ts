@@ -48,8 +48,9 @@ export async function getRepo(ctx: Context, repoFullName: string) {
 export async function getLabels(ctx: Context, repoFullName: string) {
 	const access_token = await ctx.getAccessToken();
 
+	const per_page = 100;
 	const url = apiUrl + `repos/${repoFullName}/labels`;
-	const result = await axios.get(url, { params: { access_token } });
+	const result = await axios.get(url, { params: { access_token, per_page } });
 	return result.data;
 }
 

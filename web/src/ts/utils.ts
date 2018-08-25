@@ -26,9 +26,6 @@ export function dic(arr: Array<any>, keyName: string) {
 	// alternative: var result = new Map(arr.map((i) => [i.key, i.val]));
 }
 
-export type Partial<T> = {
-	[P in keyof T]?: T[P];
-}
 
 type AnyButArray = object | number | string | boolean;
 
@@ -90,3 +87,20 @@ export function buildTimeVal(time?: number) {
 	}
 	return timeStr;
 }
+
+
+//#region    ---------- HTML parts ---------- 
+
+export function htmlIcon(name: string) {
+	let html = `<i class="${name}">`;
+	html += htmlSymbol(name);
+	html += '</i>';
+	return html;
+}
+export function htmlSymbol(name: string) {
+	var html = ['<svg class="symbol ' + name + '">'];
+	html.push('<use xlink:href="#' + name + '"></use>');
+	html.push('</svg>');
+	return html.join('\n');
+}
+//#endregion ---------- /HTML parts ---------- 

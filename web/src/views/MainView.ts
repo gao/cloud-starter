@@ -42,7 +42,7 @@ export class MainView extends BaseView {
 			}
 		},
 
-		'click; aside': async (evt) => {
+		'click; .toogle-user-menu': async (evt) => {
 			evt!.cancelBubble = true;
 			if (this.userMenu.classList.contains('displayNone')) {
 				this.userMenu.classList.remove('displayNone');
