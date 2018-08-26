@@ -1,6 +1,5 @@
-import { trigger, first, hub } from "mvdom";
-import { get } from "./ajax";
-
+import { trigger } from 'mvdom';
+import { get } from './ajax';
 
 // --------- Load svg icons --------- //
 // NOTE: We start the loading as soon as possible (before the DOMContentLoaded)
@@ -9,6 +8,7 @@ var svgSymbolsPromise = get("/svg/sprite.svg", null, { contentType: "application
 
 
 document.addEventListener("DOMContentLoaded", function (event) {
+
 	// we make sure the the ajax for the svg/sprites.svg returns
 	svgSymbolsPromise.then(function (xmlDoc) {
 		// add the symbols to the head (external linking works but has issues - styling, and caching -)

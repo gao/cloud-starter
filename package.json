@@ -23,7 +23,7 @@
     "tracking": "^1.1.3",
     "ts-node": "^7.0.1",
     "typescript": "^3.0.1",
-    "vdev": "^0.8.0"
+    "vdev": "file:../../node-vdev/node-vdev_src/vdev-0.8.1.tgz"
   },
   "devDependencies": {
     "@types/csvtojson": "^1.1.5",

@@ -3,7 +3,7 @@
 import { srouter } from '../express-utils';
 import { getUserRepos, getRepo } from '../service/github';
 import { projectDao } from '../da/daos';
-import { Project } from '../da/entities';
+import { Project } from 'shared/entities';
 import { getProjectFromReq } from './web-commons';
 import { syncIssues, syncLabels } from '../service/github-syncer';
 

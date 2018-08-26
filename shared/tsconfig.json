@@ -10,20 +10,18 @@
 		// node.js does not support es2015, so, we tell typescript to output commonjs (we do not use rollup for server, just ts-node)
 		"module": "commonjs",
 
+		"composite": true, 
+		
 		// 99% of the code will be .ts, and .js files will just be module glue and does not need to be processed by typescript (keep the glue small)
 		"allowJs": false,
 		"checkJs": false,
 
 		"sourceMap": true,  // for debug
 
+		// Need to be commented to work. 
 		"outDir": "./dist", /* Redirect output structure to the directory. */
-
-		"baseUrl": "./src/",  /* Base directory to resolve non-absolute module names. */
-		"paths": {
-			"common/*": ["../../common/ts/*"], 
-			"shared/*": ["../../../shared/src/*"]
-		},
-
+		// "outFile": "./dist/shared.js",
+		"baseUrl": "./src",
 		// To extract the maximum value from TypeScript, we use strict = true (no implicit, null check, ...)
 		"strict": true, 
 

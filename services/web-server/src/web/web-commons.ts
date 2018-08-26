@@ -1,5 +1,5 @@
 import { projectDao } from '../da/daos';
-import { Project } from '../da/entities';
+import { Project } from 'shared/entities';
 import { Request } from '../express-utils';
 
 /** Get the projectId from reques, and get the Project object */

@@ -9,6 +9,9 @@
 		// same as browser code, .js will be used 1% for gluing things together, no need to type it. 
 		"allowJs": false,
 		"checkJs": false,
+		
+		// strict is the best way to extract the most value from TypeScript
+		"strict": true,
 
 		"sourceMap": false,  // we do not need the sourcemap for server
 
@@ -17,9 +20,6 @@
 
 		// This point to the "../" so that we can include common/
 		"rootDir": "../",  
-
-		// strict is the best way to extract the most value from TypeScript
-		"strict": true,
 
 		// same as with browser, need to use 3rd party modules
 		"moduleResolution": "node",

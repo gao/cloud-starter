@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import { newContext } from '../context';
 import { extname } from 'path';
 import { userDao } from '../da/daos';
-import { User } from '../da/entities';
+import { User } from 'shared/entities';
 import { cookieNameUserId, cookieNameAuthToken, setAuth, createAuthToken } from '../auth';
 import * as crypto from 'crypto';
 

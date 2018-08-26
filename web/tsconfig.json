@@ -9,6 +9,9 @@
 		"allowJs": false,
 		"checkJs": false,
 
+		// To extract the maximum value from TypeScript, we use strict = true (no implicit, null check, ...)
+		"strict": true, 
+
 		// Definitely wants sourcemapp
 		"sourceMap": true, /* Generates corresponding '.map' file. */
 
@@ -19,15 +22,15 @@
 		// We point the root dir to the parent to include eventual ../common/ (and we will exclude other .ts dirs, like eventual server/)
 		"rootDir": "../",
 
-		// To extract the maximum value from TypeScript, we use strict = true (no implicit, null check, ...)
-		"strict": true, 
 
 		// This is important to support 3rd party modules that are still in a node.js/commonjs way
 		"moduleResolution": "node", 
 
 		// This allow to have relative path in the import, rather than "import ... "../../ts/ajax" we can do "ts/ajax"
 		"baseUrl": "./src/",
-
+		"paths": {
+			"shared/*": ["../../shared/src/*"]
+		},
 		// allow to import moment like: import moment from "moment"
 		"allowSyntheticDefaultImports": true
 	},
@@ -39,7 +42,7 @@
 
 	"exclude": [
 		"node_modules",
-		"server", // we exclude server
+		"services", // we exclude services
 		".rpt2_cache" // this folder will be created by the rollup-typescript2, so, need to exlude it, can become confusing.
 	]
 }

@@ -1,10 +1,15 @@
 
 import * as crypto from 'crypto';
 
-
+import { newBar } from "shared/foo";
+import { randomString } from "common/utils";
 
 describe("test-dev", function () {
 
+	it('test-bar', async function () {
+		console.log('test-bar', newBar);
+		console.log('common utils', randomString);
+	})
 
 	it('test-dev-crypto', async function () {
 

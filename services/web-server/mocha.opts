@@ -1,1 +1,2 @@
-dist/test/test-*.js
+--require dist/services/web-server/src/test/setup-aliases.js
+dist/services/web-server/src/test/test-*.js

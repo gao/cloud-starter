@@ -4,7 +4,7 @@
   "description": "Cloud Starter main web-server (API and serving html/js/css)",
   "main": "dist/start.js",
   "scripts": {
-    "start": "node --inspect dist/start",
+    "start": "node --inspect dist/services/web-server/src/start",
     "dtest": "./node_modules/.bin/mocha --inspect-brk --inspect --opts mocha.opts ",
     "test": "./node_modules/.bin/mocha --opts mocha.opts"
   },
@@ -19,12 +19,14 @@
     "@types/express": "^4.16.0",
     "@types/knex": "^0.14.21",
     "@types/mocha": "^5.2.5",
+    "@types/module-alias": "^2.0.0",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
     "express": "^4.16.3",
     "knex": "^0.15.2",
     "mocha": "^5.2.0",
+    "module-alias": "^2.1.0",
     "node-simple-timer": "^0.1.1",
     "pg": "^7.4.3",
     "ts-node": "^7.0.1",

@@ -1,7 +1,6 @@
 import { PerfContext } from './perf';
-import { User } from './da/entities';
+import { User } from 'shared/entities';
 import { oauthDao } from './da/daos';
-import { OAuth } from './da/entities';
 
 // temporary hardcoded (should go to DB with roles)
 const _userPrivileges: { [key: string]: string[] } = {

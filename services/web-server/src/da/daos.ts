@@ -1,9 +1,9 @@
 import { BaseDao } from './dao-base';
-import { Project, Ticket, User, OAuth, Label } from './entities';
+import { Project, Ticket, User, OAuth, Label } from 'shared/entities';
 import { Context, newContext } from '../context';
 import { AccessRequires } from './access';
 
-export * from './entities';
+export * from 'shared/entities';
 
 class UserDao extends BaseDao<User, number>{
 	constructor() {

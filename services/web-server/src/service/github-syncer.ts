@@ -1,7 +1,7 @@
 
 import { getIssues, getLabels } from './github';
 import { ticketDao, projectDao, labelDao } from '../da/daos';
-import { Ticket, Label } from '../da/entities';
+import { Ticket, Label } from 'shared/entities';
 import { Context } from '../context';
 
 

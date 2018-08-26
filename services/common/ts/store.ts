@@ -40,7 +40,7 @@ async function storeBucket() {
 	};
 
 	// get the google storage object.
-	const storage = Storage(gBucketInfo.conf);
+	const storage = new Storage(gBucketInfo.conf);
 	// get the bucket name
 	const bucket = await storage.bucket(gBucketInfo.name);
 	return bucket;
