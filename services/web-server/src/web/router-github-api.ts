@@ -51,13 +51,11 @@ _router.post('/github/sync', async function (req, res, next) {
 		throw new Error("Cannot sync because no projectId in post request ");
 	}
 
-	// Sync the label and issues, can do it concurrently
-	const [syncedIssueIds, syncedLabelIds] = await Promise.all(
-		[syncIssues(req.context, projectId),
-		syncLabels(req.context, projectId)]);
+	// first we sync the labels (so that they are ready when syncing the ticket)
+	const syncedLabelIds = await syncLabels(req.context, projectId);
+	const syncedTicketIds = await syncIssues(req.context, projectId);
 
-
-	return { success: true, data: { syncedIssueIds, syncedLabelIds } };
+	return { success: true, data: { syncedLabelIds, syncedTicketIds } };
 
 });
 

@@ -1,3 +1,4 @@
+require('./setup-module-aliases');
 import * as express from 'express';
 import { Request, Response, NextFunction } from 'express';
 import * as cookieParser from 'cookie-parser';
@@ -24,7 +25,7 @@ async function main() {
 	app.use(cookieParser());
 
 	app.use(bodyParser.json());
-	app.use(bodyParser.urlencoded());
+	app.use(bodyParser.urlencoded({ extended: true }));
 
 	// mount the github oauth router
 	app.use(routerGithubOauth.expressRouter);

@@ -1,5 +1,5 @@
 import { BaseDao } from './dao-base';
-import { Project, Ticket, User, OAuth, Label } from 'shared/entities';
+import { Project, Ticket, User, OAuth, Label, TicketLabel } from 'shared/entities';
 import { Context, newContext } from '../context';
 import { AccessRequires } from './access';
 
@@ -36,39 +36,22 @@ class UserDao extends BaseDao<User, number>{
 export const userDao = new UserDao();
 
 
-class ProjectDao extends BaseDao<Project, number>{
-	constructor() { super('project') }
-}
-export const projectDao = new ProjectDao();
+export const projectDao = new BaseDao<Project, number>('project');
 
+export const ticketDao = new BaseDao<Ticket, number>('ticket');
 
-class TicketDao extends BaseDao<Ticket, number>{
-	constructor() { super('ticket') }
-}
-export const ticketDao = new TicketDao();
+export const oauthDao = new BaseDao<OAuth, number>('oauth');
 
-class OAuthDao extends BaseDao<OAuth, number>{
-	constructor() { super('oauth') }
-}
-export const oauthDao = new OAuthDao();
+export const labelDao = new BaseDao<Label, number>('label');
 
+export type TicketLabelId = { ticketId: number, labelId: number };
+export const ticketLabelDao = new BaseDao<TicketLabel, TicketLabelId>('ticket_label', ['ticketId', 'labelId']);
 
-class FeatureDao extends BaseDao<Project, number>{
-	constructor() { super('feature') }
-}
-export const featureDao = new FeatureDao();
-
-
-class LabelDao extends BaseDao<Label, number>{
-	constructor() { super('label') }
-}
-export const labelDao = new LabelDao();
-
-
-export const daoByEntity: { [type: string]: BaseDao<any, number> } = {
+export const daoByEntity: { [type: string]: BaseDao<any, any> } = {
 	User: userDao,
 	Project: projectDao,
 	Label: labelDao,
-	Ticket: ticketDao
+	Ticket: ticketDao,
+	TicketLabel: ticketLabelDao
 }
 

@@ -1,6 +1,6 @@
 
 import { getIssues, getLabels } from './github';
-import { ticketDao, projectDao, labelDao } from '../da/daos';
+import { ticketDao, projectDao, labelDao, ticketLabelDao } from '../da/daos';
 import { Ticket, Label } from 'shared/entities';
 import { Context } from '../context';
 
@@ -39,7 +39,6 @@ export async function syncLabels(ctx: Context, projectId: number) {
 				ghColor: ghLabel.color
 			}
 
-
 			const labelId = await labelDao.create(ctx, newLabelData);
 			syncedIds.push(labelId)
 		}
@@ -58,12 +57,15 @@ export async function syncIssues(ctx: Context, projectId: number) {
 
 	// We get the github issues from the API and the tickets from the db
 	// Note: We can do that in parallel and then wait for both to resolve
+	const labelsP = labelDao.list(ctx, { matching: { projectId } });
 	const issuesP = await getIssues(ctx, project.ghFullName);
 	const ticketsP = await ticketDao.list(ctx, { matching: { projectId } });
 
 	// Wait for both to be resolved
 	// Note: Here the types will be correctly inferred!!
-	const [issues, tickets] = await Promise.all([issuesP, ticketsP]);
+	const [issues, tickets, labels] = await Promise.all([issuesP, ticketsP, labelsP]);
+
+	const labelByGhId = new Map(labels.map((l): [number, Label] => [l.ghId!, l]));
 
 	// put the tickets in a map by ghId
 	const ticketByGhId = new Map(tickets.map((t): [number, Ticket] => [t.ghId!, t]));
@@ -81,7 +83,19 @@ export async function syncIssues(ctx: Context, projectId: number) {
 				ghNumber: issue.number
 			}
 			const ticketId = await ticketDao.create(ctx, newTicketData);
+
+			if (issue.labels) {
+				for (const ghLabel of issue.labels) {
+					const label = labelByGhId.get(ghLabel.id);
+					if (label) {
+						await ticketLabelDao.create(ctx, { ticketId, labelId: label.id })
+					}
+				}
+			}
+
 			syncedIds.push(ticketId);
+
+
 		}
 	}
 

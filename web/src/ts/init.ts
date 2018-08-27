@@ -19,7 +19,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
 			h.appendChild(firstChildElement);
 		}
 
-
 		// trigger an event that the application has been loaded
 		trigger(document, "APP_LOADED");
 

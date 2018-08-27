@@ -1,3 +1,12 @@
+
+//#region    ---------- Entity Related Types ---------- 
+export interface Filter<E> {
+	matching?: Partial<E>;
+	ids?: number[];
+}
+//#endregion ---------- /Entity Related Types ---------- 
+
+//#region    ---------- Entity Types ---------- 
 export interface User {
 	id: number;
 	username: string;
@@ -43,7 +52,13 @@ export interface Label {
 	ghColor?: string;
 }
 
+export interface TicketLabel {
+	ticketId: number;
+	labelId: number;
+}
+
 export interface FeatureLabel {
 	featureId: number;
 	labelId: number;
 }
+//#endregion ---------- /Entity Types ---------- 

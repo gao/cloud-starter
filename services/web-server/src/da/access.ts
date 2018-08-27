@@ -1,4 +1,4 @@
-import { Dao } from './dao';
+import { BaseDao } from './dao-base';
 import { Context } from '../context';
 
 //#region    ---------- Decorator ---------- 
@@ -7,7 +7,7 @@ export function AccessRequires(privilege: string[] | string) {
 
 	return function anno(target: Object, propertyKey: string, descriptor: TypedPropertyDescriptor<any>) {
 		const method = descriptor.value!;
-		descriptor.value = async function (this: Dao<Object, number>) {
+		descriptor.value = async function (this: BaseDao<Object, number>) {
 			const ctx = arguments[0] as Context;
 			const userId = ctx.userId;
 			if (!ctx.constructor.name.startsWith('Context')) {

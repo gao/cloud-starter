@@ -35,6 +35,14 @@ CREATE TABLE "ticket" (
 );
 ALTER SEQUENCE ticket_id_seq RESTART WITH 1000;
 
+CREATE TABLE "ticket_label" (
+  "ticketId" bigint NOT NULL,
+  "labelId" bigint NOT NULL,
+  PRIMARY KEY("ticketId", "labelId")
+);
+
+
+
 CREATE TABLE "label" (
   id serial PRIMARY KEY,
   "projectId" bigint,
