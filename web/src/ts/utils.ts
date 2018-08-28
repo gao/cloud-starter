@@ -89,6 +89,32 @@ export function buildTimeVal(time?: number) {
 }
 
 
+//#region    ---------- color ---------- 
+const lumaCache = new Map<string, number>();
+export function getLuma(c: string) {
+	if (c.startsWith("#")) {
+		c = c.substring(1);
+	}
+
+	// try to get it from cach
+	let luma = lumaCache.get(c);
+
+	// if not in cache, compute
+	if (luma == null) {
+		const rgb = parseInt(c, 16);   // convert rrggbb to decimal
+		const r = (rgb >> 16) & 0xff;  // extract red
+		const g = (rgb >> 8) & 0xff;  // extract green
+		const b = (rgb >> 0) & 0xff;  // extract blue
+
+		luma = 0.2126 * r + 0.7152 * g + 0.0722 * b; // per ITU-R BT.709
+
+		lumaCache.set(c, luma);
+	}
+
+	return luma;
+}
+//#endregion ---------- /color ---------- 
+
 //#region    ---------- HTML parts ---------- 
 
 export function htmlIcon(name: string) {

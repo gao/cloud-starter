@@ -5,6 +5,7 @@ import { ticketDso, labelDso } from 'ts/dsos';
 import { first, append, display, on } from 'mvdom';
 import { render } from 'ts/render';
 import { ProjectLabelPickerDialog } from './ProjectLabelPickerDialog';
+import { getLuma } from 'ts/utils';
 
 export class ProjectTicketsView extends BaseView {
 
@@ -32,6 +33,18 @@ export class ProjectTicketsView extends BaseView {
 		this.projectId = data.projectId;
 
 		const tickets = await ticketDso.list({ projectId: this.projectId });
+
+		// TODO: need to move the 'isDark' somewhere else, perhaps on import time
+		for (const t of tickets) {
+			if (t.labels) {
+				for (const l of t.labels) {
+					const luma = getLuma(l.color);
+					l.luma = luma;
+					l.isDark = (l.luma < 150);
+					console.log(`${l.color} - ${l.name} - ${l.luma}`);
+				}
+			}
+		}
 
 		append(this.mainTicketsContent, render('ProjectTicketsView-tickets', { tickets }), 'empty');
 	}

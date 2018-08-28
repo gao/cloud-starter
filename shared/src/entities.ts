@@ -38,7 +38,7 @@ export interface Ticket {
 	ghNumber?: number;
 
 	//// transient properties
-	labels?: { id: number, name: string, color: string }[];
+	labels?: { id: number, name: string, color: string, luma?: number, isDark?: boolean }[];
 }
 
 

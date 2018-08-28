@@ -17,7 +17,7 @@
 			{{#each tickets}}
 			<a href="#project/{{projectId}}/ticket/{{id}}">{{ghNumber}} - {{title}}<br />
 				{{#each labels}}
-				<span class="lbl" style="background: #{{color}}">{{name}}</span>
+				<span class="lbl" style="background: #{{color}}; {{#if isDark}}color:#fff{{/if}}" >{{name}}</span>
 				{{/each}}
 			</a>
 			{{/each}}
