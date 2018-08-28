@@ -3,18 +3,17 @@ import { Context } from '../context';
 import { Monitor } from '../perf';
 import { Filter } from 'shared/entities';
 import { ensureArray } from 'shared/utils';
-import { QueryBuilder } from 'knex';
 
 
 // Note: for now, the knex can take a generic I for where value
 // @annoC
 export class BaseDao<E, I> {
 	readonly tableName: string;
-	readonly idNames: string[];
+	readonly idNames: string | string[];
 
 	constructor(tableName: string, idNames?: string | string[]) {
 		this.tableName = tableName;
-		this.idNames = (idNames != null) ? ensureArray(idNames) : ['id'];
+		this.idNames = (idNames != null) ? idNames : 'id';
 	}
 
 	@Monitor()
@@ -75,27 +74,28 @@ export class BaseDao<E, I> {
 
 
 	private getWhereIdObject(id: any) {
+		// otherwise, build the object with all of the appropriate id
+		const r: any = {};
 
 		const t = typeof id;
 
 		// if the id value is a scalar number/string, then, check and return the appropriate object
 		if (t === 'number' || t === 'string') {
-			if (this.idNames.length > 1) {
+			if (this.idNames instanceof Array) {
 				throw new Error(`Dao for ${this.tableName} has composite ids ${this.idNames} but method passed only one parameter ${id}`);
 			}
-			const name = this.idNames[0];
-			return { name: id };
+			const name = this.idNames as string;
+			r[name] = id;
 		}
 
-		// otherwise, build the object with all of the appropriate id
-		const r: any = {};
-
-		for (const name of this.idNames) {
-			const val = id[name];
-			if (val == null) {
-				throw new Error(`Dao for ${this.tableName} requires id property ${name}, but not present it ${id}`);
+		else {
+			for (const name of this.idNames) {
+				const val = id[name];
+				if (val == null) {
+					throw new Error(`Dao for ${this.tableName} requires id property ${name}, but not present it ${id}`);
+				}
+				r[name] = val;
 			}
-			r[name] = val;
 		}
 
 		return r;

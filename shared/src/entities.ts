@@ -28,12 +28,17 @@ export interface Project {
 }
 
 export interface Ticket {
+
+	//// db properties
 	id: number;
 	projectId: number;
 	title: string;
 	ghId?: number;
 	ghTitle?: string;
 	ghNumber?: number;
+
+	//// transient properties
+	labels?: { id: number, name: string, color: string }[];
 }
 
 

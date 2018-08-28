@@ -15,7 +15,11 @@
 		<div class="list">
 			<ul>
 			{{#each tickets}}
-			<a href="#project/{{projectId}}/ticket/{{id}}">{{ghNumber}} - {{title}}</a>
+			<a href="#project/{{projectId}}/ticket/{{id}}">{{ghNumber}} - {{title}}<br />
+				{{#each labels}}
+				<span class="lbl" style="background: #{{color}}">{{name}}</span>
+				{{/each}}
+			</a>
 			{{/each}}
 			</ul>
 		<div>
