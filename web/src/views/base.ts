@@ -57,7 +57,13 @@ export class BaseView implements View {
 		}
 
 	}
+
+	resetNewPathAt(idx: number) {
+		delete this.currentPaths[idx];
+	}
 }
+
+
 
 export function addDomEvents(target: EventBindings, source: EventBindings) {
 	return Object.assign(target, source);

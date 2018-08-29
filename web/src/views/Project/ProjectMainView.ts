@@ -73,6 +73,7 @@ export class ProjectMainView extends BaseView {
 		const newProjectId = this.hasNewPathAt(1, '' + id);
 
 		if (newProjectId != null) {
+
 			this.projectId = id!;
 			this.el.setAttribute('data-entity-id', `${id}`);
 			// get the project
@@ -81,7 +82,8 @@ export class ProjectMainView extends BaseView {
 			// refresh the header
 			append(this.header, render('ProjectMainView-header', project), 'empty');
 
-			this.mode = 'dash';
+			// reset the newPath for the tab index (no matter what we want to refresh it)
+			this.resetNewPathAt(2);
 		}
 
 		// if new path
