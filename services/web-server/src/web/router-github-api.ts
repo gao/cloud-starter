@@ -34,6 +34,9 @@ _router.post('/github/import-repo', async function (req, res, next) {
 		const projectId = await projectDao.create(req.context, projectData);
 		const newProject = await projectDao.get(req.context, projectId);
 
+		// create the first pane. 
+
+
 		return { success: true, data: newProject };
 
 	} catch (ex) {

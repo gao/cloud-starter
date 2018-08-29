@@ -1,4 +1,4 @@
-import { Filter, Ticket } from 'shared/entities';
+import { Ticket, TicketFilter } from 'shared/entities';
 import { Context } from '../context';
 import { BaseDao } from './dao-base';
 import { getKnex } from './db';
@@ -6,7 +6,7 @@ import { getKnex } from './db';
 export class TicketDao extends BaseDao<Ticket, number> {
 	constructor() { super('ticket') }
 
-	async list(ctx: Context, filter?: Filter<Ticket>): Promise<Ticket[]> {
+	async list(ctx: Context, filter?: TicketFilter): Promise<Ticket[]> {
 		const k = await getKnex();
 		let q = k(this.tableName);
 
@@ -23,16 +23,29 @@ export class TicketDao extends BaseDao<Ticket, number> {
 		}
 		q.columns(columns);
 
-		// for now only support the filter.matching
-		if (filter && filter.matching) {
-			// de-ambiguitate matching, for now, only support ticket matching
-			const matching = Object.entries(filter.matching).reduce((acc: any, kv: any[]) => {
-				acc['ticket.' + kv[0]] = kv[1];
-				return acc;
-			}, {});
 
-			q = q.where(matching);
+		// Add the filter is present
+		if (filter) {
+			// TicketFilter always had a .projectId
+			q.where('ticket.projectId', filter.projectId);
+
+			// for now only support the filter.matching
+			if (filter.matching) {
+				// de-ambiguitate matching, for now, only support ticket matching
+				const matching = Object.entries(filter.matching).reduce((acc: any, kv: any[]) => {
+					acc['ticket.' + kv[0]] = kv[1];
+					return acc;
+				}, {});
+
+				q = q.where(matching);
+			}
+
+			// include the labels
+			if (filter.labelIds && filter.labelIds.length > 0) {
+				q.whereIn('tl.labelId', filter.labelIds);
+			}
 		}
+
 
 		// make the join up to the label table (many to many on the middle) 
 		q = q.leftJoin('ticket_label as tl', 'ticket.id', 'tl.ticketId');

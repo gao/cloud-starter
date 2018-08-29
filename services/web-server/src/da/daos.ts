@@ -1,4 +1,4 @@
-import { Label, OAuth, Project, TicketLabel, User } from 'shared/entities';
+import { Label, OAuth, Project, TicketLabel, User, Pane } from 'shared/entities';
 import { Context } from '../context';
 import { AccessRequires } from './access';
 import { BaseDao } from './dao-base';
@@ -41,6 +41,8 @@ export const projectDao = new BaseDao<Project, number>('project');
 
 export const ticketDao = new TicketDao();
 
+export const paneDao = new BaseDao<Pane, number>('pane');
+
 export const oauthDao = new BaseDao<OAuth, number>('oauth');
 
 export const labelDao = new BaseDao<Label, number>('label');
@@ -53,6 +55,7 @@ export const daoByEntity: { [type: string]: BaseDao<any, any> } = {
 	Project: projectDao,
 	Label: labelDao,
 	Ticket: ticketDao,
-	TicketLabel: ticketLabelDao
+	TicketLabel: ticketLabelDao,
+	Pane: paneDao
 }
 

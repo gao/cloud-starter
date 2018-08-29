@@ -10,6 +10,7 @@ import { getLuma } from 'ts/utils';
 export class ProjectTicketsView extends BaseView {
 
 	projectId!: number;
+	labelIds: number[] = [];
 
 	//// Key view DOM Elements
 	private get mainTicketsContent() { return first(this.el, '.card > section')! }
@@ -21,8 +22,8 @@ export class ProjectTicketsView extends BaseView {
 			const d = await display(ProjectLabelPickerDialog, 'body', { projectId: this.projectId, });
 			on(d.el, "OK", async () => {
 				const ids = d.getLabelIds();
-				const labels = await labelDso.list();
-				console.log(labels);
+				this.labelIds = ids;
+				this.refresh();
 			})
 		}
 	})
@@ -32,7 +33,13 @@ export class ProjectTicketsView extends BaseView {
 	async postDisplay(data: { projectId: number }) {
 		this.projectId = data.projectId;
 
-		const tickets = await ticketDso.list({ projectId: this.projectId });
+		this.refresh();
+	}
+	//#endregion ---------- /View Controller Methods ---------- 
+
+
+	async refresh() {
+		const tickets = await ticketDso.list({ projectId: this.projectId, labelIds: this.labelIds });
 
 		// TODO: need to move the 'isDark' somewhere else, perhaps on import time
 		for (const t of tickets) {
@@ -41,15 +48,11 @@ export class ProjectTicketsView extends BaseView {
 					const luma = getLuma(l.color);
 					l.luma = luma;
 					l.isDark = (l.luma < 150);
-					console.log(`${l.color} - ${l.name} - ${l.luma}`);
 				}
 			}
 		}
 
 		append(this.mainTicketsContent, render('ProjectTicketsView-tickets', { tickets }), 'empty');
 	}
-	//#endregion ---------- /View Controller Methods ---------- 
-
-
 
 }

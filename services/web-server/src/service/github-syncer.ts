@@ -59,7 +59,7 @@ export async function syncIssues(ctx: Context, projectId: number) {
 	// Note: We can do that in parallel and then wait for both to resolve
 	const labelsP = labelDao.list(ctx, { matching: { projectId } });
 	const issuesP = await getIssues(ctx, project.ghFullName);
-	const ticketsP = await ticketDao.list(ctx, { matching: { projectId } });
+	const ticketsP = await ticketDao.list(ctx, { projectId });
 
 	// Wait for both to be resolved
 	// Note: Here the types will be correctly inferred!!

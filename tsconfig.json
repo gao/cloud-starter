@@ -26,7 +26,11 @@
 		"moduleResolution": "node", 
 
 		// allow to import moment like: import moment from "moment"
-		"allowSyntheticDefaultImports": true
+		"allowSyntheticDefaultImports": true, 
+		"baseUrl": ".",
+    "paths": {
+      "postgres-array": ["scripts/types/others"]
+    }
 	},
 
 	// We want more control about which code we will compile and exclude

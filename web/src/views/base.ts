@@ -30,6 +30,8 @@ export class BaseView implements View {
 
 	docEvents: EventBindings = {};
 
+	winEvents: EventBindings = {};
+
 	// Here we use the array way, because, we want to allow subclass to also listen to the same hubEvents 
 	//   as the base class (might be useful in some circumstances)
 	hubEvents: HubBindings[] = [];

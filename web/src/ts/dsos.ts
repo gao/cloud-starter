@@ -1,6 +1,6 @@
 import { get as webGet, post as webPost, put as webPut, delet as webDelete, patch as webPatch } from './ajax';
 import { hub } from 'mvdom';
-import { Project, Ticket, Label, Filter } from 'shared/entities';
+import { Project, Ticket, Label, Filter, TicketFilter } from 'shared/entities';
 
 const dsoHub = hub('dsoHub');
 
@@ -45,9 +45,6 @@ class BaseDso<E, F> {
 export const projectDso = new BaseDso<Project, Filter<Project>>('Project');
 
 
-export interface TicketFilter extends Filter<Ticket> {
-	projectId: number;
-}
 export const ticketDso = new BaseDso<Ticket, TicketFilter>('Ticket');
 
 export interface LabelFilter extends Filter<Label> {

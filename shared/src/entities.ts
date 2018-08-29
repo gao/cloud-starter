@@ -4,7 +4,21 @@ export interface Filter<E> {
 	matching?: Partial<E>;
 	ids?: number[];
 }
+
+export interface TicketFilter extends Filter<Ticket> {
+	projectId: number;
+	labelIds?: number[];
+}
+
 //#endregion ---------- /Entity Related Types ---------- 
+
+//#region    ---------- BaseEntities ---------- 
+
+interface ProjectEntity {
+	projectId: number;
+}
+//#endregion ---------- /BaseEntities ---------- 
+
 
 //#region    ---------- Entity Types ---------- 
 export interface User {
@@ -27,11 +41,10 @@ export interface Project {
 	ghFullName?: string;
 }
 
-export interface Ticket {
+export interface Ticket extends ProjectEntity {
 
 	//// db properties
 	id: number;
-	projectId: number;
 	title: string;
 	ghId?: number;
 	ghTitle?: string;
@@ -42,15 +55,8 @@ export interface Ticket {
 }
 
 
-export interface Feature {
+export interface Label extends ProjectEntity {
 	id: number;
-	name: string;
-	parentId: number;
-}
-
-export interface Label {
-	id: number;
-	projectId: number;
 	name: string;
 	color: string;
 	ghId?: number;
@@ -62,8 +68,11 @@ export interface TicketLabel {
 	labelId: number;
 }
 
-export interface FeatureLabel {
-	featureId: number;
-	labelId: number;
+
+
+export interface Pane extends ProjectEntity {
+	id: number;
+	name: string;
+	labelIds?: number[];
 }
 //#endregion ---------- /Entity Types ---------- 

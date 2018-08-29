@@ -7,7 +7,7 @@
   "dependencies": {
     "@types/chokidar": "^1.7.5",
     "@types/pg": "^7.4.10",
-    "d3": "^5.6.0",
+    "d3": "^5.7.0",
     "gtx": "^0.6.0",
     "handlebars": "^4.0.11",
     "hbsp": "^0.2.2",
@@ -29,7 +29,7 @@
     "@types/csvtojson": "^1.1.5",
     "@types/d3": "^5.0.0",
     "@types/handlebars": "^4.0.39",
-    "@types/knex": "^0.14.21",
+    "@types/knex": "^0.14.22",
     "@types/qs": "^6.5.1",
     "@types/redis": "^2.8.2",
     "chokidar": "^2.0.4",
@@ -38,7 +38,7 @@
     "sketchdev": "^0.3.1"
   },
   "scripts": {
-    "t": "./node_modules/.bin/ts-node scripts/cmd-test.ts",
+    "t": "./node_modules/.bin/ts-node scripts/dev-test.ts testk",
     "test": "./node_modules/.bin/_mocha --opts mocha.opts",
     "test-web": "./node_modules/.bin/ts-node scripts/cmd-others.ts runTest",
     "ico": "./node_modules/.bin/ts-node scripts/cmd-ico.ts ico",

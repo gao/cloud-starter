@@ -12,12 +12,13 @@ const entityType = 'Ticket'; // normalize parametirazation accross crud override
 // list the entities, require query.projectId
 _router.get(`/crud/${entityType}`, async function (req, res, next) {
 	const projectId = req.query.projectId;
+	const labelIds = (req.query.labelIds) ? JSON.parse(req.query.labelIds) : undefined;
 
 	if (projectId == null) {
 		throw new Error(`Cannot list tickets, 'projectId' request param missing`);
 	}
 
-	const data = await ticketDao.list(req.context, { matching: { projectId } });
+	const data = await ticketDao.list(req.context, { projectId, labelIds });
 
 	return { success: true, data };
 });
