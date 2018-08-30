@@ -16,7 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/knex": "^0.14.21",
+    "@types/knex": "^0.14.22",
     "cmdrouter": "^0.3.1",
     "knex": "^0.15.2",
     "module-alias": "^2.1.0",
@@ -24,7 +24,7 @@
     "pg": "^7.4.3",
     "redis": "^2.8.0",
     "ts-node": "^7.0.1",
-    "typescript": "^3.0.1",
-    "vdev": "^0.8.0"
+    "typescript": "^3.0.3",
+    "vdev": "^0.8.1"
   }
 }
