@@ -1,8 +1,9 @@
 import { getKnex } from './db';
 import { Context } from '../context';
 import { Monitor } from '../perf';
-import { Filter } from 'shared/entities';
+import { Filter, ProjectEntityFilter } from 'shared/entities';
 import { ensureArray } from 'shared/utils';
+import { QueryBuilder } from 'knex';
 
 
 // Note: for now, the knex can take a generic I for where value
@@ -59,9 +60,8 @@ export class BaseDao<E, I> {
 	async list(ctx: Context, filter?: Filter<E>): Promise<E[]> {
 		const k = await getKnex();
 		let q = k(this.tableName);
-		if (filter && filter.matching) {
-			q = q.where(filter.matching);
-		}
+		this.completeListQueryBuilder(q, filter);
+
 		const entities = await q.then(); // TODO: need to check if this is the common way
 		return entities as E[];
 	}
@@ -70,6 +70,12 @@ export class BaseDao<E, I> {
 	async remove(ctx: Context, id: I) {
 		const k = await getKnex();
 		return k(this.tableName).delete().where(this.getWhereIdObject(id));
+	}
+
+	protected completeListQueryBuilder(q: QueryBuilder, filter?: Filter<E>) {
+		if (filter && filter.matching) {
+			q = q.where(filter.matching);
+		}
 	}
 
 
@@ -103,3 +109,11 @@ export class BaseDao<E, I> {
 	}
 }
 
+export class ProjectEntityDao<E, I> extends BaseDao<E, I> {
+
+	protected completeListQueryBuilder(q: QueryBuilder, filter: ProjectEntityFilter<E>) {
+		super.completeListQueryBuilder(q, filter);
+		q.where('projectId', filter.projectId);
+	}
+
+}

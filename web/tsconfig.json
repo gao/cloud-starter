@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
-		// For browser client, we target edge and above, so es6 (i.e., es2015) is safe. (for ie11 and safari9, es5 should be the target)
-		"target": "es2015",
+		// For browser client, we target edge and above (use es2016 for [].includes for example)
+		"target": "es2016",
 		// For browser client, since we are using rollup to package, we target the es6/es2015 module
 		"module": "es2015",
 

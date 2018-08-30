@@ -1,28 +1,47 @@
 
 import { BaseView, addDomEvents } from 'views/base';
 import { DialogBase } from '../Dialog/DialogBase';
-import { labelDso } from 'ts/dsos';
+import { labelDso, paneDso } from 'ts/dsos';
 import { render } from 'ts/render';
-import { all } from 'mvdom';
+import { all, pull } from 'mvdom';
+import { Label, Pane } from 'shared/entities';
 
-export class ProjectLabelPickerDialog extends DialogBase {
+export class ProjectPaneConfigDialog extends DialogBase {
 
+	private paneId!: number;
 
 	//#region    ---------- View DOM Events ---------- 
 	events = addDomEvents(this.events, {
 		'CHANGE; em.check': (evt) => {
 			const em = evt.selectTarget;
+		},
+
+		'OK': async (evt) => {
+			const fieldsData = pull(this.el);
+			const labelIds = this.getLabelIds();
+			paneDso.update(this.paneId, { ...fieldsData, ...{ labelIds } });
 		}
+
 	});
 	//#endregion ---------- /View DOM Events ---------- 
 
 	//#region    ---------- View Controller Methods ---------- 
 	async init(data: any) {
-		const projectId = data.projectId;
+		this.paneId = data.paneId;
+
+		const pane = await paneDso.get(this.paneId);
+
+		const projectId = pane.projectId;
 		this.title = "Labels";
 
-		const labels = await labelDso.list({ projectId });
-		this.content = render('ProjectLabelPickerDialog-content', { labels });
+		const labels: (Label & { sel?: boolean })[] = await labelDso.list({ projectId });
+
+		if (pane.labelIds != null) {
+			labels.forEach(l => l.sel = (pane.labelIds!.includes(l.id)))
+		}
+
+		const contentData = { ...pane, ...{ labels } };
+		this.content = render('ProjectPaneConfigDialog-content', contentData);
 		this.footer = true;
 	}
 	//#endregion ---------- /View Controller Methods ---------- 

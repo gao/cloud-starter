@@ -3,8 +3,33 @@
 
 .ProjectTicketsView{
 	display: grid;
-	grid-template-columns: 30rem;
-	grid-template-rows: 1fr;
+	grid-template-columns: 30rem 30rem;
+	grid-column-gap: 2rem;
+
+
+	& > .show-add-pane-dialog{
+		width: 6rem;
+		align-self: center;
+		justify-items: center;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		button{
+			opacity: .4;
+			background: white;
+			font-size: 3.5rem;
+			height: 7.5rem;
+			width: 7.5rem;
+			line-height: 0;
+			color: var(--txt-lighter);
+			font-weight: 100;
+
+			&:hover{
+				opacity: 1;
+			}
+		}
+	}
 
 	.card > section {
 		display: flex;

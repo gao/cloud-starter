@@ -1,6 +1,6 @@
 import { get as webGet, post as webPost, put as webPut, delet as webDelete, patch as webPatch } from './ajax';
 import { hub } from 'mvdom';
-import { Project, Ticket, Label, Filter, TicketFilter } from 'shared/entities';
+import { Project, Ticket, Label, Filter, TicketFilter, Pane, ProjectEntityFilter } from 'shared/entities';
 
 const dsoHub = hub('dsoHub');
 
@@ -34,7 +34,18 @@ class BaseDso<E, F> {
 		const result = await webPost(`/api/crud/${this._entityType}`, props);
 		const entity = result.data;
 		if (result.success) {
-			dsoHub.pub('Project', 'create', entity);
+			dsoHub.pub(this._entityType, 'create', entity);
+			return entity;
+		} else {
+			throw result;
+		}
+	}
+
+	async update(id: number, props: Partial<E>): Promise<any> {
+		const result = await webPatch(`/api/crud/${this._entityType}/${id}`, props);
+		const entity = result.data;
+		if (result.success) {
+			dsoHub.pub(this._entityType, 'update', entity);
 			return entity;
 		} else {
 			throw result;
@@ -46,6 +57,8 @@ export const projectDso = new BaseDso<Project, Filter<Project>>('Project');
 
 
 export const ticketDso = new BaseDso<Ticket, TicketFilter>('Ticket');
+
+export const paneDso = new BaseDso<Pane, ProjectEntityFilter<Pane>>('Pane');
 
 export interface LabelFilter extends Filter<Label> {
 	projectId: number;

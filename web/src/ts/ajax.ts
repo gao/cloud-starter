@@ -26,7 +26,7 @@ export function delet(path: string, data?: any) {
 
 // patch
 export function patch(path: string, data?: any) {
-	return _ajax('PUT', path, data, null);
+	return _ajax('PATCH', path, data, null);
 }
 
 
@@ -51,9 +51,8 @@ function _ajax(type: string, path: string, data?: any, opts?: any): Promise<any>
 
 		xhr.open(type, url);
 		if (!opts.contentType.startsWith("multipart/form-data")) {
-			// FIXME: it works for java receive params
-			// xhr.setRequestHeader("Content-Type", opts.contentType);
-			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+			xhr.setRequestHeader("Content-Type", opts.contentType);
+			// xhr.setRequestHeader("Content-Type", "application/json");
 		}
 
 		xhr.onload = function () {
@@ -87,14 +86,15 @@ function _ajax(type: string, path: string, data?: any, opts?: any): Promise<any>
 		// pass body
 		if (asBody) {
 			if (opts.contentType.startsWith("multipart/form-data")) {
+				console.log(`send with formData`);
 				var formData = new FormData();
 				for (var k in data) {
 					formData.append(k, data[k]);
 				}
 				xhr.send(formData);
 			} else {
-				// FIXME: this works for java receive params
-				xhr.send(param(data));
+				const xhrData = JSON.stringify(data);//param(data);
+				xhr.send(xhrData);
 			}
 		} else {
 			xhr.send();

@@ -1,30 +1,33 @@
-
-
-import { BaseView, addDomEvents } from 'views/base';
-import { ticketDso, labelDso } from 'ts/dsos';
-import { first, append, display, on } from 'mvdom';
+import { BaseView, addDomEvents, addHubEvents } from 'views/base';
+import { ticketDso, paneDso } from 'ts/dsos';
+import { first, append, display, on, push } from 'mvdom';
 import { render } from 'ts/render';
-import { ProjectLabelPickerDialog } from './ProjectLabelPickerDialog';
+import { ProjectPaneConfigDialog } from './ProjectPaneConfigDialog';
 import { getLuma } from 'ts/utils';
+import { Pane } from 'shared/entities';
 
 export class ProjectTicketsView extends BaseView {
 
 	projectId!: number;
-	labelIds: number[] = [];
 
-	//// Key view DOM Elements
-	private get mainTicketsContent() { return first(this.el, '.card > section')! }
+
+	//#region    ---------- Hub Events ---------- 
+	hubEvents = addHubEvents(this.hubEvents, {
+		'dsoHub; Pane; update, create': async (pane: Pane) => {
+			this.refreshPane(pane.id);
+		}
+	})
+	//#endregion ---------- /Hub Events ---------- 
+
 
 	//#region    ---------- View DOM Events ---------- 
 	events = addDomEvents(this.events, {
 		'click; .card > header .ico-more': async (evt) => {
-			const ticketCard = evt.selectTarget.closest('.card');
-			const d = await display(ProjectLabelPickerDialog, 'body', { projectId: this.projectId, });
-			on(d.el, "OK", async () => {
-				const ids = d.getLabelIds();
-				this.labelIds = ids;
-				this.refresh();
-			})
+			const paneEl = evt.selectTarget.closest('[data-type="Pane"]')!;
+			const paneId = parseInt(paneEl.getAttribute('data-id')!);
+
+			// TODO: need to get the labelIds to set the checbox
+			const d = await display(ProjectPaneConfigDialog, 'body', { paneId });
 		}
 	})
 	//#endregion ---------- /View DOM Events ---------- 
@@ -39,8 +42,31 @@ export class ProjectTicketsView extends BaseView {
 
 
 	async refresh() {
-		const tickets = await ticketDso.list({ projectId: this.projectId, labelIds: this.labelIds });
+		const projectId = this.projectId;
 
+		// first get all of the panes
+		const panes = await paneDso.list({ projectId });
+
+		const addEl = first(this.el, '.show-add-pane-dialog')!;
+
+		for (const pane of panes) {
+			const cardFrag = render('ProjectTicketsView-pane', pane)
+			append(addEl, cardFrag, 'before');
+			this.refreshPane(pane.id);
+		}
+
+	}
+
+	async refreshPane(paneId: number) {
+		const paneEl = first(this.el, `[data-type='Pane'][data-id='${paneId}']`);
+		if (paneEl == null) {
+			console.log(`cannot find pane for ${paneId}`);
+			return;
+		}
+
+		const pane = await paneDso.get(paneId);
+		push(paneEl, pane);
+		const tickets = await ticketDso.list({ projectId: this.projectId, labelIds: pane.labelIds });
 		// TODO: need to move the 'isDark' somewhere else, perhaps on import time
 		for (const t of tickets) {
 			if (t.labels) {
@@ -51,8 +77,8 @@ export class ProjectTicketsView extends BaseView {
 				}
 			}
 		}
-
-		append(this.mainTicketsContent, render('ProjectTicketsView-tickets', { tickets }), 'empty');
+		const sectionEl = first(paneEl, '.card > section')!;
+		append(sectionEl, render('ProjectTicketsView-tickets', { tickets }), 'empty');
 	}
 
 }

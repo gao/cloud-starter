@@ -2,10 +2,11 @@
 
 import { srouter } from '../express-utils';
 import { getUserRepos, getRepo } from '../service/github';
-import { projectDao } from '../da/daos';
+import { projectDao, paneDao } from '../da/daos';
 import { Project } from 'shared/entities';
 import { getProjectFromReq } from './web-commons';
 import { syncIssues, syncLabels } from '../service/github-syncer';
+import { accessSync } from 'fs';
 
 const _router = srouter();
 
@@ -20,6 +21,7 @@ _router.get('/github/repos', async function (req, res, next) {
 
 _router.post('/github/import-repo', async function (req, res, next) {
 	const repoName = req.body.repo;
+	const ctx = req.context;
 
 	try {
 		const repo = await getRepo(req.context, repoName);
@@ -31,11 +33,15 @@ _router.post('/github/import-repo', async function (req, res, next) {
 			ghFullName: repo.full_name,
 		}
 
-		const projectId = await projectDao.create(req.context, projectData);
-		const newProject = await projectDao.get(req.context, projectId);
+		const projectId = await projectDao.create(ctx, projectData);
+		const newProject = await projectDao.get(ctx, projectId);
 
 		// create the first pane. 
+		await paneDao.create(ctx, { projectId, name: "All Open" });
 
+		// sync the data. 
+		await syncLabels(req.context, projectId);
+		await syncIssues(req.context, projectId);
 
 		return { success: true, data: newProject };
 

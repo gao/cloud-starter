@@ -27,7 +27,7 @@ ALTER SEQUENCE project_id_seq RESTART WITH 1000;
 
 CREATE TABLE "ticket" (
   id bigserial PRIMARY KEY,
-  "projectId" bigint,
+  "projectId" bigint NOT NULL,
   title varchar(128), 
   "ghId" bigint,
   "ghNumber" int,
@@ -43,7 +43,7 @@ CREATE TABLE "ticket_label" (
 
 CREATE TABLE "label" (
   id bigserial PRIMARY KEY,
-  "projectId" bigint,
+  "projectId" bigint NOT NULL,
   name varchar(128), 
   color varchar(32),
   "ghId" bigint,
@@ -52,7 +52,8 @@ CREATE TABLE "label" (
 ALTER SEQUENCE label_id_seq RESTART WITH 1000;
 
 CREATE TABLE pane (
-    id bigserial PRIMARY KEY,  
+    id bigserial PRIMARY KEY,
+    "projectId" bigint NOT NULL,
     name varchar(128),
     "labelIds" bigint[]
 );

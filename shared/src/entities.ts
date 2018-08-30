@@ -5,8 +5,11 @@ export interface Filter<E> {
 	ids?: number[];
 }
 
-export interface TicketFilter extends Filter<Ticket> {
+export interface ProjectEntityFilter<E> extends Filter<E> {
 	projectId: number;
+}
+
+export interface TicketFilter extends ProjectEntityFilter<Ticket> {
 	labelIds?: number[];
 }
 

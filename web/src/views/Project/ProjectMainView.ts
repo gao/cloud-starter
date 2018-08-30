@@ -6,7 +6,10 @@ import { pathAsNum } from 'ts/route';
 import { addDomEvents, addHubEvents, BaseView } from 'views/base';
 import { ProjectTicketsView } from './ProjectTicketsView';
 
-const defaultTab = 'tickets';
+// TIP: Simple but Effective Module Scoped UI State
+//    We start with the "tickets" as the default tab, but then, it get updated as the user change tabs.
+//    This is a very simple but effective way to keep the tab selected when changing project (simple but effective UI state). 
+let defaultTab = 'tickets';
 
 export class ProjectMainView extends BaseView {
 	projectId?: number;
@@ -89,6 +92,7 @@ export class ProjectMainView extends BaseView {
 		// if new path
 		const newTab = this.hasNewPathAt(2, defaultTab);
 		if (newTab) {
+			defaultTab = newTab; // we change the default, see Simple but Effective UI State TIP above
 			this.mode = newTab;
 
 			if (this.mode === "tickets") {

@@ -1,27 +1,34 @@
 <script id="ProjectTicketsView" type="text/html">
 	<div class="ProjectTicketsView">
 	
-		<div class="card">
-			<header><h5>Tickets</h5><aside>{{{ico "ico-more"}}}</header>
-			<section>
-			</section>
+		<div class=" show-add-pane-dialog">
+			<button class="">+</button>
 		</div>
 	</div>
-	</script>
+</script>
 	
-	
-	<script id="ProjectTicketsView-tickets" type="text/html">
-	
-		<div class="list">
-			<ul>
-			{{#each tickets}}
-			<a href="#project/{{projectId}}/ticket/{{id}}">{{ghNumber}} - {{title}}<br />
-				{{#each labels}}
-				<span class="lbl" style="background: #{{color}}; {{#if isDark}}color:#fff{{/if}}" >{{name}}</span>
-				{{/each}}
-			</a>
+<script id="ProjectTicketsView-pane" type="text/html">
+<div class="card" data-type="Pane" data-id="{{id}}">
+	<header>
+		<h5 class="dx dx-name">{{name}}</h5>
+		<aside>{{{ico "ico-more"}}}</aside>
+	</header>
+	<section>
+	</section>
+</div>
+</script>
+
+<script id="ProjectTicketsView-tickets" type="text/html">
+
+	<div class="list">
+		<ul>
+		{{#each tickets}}
+		<a href="#project/{{projectId}}/ticket/{{id}}">{{ghNumber}} - {{title}}<br />
+			{{#each labels}}
+			<span class="lbl" style="background: #{{color}}; {{#if isDark}}color:#fff{{/if}}" >{{name}}</span>
 			{{/each}}
-			</ul>
-		<div>
-	</script>
-	
+		</a>
+		{{/each}}
+		</ul>
+	<div>
+</script>
