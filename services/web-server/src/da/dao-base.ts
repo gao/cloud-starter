@@ -2,13 +2,12 @@ import { getKnex } from './db';
 import { Context } from '../context';
 import { Monitor } from '../perf';
 import { Filter, ProjectEntityFilter } from 'shared/entities';
-import { ensureArray } from 'shared/utils';
 import { QueryBuilder } from 'knex';
 
 
 // Note: for now, the knex can take a generic I for where value
 // @annoC
-export class BaseDao<E, I> {
+export class BaseDao<E, I, F extends Filter<E> = Filter<E>> {
 	readonly tableName: string;
 	readonly idNames: string | string[];
 
@@ -57,10 +56,10 @@ export class BaseDao<E, I> {
 	}
 
 	@Monitor()
-	async list(ctx: Context, filter?: Filter<E>): Promise<E[]> {
+	async list(ctx: Context, filter?: F): Promise<E[]> {
 		const k = await getKnex();
 		let q = k(this.tableName);
-		this.completeListQueryBuilder(q, filter);
+		this.completeQueryBuildWithFilter(q, filter);
 
 		const entities = await q.then(); // TODO: need to check if this is the common way
 		return entities as E[];
@@ -72,7 +71,7 @@ export class BaseDao<E, I> {
 		return k(this.tableName).delete().where(this.getWhereIdObject(id));
 	}
 
-	protected completeListQueryBuilder(q: QueryBuilder, filter?: Filter<E>) {
+	protected completeQueryBuildWithFilter(q: QueryBuilder, filter?: F) {
 		if (filter && filter.matching) {
 			q = q.where(filter.matching);
 		}
@@ -109,10 +108,10 @@ export class BaseDao<E, I> {
 	}
 }
 
-export class ProjectEntityDao<E, I> extends BaseDao<E, I> {
+export class ProjectEntityDao<E, I> extends BaseDao<E, I, ProjectEntityFilter<E>> {
 
-	protected completeListQueryBuilder(q: QueryBuilder, filter: ProjectEntityFilter<E>) {
-		super.completeListQueryBuilder(q, filter);
+	protected completeQueryBuildWithFilter(q: QueryBuilder, filter: ProjectEntityFilter<E>) {
+		super.completeQueryBuildWithFilter(q, filter);
 		q.where('projectId', filter.projectId);
 	}
 

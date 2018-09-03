@@ -3,52 +3,52 @@
 
 .ProjectTicketsView{
 	display: grid;
-	grid-template-columns: 30rem 30rem;
+	grid-auto-flow: column;
+	grid-auto-columns: 30rem;
 	grid-column-gap: 2rem;
 
+	/* FIXME: CSS too complex, needs to be reduce. Probably need a button.main which is the round blue circle.*/
 
-	& > .show-add-pane-dialog{
-		width: 6rem;
+
+	.show-add{
+		background: #fff;
 		align-self: center;
-		justify-items: center;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-
-		button{
-			opacity: .4;
-			background: white;
-			font-size: 3.5rem;
-			height: 7.5rem;
-			width: 7.5rem;
-			line-height: 0;
-			color: var(--txt-lighter);
-			font-weight: 100;
-
-			&:hover{
-				opacity: 1;
+		margin-left: 5rem;
+		opacity: .3;
+		i{
+			fill: var(--bdr-light);
+		}
+		&:hover{
+			filter: none;
+			opacity: 1;
+			i{
+				fill: #fff;
 			}
 		}
 	}
 
-	.card > section {
-		display: flex;
-		padding-bottom: 2rem;
+	.card{
 
-		& > div.list{
-			position: relative;
-			flex: 1;
+		& > section {
+			display: flex;
+			padding-bottom: 2rem;
 
-			& > ul{
-				overflow: scroll;
-				@mixin fitparent{};
+			& > div.list{
+				position: relative;
+				flex: 1;
 
-				.lbl{
-					font-size: .75rem;
-					padding: .5em .5rem;
+				& > ul{
+					overflow: scroll;
+					@mixin fitparent{};
+
+					.lbl{
+						font-size: .75rem;
+						padding: .5em .5rem;
+					}
 				}
-			}
 
+			}
 		}
 	}
+
 }

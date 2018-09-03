@@ -17,10 +17,10 @@ export class BaseView implements View {
 	//        and later, when MVDOM will define them correctly, we will remove this initialization. 
 
 	/** Unique id of the view. Used in namespace binding and such.  */
-	id = "";
+	id!: string;
 
 	/** The view name or "class name". */
-	name = "";
+	name!: string;
 
 	/** The htmlElement created "definite assignment assertion" as we know it will be defined after create */
 	el!: HTMLElement; // 
@@ -31,6 +31,8 @@ export class BaseView implements View {
 	docEvents: EventBindings = {};
 
 	winEvents: EventBindings = {};
+
+	closestEvents: EventBindings = {};
 
 	// Here we use the array way, because, we want to allow subclass to also listen to the same hubEvents 
 	//   as the base class (might be useful in some circumstances)

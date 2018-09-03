@@ -16,7 +16,7 @@ export async function syncLabels(ctx: Context, projectId: number) {
 
 	// get the github and db labels in parallel
 	const ghLabelsP = getLabels(ctx, project.ghFullName);
-	const labelsP = labelDao.list(ctx, { matching: { projectId } });
+	const labelsP = labelDao.list(ctx, { projectId });
 
 	// wait for both of them
 	const [ghLabels, labels] = await Promise.all([ghLabelsP, labelsP]);
@@ -57,7 +57,7 @@ export async function syncIssues(ctx: Context, projectId: number) {
 
 	// We get the github issues from the API and the tickets from the db
 	// Note: We can do that in parallel and then wait for both to resolve
-	const labelsP = labelDao.list(ctx, { matching: { projectId } });
+	const labelsP = labelDao.list(ctx, { projectId });
 	const issuesP = await getIssues(ctx, project.ghFullName);
 	const ticketsP = await ticketDao.list(ctx, { projectId });
 

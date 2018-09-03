@@ -12,8 +12,17 @@
 		display: grid;
 		grid-template-columns: 4rem 24rem auto 14rem 1rem;
 		
+		& > i { 
+			justify-self: center;
+			align-self: center;
+			fill: #fff;
+			width: 2rem;
+			height: 2rem;
+			cursor: pointer;
+		}
 		& > h3 {
-			@mixin typo-h5{}; 
+			@mixin typo-h5{};
+			
 			grid-column: 2;
 			align-self: center;
 			justify-self: left;
