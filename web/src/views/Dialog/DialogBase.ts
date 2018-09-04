@@ -14,7 +14,17 @@ const defaultFooter: FooterConfig = {
 	cancel: true
 }
 
+type Opts = {
+	cssExtra: string;
+}
+
 export class DialogBase extends BaseView {
+	opts: Opts;
+
+	constructor(opts: Opts) {
+		super();
+		this.opts = opts || {};
+	}
 
 	set title(title: string) {
 		first(this.el, '.dialog > header > .title')!.innerText = title;
@@ -77,16 +87,16 @@ export class DialogBase extends BaseView {
 	//#endregion ---------- /Dom Events ---------- 
 
 	//#region    ---------- Controller Methods ---------- 
-	create(data?: any) {
-		data = data || {};
+	create() {
+
 
 		// here we do not call super.create, because no matter what the class, we want use the BaseDialog.tmpl
-		let frag = render('DialogBase', data);
+		let frag = render('DialogBase');
 
 		// frag.firstElementChild!.classList.add('base-dialog');
 
-		if (data && data.extraClass) {
-			frag.firstElementChild!.classList.add(data.extraClass);
+		if (this.opts && this.opts.cssExtra) {
+			frag.firstElementChild!.classList.add(this.opts.cssExtra);
 		}
 
 		const name = this.name.indexOf("$") > -1 ? this.name.slice(0, this.name.indexOf("$")) : this.name;

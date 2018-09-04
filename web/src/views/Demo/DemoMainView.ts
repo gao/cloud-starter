@@ -39,7 +39,7 @@ export class DemoMainView extends BaseView {
 		// update this view/content only if the path has changed
 		if (newPath != null) {
 			const subViewClass = pathToView[newPath];
-			display(subViewClass, this.main, null, 'empty');
+			display(new subViewClass, this.main, null, 'empty');
 
 
 

@@ -12,7 +12,7 @@ on(document, 'APP_LOADED', async function () {
 	// if no UC, we display the LoginView
 
 	if (!uc) {
-		display(LoginView, 'body', null, 'empty');
+		display(new LoginView(), 'body', null, 'empty');
 	} else {
 		// then add this new MainView
 		display(new MainView(uc), first('body')!, { uc }).then(function () {

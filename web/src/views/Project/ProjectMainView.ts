@@ -98,10 +98,10 @@ export class ProjectMainView extends BaseView {
 
 			switch (this.mode) {
 				case "lists":
-					display(ProjectListMainView, this.content, { projectId: this.projectId }, 'empty');
+					display(new ProjectListMainView(this.projectId!), this.content, { projectId: this.projectId }, 'empty');
 					break;
 				case "tickets":
-					display(new ProjectTicketsMainView(), this.content, { projectId: this.projectId }, 'empty');
+					display(new ProjectTicketsMainView(this.projectId!), this.content, { projectId: this.projectId }, 'empty');
 					break;
 				default:
 					empty(this.content);

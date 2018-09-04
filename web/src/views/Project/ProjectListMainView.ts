@@ -10,6 +10,11 @@ export class ProjectListMainView extends BaseView {
 
 	projectId!: number;
 
+	constructor(projectId: number) {
+		super();
+		this.projectId = projectId;
+	}
+
 	//#region    ---------- Hub Events ---------- 
 	hubEvents = addHubEvents(this.hubEvents, {
 
@@ -48,9 +53,7 @@ export class ProjectListMainView extends BaseView {
 
 
 	//#region    ---------- View Controller Methods ---------- 
-	async postDisplay(data: { projectId: number }) {
-		this.projectId = data.projectId;
-
+	async postDisplay() {
 		this.refresh();
 	}
 	//#endregion ---------- /View Controller Methods ---------- 
