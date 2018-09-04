@@ -14,7 +14,7 @@
     "knex": "^0.15.2",
     "mocha": "^5.2.0",
     "moment": "^2.22.1",
-    "mvdom": "file:../../__mvdom/mvdom_src",
+    "mvdom": "^0.6.0",
     "node-simple-timer": "^0.1.1",
     "p-spawn": "^0.4.1",
     "pg": "^7.4.3",

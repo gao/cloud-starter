@@ -15,7 +15,7 @@ export class NavView extends BaseView {
 	events = addDomEvents(this.events, {
 		'click; .show-add-project-dialog': async () => {
 
-			const dialog = await display(ProjectAddDialog, 'body');
+			const dialog = await display(new ProjectAddDialog(), 'body');
 			on(dialog.el, 'ok', async (evt) => {
 				const r = await projectDso.create(evt.detail!);
 			});

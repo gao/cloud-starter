@@ -1,6 +1,6 @@
 
 import { BaseView, addDomEvents } from 'views/base';
-import { DialogBase } from '../Dialog/DialogBase';
+import { DialogBase, DialogBaseOpts } from '../Dialog/DialogBase';
 import { labelDso, paneDso } from 'ts/dsos';
 import { render } from 'ts/render';
 import { all, pull } from 'mvdom';
@@ -13,14 +13,14 @@ export class ProjectPaneConfigDialog extends DialogBase {
 	private paneId?: number;
 	private projectId!: number; // after init, this will always be present.
 
-	constructor(opts: { projectId?: number, paneId?: number }) {
+	constructor(data: { projectId?: number, paneId?: number, opts?: DialogBaseOpts }) {
 		super();
-		if (opts) {
-			if (opts.projectId != null) {
-				this.projectId = opts.projectId;
+		if (data) {
+			if (data.projectId != null) {
+				this.projectId = data.projectId;
 			}
-			if (opts.paneId != null) {
-				this.paneId = opts.paneId;
+			if (data.paneId != null) {
+				this.paneId = data.paneId;
 			}
 		}
 	}

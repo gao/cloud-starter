@@ -14,14 +14,14 @@ const defaultFooter: FooterConfig = {
 	cancel: true
 }
 
-type Opts = {
-	cssExtra: string;
+export type DialogBaseOpts = {
+	cssExtra?: string;
 }
 
 export class DialogBase extends BaseView {
-	opts: Opts;
+	opts: DialogBaseOpts;
 
-	constructor(opts: Opts) {
+	constructor(opts?: DialogBaseOpts) {
 		super();
 		this.opts = opts || {};
 	}
