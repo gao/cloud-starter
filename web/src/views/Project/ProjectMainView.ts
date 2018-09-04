@@ -5,6 +5,7 @@ import { render } from 'ts/render';
 import { pathAsNum } from 'ts/route';
 import { addDomEvents, addHubEvents, BaseView } from 'views/base';
 import { ProjectListMainView } from './ProjectListMainView';
+import { ProjectTicketsMainView } from './ProjectTicketsMainView';
 
 // TIP: Simple but Effective Module Scoped UI State
 //    We start with the "tickets" as the default tab, but then, it get updated as the user change tabs.
@@ -95,11 +96,17 @@ export class ProjectMainView extends BaseView {
 			defaultTab = newTab; // we change the default, see Simple but Effective UI State TIP above
 			this.mode = newTab;
 
-			if (this.mode === "lists") {
-				display(ProjectListMainView, this.content, { projectId: this.projectId }, 'empty');
-			} else {
-				empty(this.content);
+			switch (this.mode) {
+				case "lists":
+					display(ProjectListMainView, this.content, { projectId: this.projectId }, 'empty');
+					break;
+				case "tickets":
+					display(new ProjectTicketsMainView(), this.content, { projectId: this.projectId }, 'empty');
+					break;
+				default:
+					empty(this.content);
 			}
+
 		}
 
 	}

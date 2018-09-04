@@ -44,7 +44,6 @@ export class ProjectAddDialog extends DialogBase {
 			const selectEl = evt.selectTarget;
 			const repoFullName = selectEl.getAttribute('data-gh-repo')!;
 			const repo = await importRepo(repoFullName);
-			console.log(`Repo created ${repoFullName}`, repo);
 			this.doClose();
 		}
 	});
@@ -69,7 +68,6 @@ export class ProjectAddDialog extends DialogBase {
 		// repos = repos.sort((a, b) => {
 		// 	return (a.pushed_at === b.pushed_at) ? 0 : (a.pushed_at > b.pushed_at) ? -1 : 1;
 		// });
-		console.log(`repos ${repos.length}`);
 		for (const repo of repos) {
 
 			html += `<a data-gh-repo="${repo.full_name}">${repo.full_name}</a>`;

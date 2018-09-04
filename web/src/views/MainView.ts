@@ -18,8 +18,13 @@ let pathToView: { [name: string]: BaseViewClass } = {
 
 export class MainView extends BaseView {
 	private _userMenuShowing = false;
-	private uc?: UserContext = undefined;
+	private uc: UserContext;
 
+
+	constructor(uc: UserContext) {
+		super();
+		this.uc = uc;
+	}
 
 	//// View key elements
 	private get nav() { return first(this.el, 'nav')! };
@@ -70,9 +75,8 @@ export class MainView extends BaseView {
 	});
 	//#endregion ---------- /Hub Events ---------- 
 
-	async postDisplay(data: { uc: UserContext }) {
-		this.uc = data.uc;
-		display(NavView, this.nav, null, 'empty');
+	async postDisplay() {
+		display(new NavView(), this.nav, null, 'empty');
 
 		// for now, the name will be the username
 		push(this.headerAside, { name: this.uc.name });
@@ -86,7 +90,7 @@ export class MainView extends BaseView {
 			const subViewClass = pathToView[newPath];
 			if (subViewClass) {
 				empty(this.main);
-				display(subViewClass, this.main, null, 'empty');
+				display(new subViewClass, this.main, null, 'empty');
 			} else {
 				console.log(`ERROR - No view found for path ${newPath}`);
 			}

@@ -1,5 +1,5 @@
 // This still use the "./lib" module to load the required library, making "./lib" the single point for external libraries.
-import { View, ExtendedDOMEventListener } from "mvdom"
+import { View, ExtendedDOMEventListener } from "mvdom";
 import { render } from "ts/render";
 
 import { RouteInfo, pathAt } from "ts/route";
