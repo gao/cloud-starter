@@ -4,12 +4,12 @@ import { sync } from 'ts/gh-api';
 import { render } from 'ts/render';
 import { pathAsNum } from 'ts/route';
 import { addDomEvents, addHubEvents, BaseView } from 'views/base';
-import { ProjectTicketsView } from './ProjectTicketsView';
+import { ProjectListMainView } from './ProjectListMainView';
 
 // TIP: Simple but Effective Module Scoped UI State
 //    We start with the "tickets" as the default tab, but then, it get updated as the user change tabs.
 //    This is a very simple but effective way to keep the tab selected when changing project (simple but effective UI state). 
-let defaultTab = 'tickets';
+let defaultTab = 'lists';
 
 export class ProjectMainView extends BaseView {
 	projectId?: number;
@@ -95,8 +95,8 @@ export class ProjectMainView extends BaseView {
 			defaultTab = newTab; // we change the default, see Simple but Effective UI State TIP above
 			this.mode = newTab;
 
-			if (this.mode === "tickets") {
-				display(ProjectTicketsView, this.content, { projectId: this.projectId }, 'empty');
+			if (this.mode === "lists") {
+				display(ProjectListMainView, this.content, { projectId: this.projectId }, 'empty');
 			} else {
 				empty(this.content);
 			}
