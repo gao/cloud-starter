@@ -15,7 +15,7 @@ on(document, 'APP_LOADED', async function () {
 		display(new LoginView(), 'body', null, 'empty');
 	} else {
 		// then add this new MainView
-		display(new MainView(uc), first('body')!, { uc }).then(function () {
+		display(new MainView(uc), first('body')!).then(function () {
 			// initialize the route, which will trigger a "CHANGE" on the routeHub hub. 
 			// Note: we do that once the MainView has been added to the DOM so that it can react accordingly
 			initRoute();
