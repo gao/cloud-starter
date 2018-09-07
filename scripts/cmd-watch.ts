@@ -8,6 +8,8 @@ router({ watch }).route();
 
 const webServerDir = 'services/web-server';
 
+const noRestartIfPathHas = '/test/';
+
 async function watch() {
 	// ./node_modules/.bin/vdev build watch web
 	spawn('./node_modules/.bin/vdev', ['build', 'watch', 'web']);
@@ -32,12 +34,21 @@ async function watch() {
 
 	watcher.on('change', async function (filePath: string) {
 		console.log(`${distDir} change: ${filePath}`);
-		cr.map(filePath);
+		if (filePath.includes(noRestartIfPathHas)) {
+			console.log(`no restart because path contains ${noRestartIfPathHas}`);
+		} else {
+			cr.map(filePath);
+		}
+
 	});
 
 	watcher.on('add', async function (filePath: string) {
 		console.log(`${distDir} add: ${filePath}`);
-		cr.map(filePath);
+		if (filePath.includes(noRestartIfPathHas)) {
+			console.log(`no restart because path contains ${noRestartIfPathHas}`);
+		} else {
+			cr.map(filePath);
+		}
 	});
 	// --------- /web-server dist watch --------- //
 

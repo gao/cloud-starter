@@ -41,8 +41,6 @@ export class DemoMainView extends BaseView {
 			const subViewClass = pathToView[newPath];
 			display(new subViewClass, this.main, null, 'empty');
 
-
-
 			// update the tab
 			const href = `#demo/${newPath}`;
 			for (const tab of all(this.el, '.tab-bar a')) {

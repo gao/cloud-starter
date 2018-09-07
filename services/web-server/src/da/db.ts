@@ -1,5 +1,6 @@
 import { types } from 'pg';
 import { parse as pgArrayParse } from 'postgres-array';
+import { dbConfig } from './db-config';
 import * as knexClient from 'knex';
 
 
@@ -15,13 +16,13 @@ types.setTypeParser(1016, function (val: string) {
 	return pgArrayParse(val, parseInt);
 });
 
-
-
-const host = 'cstar-db-srv';
 // const host = 'localhost';
-const dbPrefix = 'cstar_';
-const dbOpts = { database: `${dbPrefix}db`, user: `${dbPrefix}user`, password: 'welcome', host: host };
-
+const dbOpts = {
+	database: dbConfig.database,
+	user: dbConfig.user,
+	password: dbConfig.password,
+	host: dbConfig.host
+};
 
 
 let _knex: knexClient | undefined;

@@ -1,11 +1,12 @@
-import { userDao, projectDao } from '../da/daos';
-import { newContext } from '../context';
-import { closeKnex } from '../da/db';
+import { userDao, projectDao } from '../src/da/daos';
+import { newContext } from '../src/context';
+import { closeKnex } from '../src/da/db';
 import * as assert from 'assert';
 
 describe("dao", function () {
 
 	this.afterAll(async function () {
+		console.log('>>> Closing Knex');
 		await closeKnex();
 	})
 

@@ -2,7 +2,8 @@
 .DS_Store
 
 # Ignore .vscode
-.vscode/
+# For this project, we actually allow .vscode files to be added to show the best practices.
+#.vscode/
 
 # ignore node things
 node_modules/
