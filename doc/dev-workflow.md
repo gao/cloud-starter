@@ -44,7 +44,32 @@ Each services should have a `test/` folder with some `.ts` test files. To run th
 npm run kexec web-server -- npm test -- -g test-hello
 ```
 
+
+#### REPL Testing
+
+To run some test each time a test files or source files get changed (will do once when multi-save), do the following. 
+
+Note: `npm run watch` needs to be off.
+
+```sh
+# to watch dist files and run test, 
+npm run trun web-server
+
+# to run only some test (the -g ...) 
+npm run trun web-server test-hello
+# This will run only test that have 'test-hello' in their mochac it(...) names
+
+```
+
+In short, the `scripts/cmd-trun.ts` just do a `npm run kexec web-server -- npm test [-- -g _filter_]` on dist file changes.
+
+
+#### Testing with DEBUG
+
+NOT supported yet. 
+
 Later, `dtest` will be supported for being able to put a break point on a test file (it will need its custom port)
+
 ```sh
 npm run kexec web-server -- npm dtest -- -g test-hello
 ```

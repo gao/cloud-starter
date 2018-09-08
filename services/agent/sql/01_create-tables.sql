@@ -6,6 +6,19 @@ CREATE TABLE "user" (
 );
 ALTER SEQUENCE user_id_seq RESTART WITH 1000;
 
+CREATE TABLE "role" (
+  id bigserial PRIMARY KEY,
+  name varchar(64) UNIQUE NOT NULL
+);
+ALTER SEQUENCE role_id_seq RESTART WITH 1000;
+
+
+CREATE TABLE "user_role" (
+  "userId" bigint NOT NULL,
+  "roleId" bigint NOT NULL,
+  PRIMARY KEY("userId", "roleId")
+);
+
 CREATE TABLE oauth (
   id bigserial PRIMARY KEY,
   "userId" bigint NOT NULL,

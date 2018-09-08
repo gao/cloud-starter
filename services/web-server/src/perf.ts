@@ -82,10 +82,10 @@ export class PerfContext {
 //#region    ---------- Decorator ---------- 
 export function Monitor() {
 
-	return function mon(target: Object, propertyKey: string, descriptor: TypedPropertyDescriptor<any>) {
+	return function (target: Object, propertyKey: string, descriptor: TypedPropertyDescriptor<any>) {
 		const method = descriptor.value!;
 
-		descriptor.value = async function (this: any) {
+		descriptor.value = async function monitorWrapper(this: any) {
 			const ctx = arguments[0] as Context;
 			if (ctx == null || !ctx.constructor.name.startsWith('Context')) {
 				throw new Error(`Cannot`)

@@ -24,7 +24,6 @@ class UserDao extends BaseDao<User, number>{
 
 	@AccessRequires('um')
 	async remove(ctx: Context, id: number) {
-		console.log('UserDao.remove')
 		return super.remove(ctx, id);
 	}
 

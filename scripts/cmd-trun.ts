@@ -6,6 +6,7 @@ import * as chokidar from 'chokidar';
 
 const servicesDir = 'services';
 
+const testPathContains = '/test/';
 
 router({ trun }).route();
 
@@ -13,13 +14,17 @@ router({ trun }).route();
 async function trun(serviceName: string, testGrep: string) {
 
 
-	// TODO: need to use the vdev to get the real dir
-	const testDir = `${servicesDir}/${serviceName}/dist/${servicesDir}/${serviceName}/test/`;
+	const serviceDir = `${servicesDir}/${serviceName}`;
+	const serviceDistDir = `${serviceDir}/dist`;
 
+	// TODO: need to use the vdev to get the real dir
+
+	// start the building
+	spawn('tsc', ['-w'], { cwd: serviceDir }); // this will create a new restart
 
 	// --------- service test watch and run --------- //
-
-	const watcher = chokidar.watch(`${testDir}**/*.js`, { depth: 99, ignoreInitial: true, persistent: true });
+	console.log('watch ' + `${serviceDistDir}/**/*.js`);
+	const watcher = chokidar.watch(`${serviceDistDir}/**/*.js`, { depth: 99, ignoreInitial: true, persistent: true });
 
 	const cr = new CallReducer(() => {
 		const args = ['run', 'kexec', serviceName];
@@ -31,6 +36,7 @@ async function trun(serviceName: string, testGrep: string) {
 	}, 500);
 
 	watcher.on('change', async function (filePath: string) {
+		console.log(`change ${filePath}`);
 		cr.map(filePath);
 	});
 

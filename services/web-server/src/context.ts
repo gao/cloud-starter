@@ -1,36 +1,34 @@
 import { PerfContext } from './perf';
 import { User } from 'shared/entities';
 import { oauthDao } from './da/daos';
+import { getPrivileges } from './role-manager';
 
 // temporary hardcoded (should go to DB with roles)
-const _userPrivileges: { [key: string]: string[] } = {
-	'-1': ['um', 'project']
-}
+
 
 /** Context factory. Right now just based on userId */
 export async function newContext(userId?: number, user?: Partial<User>) {
 	if (userId !== undefined) {
-		const privileges = _userPrivileges[userId] || [];
-		return new ContextImpl(userId, privileges, user);
+		return new ContextImpl(userId, user);
 	} else {
 		// empty context
 		return new ContextImpl(-1);
 	}
 }
 
-
+/** Note: Make context an interface so that ContextImpl class does not get expose and app code cannot create it of the newContext factory */
 export interface Context {
 	readonly userId: number;
 	readonly username: string | null;
 	getAccessToken(): Promise<string | null>;
-	hasPrivilege: (privilege: string) => boolean;
+	hasPrivilege(privilege: string): Promise<boolean>;
 	readonly perfContext: PerfContext;
 }
 
 //#region    ---------- Private Implementations ---------- 
 class ContextImpl implements Context {
 	readonly userId: number;
-	private _privilegeSet: Set<string>;
+	private _privilegeSet: Set<string> | undefined = undefined;
 	private _user?: Partial<User>
 	readonly perfContext = new PerfContext();
 
@@ -41,9 +39,8 @@ class ContextImpl implements Context {
 	}
 
 
-	constructor(userId: number, privileges?: string[], user?: Partial<User>) {
+	constructor(userId: number, user?: Partial<User>) {
 		this.userId = userId;
-		this._privilegeSet = new Set(privileges);
 		this._user = user;
 	}
 
@@ -70,7 +67,13 @@ class ContextImpl implements Context {
 		return this._accessToken;
 	}
 
-	public hasPrivilege(privilege: string) {
+	public async hasPrivilege(privilege: string) {
+
+		if (!this._privilegeSet) {
+			const privileges = await getPrivileges(this.userId);
+			this._privilegeSet = new Set(privileges);
+		}
+
 		return this._privilegeSet.has(privilege);
 	}
 
