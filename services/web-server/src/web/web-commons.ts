@@ -1,4 +1,4 @@
-import { projectDao } from '../da/daos';
+import { projectDao } from 'common/da/daos';
 import { Project } from 'shared/entities';
 import { Request } from '../express-utils';
 

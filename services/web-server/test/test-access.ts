@@ -1,6 +1,7 @@
-import { userDao, projectDao } from '../src/da/daos';
-import { newContext, Context } from '../src/context';
-import { closeKnex } from '../src/da/db';
+import { userDao, projectDao } from 'common/da/daos';
+import { newContext, Context } from 'common/context';
+import { closeKnex } from 'common/da/db';
+import * as assert from 'assert';
 
 let adminCtx: Context;
 
@@ -15,28 +16,36 @@ describe("test-access", function () {
 	});
 
 	it('access-basic-create', async function () {
-		let users = await userDao.list(adminCtx);
-		console.log(`users >>  ${users.length}`);
+		const users = await userDao.list(adminCtx);
+		const orginalUserCount = users.length;
 
 		// create and remove as admin, should all work
-		let userId = await userDao.create(adminCtx, { username: 'text-access-user-01' });
-		await userDao.remove(adminCtx, userId);
+		const userId_1 = await userDao.create(adminCtx, { username: 'text-access-user-01' });
+		await userDao.remove(adminCtx, userId_1);
 
-		// we create a user with no admin role
-		userId = await userDao.create(adminCtx, { username: 'text-access-user-02' });
-		const userCtx = await newContext(userId);
+		// create a normal user 2
+		const userId_2 = await userDao.create(adminCtx, { username: 'text-access-user-02' });
+		const user2Ctx = await newContext(userId_2);
 
-		// user can create a new user
-		const userId3 = await userDao.create(userCtx, { username: 'text-access-user-03' });
-
-		// However, user cannot remove user 3 (because of @AccessRequires('um'))
-		try {
-			await userDao.remove(userCtx, userId3);
-		} catch (ex) {
-			console.log(`ERROR AS EXPECTED`, ex);
-		}
+		// with user 2 context, create a user3, should work
+		const userId_3 = await userDao.create(user2Ctx, { username: 'text-access-user-03' });
 
 
+		await assert.rejects(userDao.remove(user2Ctx, userId_3), (ex: any) => {
+			if (ex.message.includes('does not have the necessary access')) {
+				return true;
+			} else {
+				return false;
+			}
+		});
+
+		// cleanup (always cleanup data). 
+		// TODO: needs to make are exception safe (finally and run even when test fail)
+		await userDao.remove(adminCtx, userId_2);
+		await userDao.remove(adminCtx, userId_3);
+
+		const userCount = (await userDao.list(adminCtx)).length;
+		assert.strictEqual(userCount, orginalUserCount, 'total user count');
 
 	})
 

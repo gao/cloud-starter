@@ -1,8 +1,8 @@
 
 import { getIssues, getLabels } from './github';
-import { ticketDao, projectDao, labelDao, ticketLabelDao } from '../da/daos';
+import { ticketDao, projectDao, labelDao, ticketLabelDao } from 'common/da/daos';
 import { Ticket, Label } from 'shared/entities';
-import { Context } from '../context';
+import { Context } from 'common/context';
 
 
 export async function syncLabels(ctx: Context, projectId: number) {

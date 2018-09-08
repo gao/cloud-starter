@@ -2,7 +2,7 @@
 
 import { srouter } from '../express-utils';
 import { getUserRepos, getRepo } from '../service/github';
-import { projectDao, paneDao } from '../da/daos';
+import { projectDao, paneDao } from 'common/da/daos';
 import { Project } from 'shared/entities';
 import { getProjectFromReq } from './web-commons';
 import { syncIssues, syncLabels } from '../service/github-syncer';

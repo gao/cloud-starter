@@ -1,6 +1,6 @@
-import { userDao, projectDao } from '../src/da/daos';
-import { newContext } from '../src/context';
-import { closeKnex } from '../src/da/db';
+import { userDao, projectDao } from 'common/da/daos';
+import { newContext } from 'common/context';
+import { closeKnex } from 'common/da/db';
 import * as assert from 'assert';
 
 describe("dao", function () {

@@ -2,7 +2,7 @@ require("../../common/ts/common-alias"); // needs to be full relative path becau
 
 
 import { getConf } from 'common/conf';
-import { getKnex } from 'common/db';
+import { getKnex } from 'common/da/db';
 
 //main();
 

@@ -1,6 +1,6 @@
 import { srouter } from '../express-utils';
-import { userDao } from '../da/daos';
-import { newContext } from '../context';
+import { userDao } from 'common/da/daos';
+import { newContext } from 'common/context';
 
 const _router = srouter();
 

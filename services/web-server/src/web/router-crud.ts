@@ -1,6 +1,6 @@
 
 import { srouter } from '../express-utils';
-import { daoByEntity } from '../da/daos';
+import { daoByEntity } from 'common/da/daos';
 
 const _router = srouter();
 

@@ -1,7 +1,7 @@
 import { srouter } from '../express-utils';
 import axios from 'axios';
-import { userDao, oauthDao } from '../da/daos';
-import { newContext } from '../context';
+import { userDao, oauthDao } from 'common/da/daos';
+import { newContext } from 'common/context';
 import { setAuth } from '../auth';
 import { getAccessToken, getUserInfo } from '../service/github';
 

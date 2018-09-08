@@ -9,8 +9,15 @@
 
 		// node.js does not support es2015, so, we tell typescript to output commonjs (we do not use rollup for server, just ts-node)
 		"module": "commonjs",
+		
+		// This is important to support 3rd party modules that are still in a node.js/commonjs way
+		"moduleResolution": "node", 
+		
 
-		// 99% of the code will be .ts, and .js files will just be module glue and does not need to be processed by typescript (keep the glue small)
+		// To extract the maximum value from TypeScript, we use strict = true (no implicit, null check, ...)
+		"strict": true, 
+
+		// all can be .ts
 		"allowJs": false,
 		"checkJs": false,
 
@@ -21,14 +28,10 @@
 		"baseUrl": "./src/",  /* Base directory to resolve non-absolute module names. */
 		"paths": {
 			"common/*": ["../../common/ts/*"], 
-			"shared/*": ["../../../shared/src/*"]
+			"shared/*": ["../../../shared/src/*"], 
+			"postgres-array": ["../../common/ts/others"] // until postgres-array get typed
 		},
 
-		// To extract the maximum value from TypeScript, we use strict = true (no implicit, null check, ...)
-		"strict": true, 
-
-		// This is important to support 3rd party modules that are still in a node.js/commonjs way
-		"moduleResolution": "node", 
 
 		"experimentalDecorators": true,
 		

@@ -6,12 +6,15 @@
 		// node.js does not support es2015, so, we tell typescript to output commonjs (we do not use rollup for server, just ts-node)
 		"module": "commonjs",
 		
-		// same as browser code, .js will be used 1% for gluing things together, no need to type it. 
-		"allowJs": false,
-		"checkJs": false,
-		
+		// same as with browser, need to use 3rd party modules
+		"moduleResolution": "node",
+
 		// strict is the best way to extract the most value from TypeScript
 		"strict": true,
+
+		// all can be ts
+		"allowJs": false,
+		"checkJs": false,
 
 		"sourceMap": false,  // we do not need the sourcemap for server
 
@@ -21,20 +24,23 @@
 		// This point to the "../" so that we can include common/
 		"rootDir": "../",  
 
-		// same as with browser, need to use 3rd party modules
-		"moduleResolution": "node",
-
 		// TODO: need to add the baseURL (check if it works with VSCode, meaning, that vscode use this tsconfig and not the root config)
 		"baseUrl": "./src/",  /* Base directory to resolve non-absolute module names. */
 		"paths": {
-			"common/*": ["../../common/ts/*"]
-		}
+			"common/*": ["../../common/ts/*"],
+			"shared/*": ["../../../shared/src/*"],
+			"postgres-array": ["../../common/ts/others"] // until postgres-array get typed			
+		}, 
+
+		"experimentalDecorators": true,
+		
+		// allow to import moment like: import moment from "moment"
+		"allowSyntheticDefaultImports": true
 	},
 
-	// We want more control about which code we will compile and exclude
+	// Note: common and shared will be pulled as needed
 	"include": [
 		"./src/**/*.ts", // we take all of the server code
-		"../common/**/*.ts" // plus the common/ code
 	],
 
 	// Excluding 

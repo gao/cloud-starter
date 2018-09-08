@@ -1,8 +1,8 @@
 import { srouter } from '../express-utils';
 import { Request, Response, NextFunction } from 'express';
-import { newContext } from '../context';
+import { newContext } from 'common/context';
 import { extname } from 'path';
-import { userDao } from '../da/daos';
+import { userDao } from 'common/da/daos';
 import { User } from 'shared/entities';
 import { cookieNameUserId, cookieNameAuthToken, setAuth, createAuthToken } from '../auth';
 import * as crypto from 'crypto';
