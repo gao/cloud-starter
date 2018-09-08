@@ -3,6 +3,7 @@ import { Context } from '../context';
 import { Monitor } from '../perf';
 import { Filter, ProjectEntityFilter } from 'shared/entities';
 import { QueryBuilder } from 'knex';
+import { AccessRequires } from './access';
 
 
 // Note: for now, the knex can take a generic I for where value
@@ -66,6 +67,7 @@ export class BaseDao<E, I, F extends Filter<E> = Filter<E>> {
 	}
 
 	@Monitor()
+	@AccessRequires('um')
 	async remove(ctx: Context, id: I) {
 		const k = await getKnex();
 		return k(this.tableName).delete().where(this.getWhereIdObject(id));

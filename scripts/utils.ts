@@ -24,7 +24,7 @@ export class CallReducer {
 		this.gracePeriod = gracePeriod;
 	}
 
-	map(item: any) {
+	map(item?: any) {
 		// add the data to the items list
 		if (item !== undefined) {
 			this.items.push(item);

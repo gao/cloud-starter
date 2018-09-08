@@ -6,14 +6,19 @@ export function AccessRequires(privilege: string[] | string) {
 	const privileges = (privilege instanceof Array) ? privilege : [privilege];
 
 	return function anno(target: Object, propertyKey: string, descriptor: TypedPropertyDescriptor<any>) {
+
+		console.log(`AccessRequires decorator for ${target.constructor.name} ${propertyKey} `);
 		const method = descriptor.value!;
+
 		descriptor.value = async function (this: BaseDao<Object, number>) {
+			console.log(`Running decorator for ${target.constructor.name} ${propertyKey} `);
 			const ctx = arguments[0] as Context;
 			const userId = ctx.userId;
 			if (!ctx.constructor.name.startsWith('Context')) {
 				throw new Error(`First argument of ${this.constructor.name}.${method.name} must be a "Context" and not a ${ctx.constructor.name}`);
 			}
 			let pass = false;
+
 			for (const p of privileges) {
 				// Check if it is userId matching rule
 				if (p.startsWith('@')) {
@@ -32,6 +37,7 @@ export function AccessRequires(privilege: string[] | string) {
 					}
 				}
 			}
+
 			if (!pass) {
 				throw new Error(`User ${userId} does not have the necessary access for "${this.constructor.name}.${method.name}" (${privileges.join('|')}`);
 			}

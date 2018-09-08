@@ -39,6 +39,7 @@
   },
   "scripts": {
     "t": "./node_modules/.bin/ts-node scripts/dev-test.ts testk",
+    "trun": "./node_modules/.bin/ts-node scripts/cmd-trun.ts trun",
     "test": "./node_modules/.bin/_mocha --opts mocha.opts",
     "test-web": "./node_modules/.bin/ts-node scripts/cmd-others.ts runTest",
     "ico": "./node_modules/.bin/ts-node scripts/cmd-ico.ts ico",
