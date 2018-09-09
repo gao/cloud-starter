@@ -1,4 +1,4 @@
-require('shared/setup-module-aliases');
+require('./setup-module-aliases');
 import * as express from 'express';
 import { Request, Response, NextFunction } from 'express';
 import * as cookieParser from 'cookie-parser';

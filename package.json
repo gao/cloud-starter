@@ -23,7 +23,7 @@
     "tracking": "^1.1.3",
     "ts-node": "^7.0.1",
     "typescript": "^3.0.3",
-    "vdev": "^0.8.2"
+    "vdev": "^0.8.3"
   },
   "devDependencies": {
     "@types/csvtojson": "^1.1.5",
@@ -38,10 +38,9 @@
     "sketchdev": "^0.3.1"
   },
   "scripts": {
-    "t": "./node_modules/.bin/ts-node scripts/dev-test.ts testk",
-    "trun": "./node_modules/.bin/ts-node scripts/cmd-trun.ts trun",
-    "test": "./node_modules/.bin/_mocha --opts mocha.opts",
-    "test-web": "./node_modules/.bin/ts-node scripts/cmd-others.ts runTest",
+    "test": "./node_modules/.bin/ts-node scripts/cmd-test.ts test",
+    "dtest": "./node_modules/.bin/ts-node scripts/cmd-test.ts dtest",
+    "twatch": "./node_modules/.bin/ts-node scripts/cmd-test.ts twatch",
     "ico": "./node_modules/.bin/ts-node scripts/cmd-ico.ts ico",
     "watch": "./node_modules/.bin/ts-node scripts/cmd-watch.ts watch",
     "gs": "./node_modules/.bin/vdev gs",

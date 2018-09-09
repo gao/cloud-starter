@@ -4,7 +4,8 @@
   "description": "Cloud Starter main web-server (API and serving html/js/css)",
   "main": "dist/start.js",
   "scripts": {
-    "start": "node --inspect dist/services/web-server/src/start",
+    "start": "node dist/services/web-server/src/start",
+    "dstart": "node --inspect dist/services/web-server/src/start",
     "dtest": "./node_modules/.bin/mocha --inspect-brk --inspect --opts mocha.opts ",
     "test": "./node_modules/.bin/mocha --opts mocha.opts"
   },

@@ -1,84 +1,87 @@
-import { userDao, projectDao } from 'common/da/daos';
-import { newContext } from 'common/context';
+import { projectDao, Project, ticketDao } from 'common/da/daos';
+import { newContext, Context } from 'common/context';
 import { closeKnex } from 'common/da/db';
 import * as assert from 'assert';
 
-describe("dao", function () {
+let adminCtx: Context;
+
+describe("test-dao", function () {
+
+	this.beforeAll(async function () {
+		adminCtx = await newContext(1); // admin user
+	});
 
 	this.afterAll(async function () {
-		console.log('>>> Closing Knex');
-		await closeKnex();
+		try {
+			await closeKnex();
+		} catch (ex) {
+			console.log('cannot ${ex}')
+		}
 	})
 
 
-	it('dao-simple-create', async function () {
+	it('dao-simple-crud-project', async function () {
 		try {
-			const ctx = await newContext(-1);
-			const startCount = (await userDao.list(ctx)).length;
+			let project: Project | undefined;
 
 			// test create
-			const userId = await userDao.create(ctx, { username: 'mike' });
-			assert.notEqual(userId, null);
+			const projectId = await projectDao.create(adminCtx, { name: 'dao-simple-crud-project_project-01' });
+			assert(Number.isInteger(projectId), 'project id');
+			project = await projectDao.get(adminCtx, projectId);
+			assert.strictEqual(project.name, 'dao-simple-crud-project_project-01');
 
-			// cleaup
-			const d = await userDao.remove(ctx, userId);
-			const endCount = (await userDao.list(ctx)).length;
-			assert.strictEqual(endCount, startCount);
+			// test update
+			await projectDao.update(adminCtx, projectId, { name: 'dao-simple-crud-project_project-01-updated' });
+			project = await projectDao.get(adminCtx, projectId);
+			assert.strictEqual(project.name, 'dao-simple-crud-project_project-01-updated');
 
-			console.log('PERF \n' + ctx.perfContext);
+			// test list
+			const projects = await projectDao.list(adminCtx, { matching: { name: 'dao-simple-crud-project_project-01-updated' } });
+			assert.strictEqual(projects[0].name, 'dao-simple-crud-project_project-01-updated');
+
+			// always cleanup
+			await projectDao.remove(adminCtx, projectId);
 
 		} catch (ex) {
 			throw ex;
 		}
-
 	});
 
-	it('dao-update-user', async function () {
+	it('dao-simple-crud-ticket', async function () {
 		try {
-			const ctx = await newContext(-1);
 
-			const userId = await userDao.create(ctx, { username: 'test-user-01' });
-			const ctxUser = await newContext(userId);
+			// SETUP
+			let project: Project | undefined;
+			// create project (container object)
+			const projectId = await projectDao.create(adminCtx, { name: 'dao-simple-crud-ticket_project-01' });
 
-			await userDao.update(ctxUser, userId, { username: 'test-user-01-updated' });
-			const user = await userDao.get(ctx, userId);
 
-			assert.strictEqual('test-user-01-updated', user.username);
+			// test create ticket
+			const ticketId = await ticketDao.create(adminCtx, { projectId, title: 'dao-simple-crud-ticket_ticket-01' })
+			const ticket = await ticketDao.get(adminCtx, ticketId);
+			assert.strictEqual(ticket.title, 'dao-simple-crud-ticket_ticket-01');
 
-			console.log('PERF \n' + ctxUser.perfContext);
+			// Note: update can be fairly assumed it worked as the project does. We might add test if we find issue. 
+
+			// test list (Note: list is a little different than projectDao.list, because the filter is different)
+			// const tickets = await ticketDao.list(adminCtx, { projectId });
+			// assert.strictEqual(tickets[0].title, 'dao-simple-crud-ticket_ticket-01');
+
+			// CLEANUP
+			await ticketDao.remove(adminCtx, ticketId);
+			await projectDao.remove(adminCtx, projectId);
 
 		} catch (ex) {
 			throw ex;
 		}
-
 	});
 
-	it('dao-create-and-update', async function () {
+	it('dao-simple-with-normal-user', async function () {
 		try {
-			const ctx = await newContext(-1);
-			const startCount = (await projectDao.list(ctx)).length;
 
-			// test the create
-			const projectId = await projectDao.create(ctx, { name: 'project-test-01' });
-			assert.notEqual(projectId, null);
-			let project = await projectDao.get(ctx, projectId);
-			assert.strictEqual('project-test-01', project.name);
 
-			// test update 
-			await projectDao.update(ctx, projectId, { name: 'project-test-01-updated' });
-			project = await projectDao.get(ctx, projectId);
-			assert.strictEqual('project-test-01-updated', project.name);
-
-			// cleanup
-			const d = await projectDao.remove(ctx, projectId);
-			const endCount = (await projectDao.list(ctx)).length;
-			assert.strictEqual(endCount, startCount);
-
-			console.log('PERF \n' + ctx.perfContext);
 		} catch (ex) {
 			throw ex;
 		}
-
 	});
-
 });

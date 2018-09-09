@@ -41,22 +41,23 @@ Note that `npm run watch` also start a kube port forward for the node debug sess
 Each services should have a `test/` folder with some `.ts` test files. To run thoes from mac, you can do for example: 
 
 ```sh
-npm run kexec web-server -- npm test -- -g test-hello
+npm run test web-server
+
+# or to run only some test (with the it('dao-...', ...) for example
+npm run test web-server dao
 ```
 
 
 #### REPL Testing
 
-To run some test each time a test files or source files get changed (will do once when multi-save), do the following. 
-
-Note: `npm run watch` needs to be off.
+`twatch` allows to continuously run test (or some test) each time a service src or test files are changed. To run some test each time a test files or source files get changed (will do once when multi-save), do the following. 
 
 ```sh
 # to watch dist files and run test, 
-npm run trun web-server
+npm run twatch web-server
 
 # to run only some test (the -g ...) 
-npm run trun web-server test-hello
+npm run twatch web-server test-hello
 # This will run only test that have 'test-hello' in their mochac it(...) names
 
 ```
@@ -66,21 +67,24 @@ In short, the `scripts/cmd-trun.ts` just do a `npm run kexec web-server -- npm t
 
 #### Testing with DEBUG
 
-NOT supported yet. 
 
-Later, `dtest` will be supported for being able to put a break point on a test file (it will need its custom port)
+`dtest` act similarely, but start the service node test with the `--inspec-break` which wait for a debug session to be attached. 
 
 ```sh
-npm run kexec web-server -- npm dtest -- -g test-hello
+npm run dtest web-server
+
+#or filtered, as 
+npm run dtest web-server dao
 ```
 
 
 ## Debugging
 
-At this point, the debugging is enable on the `web-server` when doing a `run-watch` (which start a port forward on )
+
+When running a `npm run watch` the web-server will be started with the debug flag `--inspect` which allows to start a debug session. 
 
 
-Then, look at the `.vscode/launch.json` `Attach to web-server` and starting it via vscode should allow to debug the web server. 
+Look at the `.vscode/launch.json` `Attach to web-server` and starting it via vscode should allow to debug the web server. 
 
 
-Note: In the future, debugging will be added to other services, and to the test, with different port for each. 
+Note: For now, the debugging is for the web-server, and will be added to other services later. 

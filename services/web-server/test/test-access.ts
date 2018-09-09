@@ -30,7 +30,6 @@ describe("test-access", function () {
 		// with user 2 context, create a user3, should work
 		const userId_3 = await userDao.create(user2Ctx, { username: 'text-access-user-03' });
 
-
 		await assert.rejects(userDao.remove(user2Ctx, userId_3), (ex: any) => {
 			if (ex.message.includes('does not have the necessary access')) {
 				return true;
@@ -47,6 +46,6 @@ describe("test-access", function () {
 		const userCount = (await userDao.list(adminCtx)).length;
 		assert.strictEqual(userCount, orginalUserCount, 'total user count');
 
-	})
+	});
 
 });

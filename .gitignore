@@ -29,6 +29,9 @@ services/web-server/web-folder/css/*.css
 services/web-server/web-folder/test/*.js
 services/web-server/web-folder/test/*.css
 
+# ignore the dev-test.ts files, they are for personal development
+test-dev.ts
+
 # prevent the .map
 *.map
 
