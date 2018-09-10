@@ -16,27 +16,34 @@ export interface TicketFilter extends ProjectEntityFilter<Ticket> {
 //#endregion ---------- /Entity Related Types ---------- 
 
 //#region    ---------- BaseEntities ---------- 
+export interface StampedEntity {
+	cid?: number,
+	ctime?: string,
+	mid?: number,
+	mtime?: string
+}
 
-interface ProjectEntity {
+interface ProjectEntity extends StampedEntity {
 	projectId: number;
 }
 //#endregion ---------- /BaseEntities ---------- 
 
 
 //#region    ---------- Entity Types ---------- 
-export interface User {
+
+export interface User extends StampedEntity {
 	id: number;
 	username: string;
 	pwd?: string;
 }
 
-export interface OAuth {
+export interface OAuth { // OAuth does ot need to be stamped
 	id: number;
 	userId: number;
 	token?: string;
 }
 
-export interface Project {
+export interface Project extends StampedEntity {
 	id: number;
 	name: string;
 	ghId?: number;
@@ -66,7 +73,7 @@ export interface Label extends ProjectEntity {
 	ghColor?: string;
 }
 
-export interface TicketLabel {
+export interface TicketLabel extends StampedEntity {
 	ticketId: number;
 	labelId: number;
 }

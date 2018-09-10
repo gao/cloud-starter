@@ -1,3 +1,4 @@
+(All code & content are [MIT](https://opensource.org/licenses/MIT) licensed.)
 
 **cloud-starter** is a simple but scalable code base (e.g., *blueprint*) to build "big" cloud application based on bus driven multi-service and modern web user interface. 
 

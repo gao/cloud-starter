@@ -8,7 +8,7 @@ export * from 'shared/entities';
 
 class UserDao extends BaseDao<User, number>{
 	constructor() {
-		super('user');
+		super('user', true);
 	}
 
 	async getByUsername(ctx: Context, username: string) {
@@ -37,18 +37,18 @@ class UserDao extends BaseDao<User, number>{
 export const userDao = new UserDao();
 
 
-export const projectDao = new BaseDao<Project, number>('project');
+export const projectDao = new BaseDao<Project, number>('project', true);
 
 export const ticketDao = new TicketDao();
 
-export const paneDao = new ProjectEntityDao<Pane, number>('pane');
+export const paneDao = new ProjectEntityDao<Pane, number>('pane', true);
 
-export const oauthDao = new BaseDao<OAuth, number>('oauth');
+export const oauthDao = new BaseDao<OAuth, number>('oauth', false);
 
-export const labelDao = new ProjectEntityDao<Label, number>('label');
+export const labelDao = new ProjectEntityDao<Label, number>('label', true);
 
 export type TicketLabelId = { ticketId: number, labelId: number };
-export const ticketLabelDao = new BaseDao<TicketLabel, TicketLabelId>('ticket_label', ['ticketId', 'labelId']);
+export const ticketLabelDao = new BaseDao<TicketLabel, TicketLabelId>('ticket_label', true, ['ticketId', 'labelId']);
 
 export const daoByEntity: { [type: string]: BaseDao<any, any> } = {
 	User: userDao,

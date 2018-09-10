@@ -1,8 +1,9 @@
 import { getKnex } from './db';
 import { Context } from '../context';
 import { Monitor } from '../perf';
-import { Filter, ProjectEntityFilter } from 'shared/entities';
+import { Filter, ProjectEntityFilter, StampedEntity } from 'shared/entities';
 import { QueryBuilder } from 'knex';
+import * as moment from 'moment';
 import { AccessRequires } from './access';
 
 
@@ -11,10 +12,12 @@ import { AccessRequires } from './access';
 export class BaseDao<E, I, F extends Filter<E> = Filter<E>> {
 	readonly tableName: string;
 	readonly idNames: string | string[];
+	readonly stamped: boolean;
 
-	constructor(tableName: string, idNames?: string | string[]) {
+	constructor(tableName: string, stamped: boolean, idNames?: string | string[]) {
 		this.tableName = tableName;
 		this.idNames = (idNames != null) ? idNames : 'id';
+		this.stamped = stamped;
 	}
 
 	@Monitor()
@@ -45,6 +48,16 @@ export class BaseDao<E, I, F extends Filter<E> = Filter<E>> {
 	async create(ctx: Context, data: Partial<E>): Promise<I> {
 		const k = await getKnex();
 
+		if (this.stamped) {
+			// Force casting. We can assume this, might have a more elegant way (but should not need StampedDao though)
+			const stampedData: StampedEntity = (<any>data) as StampedEntity;
+			const now = moment().utc().toISOString();
+			stampedData.cid = ctx.userId;
+			stampedData.ctime = now;
+			stampedData.mid = ctx.userId;
+			stampedData.mtime = now;
+		}
+
 		const r = await k(this.tableName).insert(data).returning(this.idNames);
 		return r[0] as I;
 	}
@@ -52,6 +65,15 @@ export class BaseDao<E, I, F extends Filter<E> = Filter<E>> {
 	@Monitor()
 	async update(ctx: Context, id: I, data: Partial<E>) {
 		const k = await getKnex();
+
+		if (this.stamped) {
+			// Force casting. We can assume this, might have a more elegant way (but should not need StampedDao though)
+			const stampedData: StampedEntity = (<any>data) as StampedEntity;
+			const now = moment().utc().toISOString();
+			stampedData.mid = ctx.userId;
+			stampedData.mtime = now;
+		}
+
 		const r = await k(this.tableName).update(data).where(this.getWhereIdObject(id));
 		return r;
 	}
@@ -67,7 +89,6 @@ export class BaseDao<E, I, F extends Filter<E> = Filter<E>> {
 	}
 
 	@Monitor()
-	@AccessRequires('um')
 	async remove(ctx: Context, id: I) {
 		const k = await getKnex();
 		return k(this.tableName).delete().where(this.getWhereIdObject(id));

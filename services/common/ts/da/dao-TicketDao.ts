@@ -1,10 +1,10 @@
-import { Ticket, TicketFilter } from '../../../../shared/src/entities';
+import { Ticket, TicketFilter } from 'shared/entities';
 import { Context } from '../context';
 import { BaseDao } from './dao-base';
 import { getKnex } from './db';
 
 export class TicketDao extends BaseDao<Ticket, number> {
-	constructor() { super('ticket') }
+	constructor() { super('ticket', true) }
 
 	async list(ctx: Context, filter?: TicketFilter): Promise<Ticket[]> {
 		const k = await getKnex();
@@ -14,6 +14,8 @@ export class TicketDao extends BaseDao<Ticket, number> {
 		const columns = {
 			'id': 'ticket.id',
 			'projectId': 'ticket.projectId',
+			'cid': 'ticket.cid',
+			'ctime': 'ticket.ctime',
 			'title': 'ticket.title',
 			'ghId': 'ticket.ghId',
 			'ghNumber': 'ticket.ghNumber',
@@ -49,7 +51,7 @@ export class TicketDao extends BaseDao<Ticket, number> {
 
 		// make the join up to the label table (many to many on the middle) 
 		q = q.leftJoin('ticket_label as tl', 'ticket.id', 'tl.ticketId');
-		q = q.join('label as l', 'tl.labelId', 'l.id');
+		q = q.leftJoin('label as l', 'tl.labelId', 'l.id');
 
 		//const sql = q.toSQL().sql; // usefull for debug
 
