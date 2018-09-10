@@ -36,12 +36,13 @@ The key code structure is as follow:
 
 We have standardized our IDE to be VSCode for everything, and while it might not have everything other Ideas, we found that it's tight integration with TypeScript (our language of choice) and its fast innovation has given us a nice productivity boost. 
 
-## Requirements
+## Local Dev Requirements
 
 As of now, the development environment has been tested on Mac, but it should work on Windows as well. 
 
 - Install Docker for Mac with Kubernetes
 - Run a local docker registry with (for the kubernetes local dev)
+
 ```sh
 docker run -d -p 5000:5000 --restart=unless-stopped --name registry registry:2.6.2
 ```
@@ -60,4 +61,3 @@ More [developer workflow](doc/dev-workflow.md)
 
 - `npm run kdelete` (this will delete all of the kubernetes resources)
 
-_... more doc to come ..._

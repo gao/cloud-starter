@@ -50,16 +50,15 @@ npm run test web-server dao
 
 #### REPL Testing
 
-`twatch` allows to continuously run test (or some test) each time a service src or test files are changed. To run some test each time a test files or source files get changed (will do once when multi-save), do the following. 
+`testw` allows to continuously run test (or some test) each time a service src or test files are changed. To run some test each time a test files or source files get changed (will do once when multi-save), do the following. 
 
 ```sh
 # to watch dist files and run test, 
-npm run twatch web-server
+npm run testw web-server
 
 # to run only some test (the -g ...) 
-npm run twatch web-server test-hello
+npm run testw web-server test-hello
 # This will run only test that have 'test-hello' in their mochac it(...) names
-
 ```
 
 In short, the `scripts/cmd-trun.ts` just do a `npm run kexec web-server -- npm test [-- -g _filter_]` on dist file changes.
@@ -68,13 +67,13 @@ In short, the `scripts/cmd-trun.ts` just do a `npm run kexec web-server -- npm t
 #### Testing with DEBUG
 
 
-`dtest` act similarely, but start the service node test with the `--inspec-break` which wait for a debug session to be attached. 
+`testd` act similarely, but start the service node test with the `--inspec-break` which wait for a debug session to be attached. 
 
 ```sh
-npm run dtest web-server
+npm run testd web-server
 
 #or filtered, as 
-npm run dtest web-server dao
+npm run testd web-server dao
 ```
 
 

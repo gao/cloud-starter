@@ -39,8 +39,8 @@
   },
   "scripts": {
     "test": "./node_modules/.bin/ts-node scripts/cmd-test.ts test",
-    "dtest": "./node_modules/.bin/ts-node scripts/cmd-test.ts dtest",
-    "twatch": "./node_modules/.bin/ts-node scripts/cmd-test.ts twatch",
+    "testw": "./node_modules/.bin/ts-node scripts/cmd-test.ts testw",
+    "testd": "./node_modules/.bin/ts-node scripts/cmd-test.ts testd",
     "ico": "./node_modules/.bin/ts-node scripts/cmd-ico.ts ico",
     "watch": "./node_modules/.bin/ts-node scripts/cmd-watch.ts watch",
     "gs": "./node_modules/.bin/vdev gs",

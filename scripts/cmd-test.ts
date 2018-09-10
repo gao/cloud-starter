@@ -6,7 +6,7 @@ import * as chokidar from 'chokidar';
 
 const servicesDir = 'services';
 
-router({ test, twatch, dtest }).route();
+router({ test, testw, testd }).route();
 
 async function test(serviceName: string, testGrep: string) {
 	if (!serviceName) {
@@ -19,7 +19,7 @@ async function test(serviceName: string, testGrep: string) {
 }
 
 /** run a 'npm run dtest [-g ...]` on a service, which will start a debug session (default host/port) */
-async function dtest(serviceName: string, testGrep: string) {
+async function testd(serviceName: string, testGrep: string) {
 	if (!serviceName) {
 		console.log("ERROR - dtest needs to have a service name. Try 'npm run dtest web-server'");
 		return;
@@ -33,7 +33,7 @@ async function dtest(serviceName: string, testGrep: string) {
 }
 
 /** run 'npm run test [-g ...]` on a service image when dist/*.js file changes */
-async function twatch(serviceName: string, testGrep: string) {
+async function testw(serviceName: string, testGrep: string) {
 	if (!serviceName) {
 		console.log("ERROR - twatch needs to have a service name. Try 'npm run twatch web-server'");
 		return;
