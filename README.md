@@ -54,6 +54,8 @@ docker run -d -p 5000:5000 --restart=unless-stopped --name registry registry:2.6
 
 Now, you should be able to go to http://localhost:8080/ and login as **admin** / **welcome**
 
+More [developer workflow](doc/dev-workflow.md)
+
 ## Clean
 
 - `npm run kdelete` (this will delete all of the kubernetes resources)
