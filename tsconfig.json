@@ -5,10 +5,16 @@
 {
 	"compilerOptions": {
 		// for node.js 8.4+, we can output to 2017 (Allow to have native async/await and all)
-		"target": "es2017",
+		"target": "esNext",
 
 		// node.js does not support es2015, so, we tell typescript to output commonjs (we do not use rollup for server, just ts-node)
 		"module": "commonjs",
+
+		// This is important to support 3rd party modules that are still in a node.js/commonjs way
+		"moduleResolution": "node", 
+		
+		// To extract the maximum value from TypeScript, we use strict = true (no implicit, null check, ...)
+		"strict": true,
 
 		// 99% of the code will be .ts, and .js files will just be module glue and does not need to be processed by typescript (keep the glue small)
 		"allowJs": false,
@@ -19,18 +25,16 @@
 		// Since we are using ts-node, not really needed, but just in case we want to do a "tsc" on folder.
 		"outDir": "./~out/", /* Redirect output structure to the directory. */
 
-		// To extract the maximum value from TypeScript, we use strict = true (no implicit, null check, ...)
-		"strict": true, 
-
-		// This is important to support 3rd party modules that are still in a node.js/commonjs way
-		"moduleResolution": "node", 
-
-		// allow to import moment like: import moment from "moment"
-		"allowSyntheticDefaultImports": true, 
 		"baseUrl": ".",
     "paths": {
+			"shared/*": ["./shared/src/*"], // this is for the services/common files so that vscode can find the shared package
       "postgres-array": ["scripts/types/others"]
-    }
+		},
+		
+		"experimentalDecorators": true,
+				
+		// allow to import moment like: import moment from "moment"
+		"allowSyntheticDefaultImports": true, 
 	},
 
 	// We want more control about which code we will compile and exclude

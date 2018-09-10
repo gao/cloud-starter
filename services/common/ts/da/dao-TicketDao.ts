@@ -1,4 +1,4 @@
-import { Ticket, TicketFilter } from 'shared/entities';
+import { Ticket, TicketFilter } from '../../../../shared/src/entities';
 import { Context } from '../context';
 import { BaseDao } from './dao-base';
 import { getKnex } from './db';

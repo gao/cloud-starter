@@ -48,7 +48,7 @@ npm run test web-server dao
 ```
 
 
-#### REPL Testing
+#### REPL Testing with `testw`
 
 `testw` allows to continuously run test (or some test) each time a service src or test files are changed. To run some test each time a test files or source files get changed (will do once when multi-save), do the following. 
 
@@ -64,17 +64,22 @@ npm run testw web-server test-hello
 In short, the `scripts/cmd-trun.ts` just do a `npm run kexec web-server -- npm test [-- -g _filter_]` on dist file changes.
 
 
-#### Testing with DEBUG
-
+#### REPL Testing with DEBUG `testd`
 
 `testd` act similarely, but start the service node test with the `--inspec-break` which wait for a debug session to be attached. 
 
 ```sh
 npm run testd web-server
 
-#or filtered, as 
+# or filtered tests
 npm run testd web-server dao
 ```
+
+The, launch the debug session "... web-server" and it should stop at the entry point, and press `>` to go to the first breakpoint. 
+
+Each time there is a save on the .ts files, the test is stopped and another session is started. 
+
+Note: The session needs to be stop with `ctrl C`
 
 
 ## Debugging
