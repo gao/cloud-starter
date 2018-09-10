@@ -1,9 +1,22 @@
 import { BaseDao } from './dao-base';
 import { Context } from '../context';
-import { newTopFinder } from 'common/top-decorator';
+import { newTopFinder } from '../top-decorator';
 
 const topFinder = newTopFinder();
 
+
+/**
+ * There are three type of privilege
+ * - '#...' such as '#admin' meaning the role admin, and this is system wide, or '#free' for free user
+ *   - as of now there are 4 types: 
+ *     - 'sys' this is the role for any background service/logic that does not have a user attached. A default 'sys' user has been created with this role
+ *     - 'admin' this is the role for any logged in user that have full admin privilege. A default 'admin' user has been created with this role.
+ *     - 'user' those are normal user that login/register through the system
+ * - '@...' such as '@cid' means that the current user (in context) `.id` match the '.cid' of the entity in question
+ * - '...' such as 'owner' or 'viewer' which are role scoped for a given project (using the user_role table)
+ * 
+ * Note: In this application, Role are scoped by project (can be scoped on different object or root depending of the app need)
+ */
 
 //#region    ---------- Decorator ---------- 
 export function AccessRequires(privilege: string[] | string) {
@@ -22,16 +35,28 @@ export function AccessRequires(privilege: string[] | string) {
 			// we perform the access control only for the top most class for this methods
 			if (isTop) {
 				const ctx = arguments[0] as Context;
-				const userId = ctx.userId;
 				if (!ctx.constructor.name.startsWith('Context')) {
 					throw new Error(`First argument of ${this.constructor.name}.${method.name} must be a "Context" and not a ${ctx.constructor.name}`);
 				}
+
+				const userId = ctx.userId;
+				const userType = ctx.userType;
+
 				let pass = false;
 
 				for (const p of privileges) {
-					// Check if it is userId matching rule
-					if (p.startsWith('@')) {
-						const propName = p.substring(2); // propName to be 
+
+					// if we have a user type, try to match it. 
+					if (p.startsWith('#')) {
+						const type = p.substring(1);
+						if (type === userType) {
+							pass = true;
+							break;
+						}
+					}
+					// if we have a property userId access type
+					else if (p.startsWith('@')) {
+						const propName = p.substring(1); // propName to be 
 						const entityId = arguments[1] as number; // right now, we assume the second arg is the entityId
 						const entity: any = await this.get(ctx, entityId);
 						const val = entity[propName] as number;
@@ -40,11 +65,9 @@ export function AccessRequires(privilege: string[] | string) {
 							break;
 						}
 					} else {
-						if ((await ctx.hasPrivilege(p))) {
-							pass = true;
-							break;
-						}
+						// TODO: needs to implement project role base
 					}
+
 				}
 
 				if (!pass) {

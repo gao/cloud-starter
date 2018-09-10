@@ -1,6 +1,6 @@
 import { srouter } from '../express-utils';
 import { Request, Response, NextFunction } from 'express';
-import { newContext } from 'common/context';
+import { getSysContext, newContext } from 'common/context';
 import { extname } from 'path';
 import { userDao } from 'common/da/daos';
 import { User } from 'shared/entities';
@@ -18,7 +18,7 @@ _router.post('/api/logoff', async function (req, res, next) {
 
 
 _router.get('/api/login', async function (req, res, next) {
-	const emptyCtx = await newContext();
+	const emptyCtx = await getSysContext();
 	const uname = req.query.username;
 	const pwd = req.query.pwd;
 	const userInfo = await userDao.getByUsername(emptyCtx, uname);
@@ -36,7 +36,7 @@ _router.get('/api/login', async function (req, res, next) {
 });
 
 _router.post('/api/register', async function (req, res, next) {
-	const emptyCtx = await newContext();
+	const emptyCtx = await getSysContext();
 	console.log('register', typeof req.body);
 
 	const { username, pwd } = req.body;
@@ -55,7 +55,7 @@ _router.use(async function (req: Request, res: Response, next: NextFunction) {
 
 		try {
 			const user = await authRequest(req);
-			req.context = await newContext(user.id, user);
+			req.context = await newContext(user);
 			next();
 			return;
 		} catch (ex) {
@@ -74,7 +74,7 @@ _router.use(async function (req: Request, res: Response, next: NextFunction) {
 });
 
 _router.get('/api/user-context', async function (req, res, next) {
-	const emptyCtx = await newContext();
+	const emptyCtx = await getSysContext();
 
 	try {
 		const user = await userDao.get(emptyCtx, req.context.userId);
@@ -90,7 +90,7 @@ _router.get('/api/user-context', async function (req, res, next) {
 //#region    ---------- Utils ---------- 
 /** Authenticate a request and return userId or null if it did not pass */
 async function authRequest(req: Request): Promise<User> {
-	const emptyCtx = await newContext();
+	const emptyCtx = await getSysContext();
 
 	const cookieUserId: number | undefined = (req.cookies.userId) ? parseInt(req.cookies.userId) : undefined;
 	const cookieAuthToken: string | undefined = req.cookies.authToken;

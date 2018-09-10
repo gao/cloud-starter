@@ -16,22 +16,23 @@ class UserDao extends BaseDao<User, number>{
 	}
 
 	// For now, we allow anybody to call this for registration. 
-	//   Need to change that at some point to avoid DOS.
-	// @AccessRequires('um') 
+	@AccessRequires(['#sys', '#admin'])
 	async create(ctx: Context, data: Partial<User>) {
+		if (!data.type) { // make the default type user
+			data.type = 'user';
+		}
 		return super.create(ctx, data);
 	}
 
-	@AccessRequires('um')
+	@AccessRequires(['#sys', '#admin'])
 	async remove(ctx: Context, id: number) {
 		return super.remove(ctx, id);
 	}
 
-	@AccessRequires(['um', '@-id'])
+	@AccessRequires(['#sys', '#admin', '@id'])
 	async update(ctx: Context, id: number, data: Partial<User>) {
 		return super.update(ctx, id, data);
 	}
-
 
 }
 export const userDao = new UserDao();

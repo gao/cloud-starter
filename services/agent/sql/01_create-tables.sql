@@ -3,6 +3,7 @@ CREATE TABLE "user" (
   id bigserial PRIMARY KEY,
   cid bigint, 
   ctime timestamp with time zone,
+  type varchar(16) NOT NULL,
   mid bigint, 
   mtime timestamp with time zone,    
   username varchar(64), 
@@ -10,17 +11,12 @@ CREATE TABLE "user" (
 );
 ALTER SEQUENCE user_id_seq RESTART WITH 1000;
 
-CREATE TABLE "role" (
-  id bigserial PRIMARY KEY,
-  name varchar(64) UNIQUE NOT NULL
-);
-ALTER SEQUENCE role_id_seq RESTART WITH 1000;
-
 
 CREATE TABLE "user_role" (
   "userId" bigint NOT NULL,
-  "roleId" bigint NOT NULL,
-  PRIMARY KEY("userId", "roleId")
+  "projectId" bigint NOT NULL,
+  "name" varchar(32) NOT NULL,
+  PRIMARY KEY("userId", "projectId")
 );
 
 CREATE TABLE oauth (

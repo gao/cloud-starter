@@ -1,7 +1,6 @@
 import { srouter } from '../express-utils';
-import axios from 'axios';
 import { userDao, oauthDao } from 'common/da/daos';
-import { newContext } from 'common/context';
+import { getSysContext } from 'common/context';
 import { setAuth } from '../auth';
 import { getAccessToken, getUserInfo } from '../service/github';
 
@@ -18,7 +17,7 @@ _router.get('/gh-callback', async function (req, res, next) {
 	const { login, email, name } = await getUserInfo(access_token);
 
 	//#region    ---------- Create/Update user/oauth as needed ---------- 
-	const ctx = await newContext();
+	const ctx = await getSysContext();
 	const token = access_token!;
 	const username = login;
 
@@ -45,7 +44,7 @@ _router.get('/gh-callback', async function (req, res, next) {
 		// if new user, then the password with the token
 		// TODO: for now this means that the first token will be the pwd until user changes it. 
 		//       We need to decide if we want to update the pwd on subsequent oauth
-		userId = await userDao.create(ctx, { username, pwd });
+		userId = await userDao.create(ctx, { username, pwd, type: 'user' });
 		const oauthId = await oauthDao.create(ctx, { userId, token });
 		msg += `new user userId: ${userId} oauthId: ${oauthId}`;
 	}

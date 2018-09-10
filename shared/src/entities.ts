@@ -33,6 +33,7 @@ interface ProjectEntity extends StampedEntity {
 
 export interface User extends StampedEntity {
 	id: number;
+	type: 'sys' | 'admin' | 'user';
 	username: string;
 	pwd?: string;
 }

@@ -1,24 +1,40 @@
 import { PerfContext } from './perf';
 import { User } from 'shared/entities';
-import { oauthDao } from './da/daos';
+import { oauthDao, userDao } from './da/daos';
 import { getPrivileges } from './role-manager';
 
 // temporary hardcoded (should go to DB with roles)
 
 
 /** Context factory. Right now just based on userId */
-export async function newContext(userId?: number, user?: Partial<User>) {
-	if (userId !== undefined) {
-		return new ContextImpl(userId, user);
+export async function newContext(userIdOrUser: number | Partial<User>) {
+	let user: Partial<User>;
+	// if we have a object, then, we can assume User
+	if (typeof userIdOrUser === 'object') {
+		user = userIdOrUser;
 	} else {
-		// empty context
-		return new ContextImpl(-1);
+		user = await userDao.get(await getSysContext(), userIdOrUser);
 	}
+	return new ContextImpl(user);
+}
+
+
+let _sysContext: Context;
+/** 
+ * Get and cache the sysContext. 
+ * Note: user 0, in the db, is of sys type, we can harcode the user data for now (perhpas later, do a knex.select to id:0 to get full data)
+ */
+export async function getSysContext() {
+	if (!_sysContext) {
+		_sysContext = await newContext({ id: 0, username: 'sys', type: 'sys' }); // we know 0 is sys. 
+	}
+	return _sysContext;
 }
 
 /** Note: Make context an interface so that ContextImpl class does not get expose and app code cannot create it of the newContext factory */
 export interface Context {
 	readonly userId: number;
+	readonly userType: string;
 	readonly username: string | null;
 	getAccessToken(): Promise<string | null>;
 	hasPrivilege(privilege: string): Promise<boolean>;
@@ -28,6 +44,7 @@ export interface Context {
 //#region    ---------- Private Implementations ---------- 
 class ContextImpl implements Context {
 	readonly userId: number;
+	readonly userType: string;
 	private _privilegeSet: Set<string> | undefined = undefined;
 	private _user?: Partial<User>
 	readonly perfContext = new PerfContext();
@@ -39,8 +56,9 @@ class ContextImpl implements Context {
 	}
 
 
-	constructor(userId: number, user?: Partial<User>) {
-		this.userId = userId;
+	constructor(user: Partial<User>) {
+		this.userId = user.id!;
+		this.userType = user.type!; // TODO: needs to find a way to type this so that type is non optional
 		this._user = user;
 	}
 

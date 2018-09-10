@@ -1,32 +1,30 @@
 import { projectDao, userDao, Project, ticketDao } from 'common/da/daos';
 import { wait } from 'common/utils';
-import { newContext, Context } from 'common/context';
+import { newContext, Context, getSysContext } from 'common/context';
 import { closeKnex } from 'common/da/db';
 import * as assert from 'assert';
 
 let adminCtx: Context; // admin user seeded in the db
-
-let user1Ctx: Context; // default user created/cleaned by this test suite
+let sysCtx: Context; // sys context (to test multiple users without testing full access with role and all)
 
 /**
- * Test some basic crud operations with timestamps and all. 
+ * Test some basic crud operations with timestamps and all from admin (to access testing)
  * 
- * Do not test: 
- *   - access: see test-access
- *   - search: see test-search
+ * @see 
+ *   - test-access and test-access-project... for access testing. 
+ *   - test-search for search testing
+ *
  */
 
 describe("test-dao", function () {
 
 	this.beforeAll(async function () {
 		adminCtx = await newContext(1); // admin user
-		user1Ctx = await newContext((await userDao.create(adminCtx, { username: 'test-user1' })));
+		sysCtx = await getSysContext();
 	});
 
 	this.afterAll(async function () {
 		try {
-			// cleanup the user created
-			await userDao.remove(adminCtx, user1Ctx.userId);
 
 			await closeKnex();
 		} catch (ex) {
@@ -46,9 +44,9 @@ describe("test-dao", function () {
 			assert.strictEqual(project.name, 'dao-simple-crud-project_project-01');
 			const mtime1 = project.mtime!;
 
-			// test update with user1
+			// test update 
 			await wait(10); // very short wait to make sure create/updatetime is not the same
-			await projectDao.update(user1Ctx, projectId, { name: 'dao-simple-crud-project_project-01-updated' });
+			await projectDao.update(sysCtx, projectId, { name: 'dao-simple-crud-project_project-01-updated' });
 			project = await projectDao.get(adminCtx, projectId);
 			assert.strictEqual(project.name, 'dao-simple-crud-project_project-01-updated');
 			const mtime2 = project.mtime!;
@@ -60,7 +58,7 @@ describe("test-dao", function () {
 			assert.notStrictEqual(project.ctime, project.mtime, 'ctime vs mtime');
 			// check that the .mid and .cid
 			assert.strictEqual(project.cid, adminCtx.userId);
-			assert.strictEqual(project.mid, user1Ctx.userId);
+			assert.strictEqual(project.mid, sysCtx.userId);
 
 
 			// test list
@@ -104,12 +102,5 @@ describe("test-dao", function () {
 		}
 	});
 
-	it('dao-simple-with-normal-user', async function () {
-		try {
 
-
-		} catch (ex) {
-			throw ex;
-		}
-	});
 });

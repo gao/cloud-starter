@@ -1,48 +1,45 @@
-import { userDao, projectDao } from 'common/da/daos';
+import { userDao, projectDao, User } from 'common/da/daos';
 import { newContext, Context } from 'common/context';
 import { closeKnex } from 'common/da/db';
 import * as assert from 'assert';
 
 let adminCtx: Context;
+let userACtx: Context;
 
 describe("test-access", function () {
 
 	this.beforeAll(async function () {
 		adminCtx = await newContext(1); // admin user
+		const userAId = await userDao.create(adminCtx, { username: 'test-user-A', type: 'user' });
+		userACtx = await newContext(userAId);
 	});
 
 	this.afterAll(async function () {
+		await userDao.remove(adminCtx, userACtx.userId);
 		await closeKnex();
 	});
 
-	it('access-user-create-remove', async function () {
+
+	it('access-user-crud-from-admin', async function () {
 		const users = await userDao.list(adminCtx);
 		const orginalUserCount = users.length;
 
-		// create and remove as admin, should all work
-		const userId_1 = await userDao.create(adminCtx, { username: 'text-access-user-01' });
-		await userDao.remove(adminCtx, userId_1);
+		// test create user from admin, should work
+		const testUser01Id = await userDao.create(adminCtx, { username: 'text-access-user-01' });
 
-		// create test user 2 and it's context
-		const userId_2 = await userDao.create(adminCtx, { username: 'text-access-user-02' });
-		const user2Ctx = await newContext(userId_2);
+		// test update user from admin, should work
+		await userDao.update(adminCtx, testUser01Id, { username: 'text-access-user-01 updated' });
+		let testUser01: User | null = await userDao.get(adminCtx, testUser01Id);
+		assert.strictEqual(testUser01.username, 'text-access-user-01 updated', 'username');
 
-		// with user 2 context, create a user3, should work
-		const userId_3 = await userDao.create(user2Ctx, { username: 'text-access-user-03' });
+		// test remove from admin, should work
+		await userDao.remove(adminCtx, testUser01Id);
+		testUser01 = await userDao.first(adminCtx, { id: testUser01Id });
+		assert.strictEqual(testUser01, null, 'testUser01 should be null');
 
-		// with user 2 context, try to remove, user3, should fail
-		await assert.rejects(userDao.remove(user2Ctx, userId_3), (ex: any) => {
-			if (ex.message.includes('does not have the necessary access')) {
-				return true;
-			} else {
-				return false;
-			}
-		});
 
 		// cleanup (always cleanup data). 
-		// TODO: needs to make are exception safe (finally and run even when test fail)
-		await userDao.remove(adminCtx, userId_2);
-		await userDao.remove(adminCtx, userId_3);
+		// testUser01 should be already removed with test above. 
 
 		// check cleanup
 		const userCount = (await userDao.list(adminCtx)).length;
@@ -50,6 +47,49 @@ describe("test-access", function () {
 
 	});
 
+
+	it('access-user-crud-from-userA', async function () {
+		const users = await userDao.list(adminCtx);
+		const orginalUserCount = users.length;
+
+
+		// test create user from test-user01 from userA, should fail
+		await assert.rejects(userDao.create(userACtx, { username: 'text-access-user-01' }), (ex: any) => {
+			if (ex.message.includes('does not have the necessary access')) {
+				return true;
+			} else {
+				return false;
+			}
+		}, 'creating user form userA');
+
+		// create test user 02 with admin
+		const testUser01Id = await userDao.create(adminCtx, { username: 'text-access-user-01' });
+
+		// test update testUser01 from userA, should fail
+		await assert.rejects(userDao.update(userACtx, testUser01Id, { username: 'text-access-user-01 updated' }), (ex: any) => {
+			if (ex.message.includes('does not have the necessary access')) {
+				return true;
+			} else {
+				return false;
+			}
+		}, 'updating test-user-01 from userA');
+
+		// test update testUser01 from testUser01, should work
+		const testUser01Ctx = await newContext(testUser01Id);
+		await userDao.update(testUser01Ctx, testUser01Id, { username: 'text-access-user-01 update 2' })
+		const testUser01 = await userDao.get(adminCtx, testUser01Id);
+		assert.strictEqual(testUser01.username, 'text-access-user-01 update 2');
+
+
+		// cleanup
+		await userDao.remove(adminCtx, testUser01Id);
+
+
+		// check cleanup
+		const userCount = (await userDao.list(adminCtx)).length;
+		assert.strictEqual(userCount, orginalUserCount, 'total user count');
+
+	});
 
 
 });
