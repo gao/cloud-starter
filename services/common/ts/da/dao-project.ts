@@ -11,7 +11,7 @@ export class ProjectDao extends BaseDao<Project, number> {
 		return super.get(ctx, id);
 	}
 
-	@AccessRequires(['#sys', '#admin', '@cid'])
+	@AccessRequires(['#sys', '#admin', '@cid', 'project-writer'])
 	async update(ctx: Context, id: number, data: Partial<Project>) {
 		return super.update(ctx, id, data);
 	}

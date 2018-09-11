@@ -7,13 +7,13 @@ const topFinder = newTopFinder();
 
 /**
  * There are three type of privilege
- * - '#...' such as '#admin' meaning the role admin, and this is system wide, or '#free' for free user
+ * - '#...' mach to user.type, such as '#admin' meaning `user.type = 'admin'`
  *   - as of now there are 4 types: 
  *     - 'sys' this is the role for any background service/logic that does not have a user attached. A default 'sys' user has been created with this role
  *     - 'admin' this is the role for any logged in user that have full admin privilege. A default 'admin' user has been created with this role.
  *     - 'user' those are normal user that login/register through the system
- * - '@...' such as '@cid' means that the current user (in context) `.id` match the '.cid' of the entity in question
- * - '...' such as 'owner' or 'viewer' which are role scoped for a given project (using the user_role table)
+ * - '@...' such as '@cid' means that the current user (in context) `.id` match the 'entity.cid' of the entity in question
+ * - '...' such as 'project-writer', are privileges that expanded from the user_role table role name (to be implemented) 
  * 
  * Note: In this application, Role are scoped by project (can be scoped on different object or root depending of the app need)
  */
