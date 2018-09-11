@@ -3,6 +3,7 @@ import { Context } from '../context';
 import { AccessRequires } from './access';
 import { BaseDao, ProjectEntityDao } from './dao-base';
 import { TicketDao } from './dao-TicketDao';
+import { ProjectDao } from './dao-project';
 
 export * from 'shared/entities';
 
@@ -38,7 +39,7 @@ class UserDao extends BaseDao<User, number>{
 export const userDao = new UserDao();
 
 
-export const projectDao = new BaseDao<Project, number>('project', true);
+export const projectDao = new ProjectDao();
 
 export const ticketDao = new TicketDao();
 

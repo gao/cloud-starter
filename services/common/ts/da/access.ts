@@ -1,5 +1,5 @@
 import { BaseDao } from './dao-base';
-import { Context } from '../context';
+import { Context, getSysContext } from '../context';
 import { newTopFinder } from '../top-decorator';
 
 const topFinder = newTopFinder();
@@ -29,7 +29,7 @@ export function AccessRequires(privilege: string[] | string) {
 		//console.log(`AccessRequires decorator for ${target.constructor.name} ${propertyKey} wrapping ${method.name}`);
 
 		descriptor.value = async function accessRequiresWrapper(this: BaseDao<Object, number>) {
-
+			const sysCtx = await getSysContext();
 			const isTop = topFinder.isTop(this.constructor, target.constructor, propertyKey);
 
 			// we perform the access control only for the top most class for this methods
@@ -41,6 +41,7 @@ export function AccessRequires(privilege: string[] | string) {
 
 				const userId = ctx.userId;
 				const userType = ctx.userType;
+				let entityId: number | null = null;
 
 				let pass = false;
 
@@ -57,8 +58,9 @@ export function AccessRequires(privilege: string[] | string) {
 					// if we have a property userId access type
 					else if (p.startsWith('@')) {
 						const propName = p.substring(1); // propName to be 
-						const entityId = arguments[1] as number; // right now, we assume the second arg is the entityId
-						const entity: any = await this.get(ctx, entityId);
+						entityId = arguments[1] as number; // right now, we assume the second arg is the entityId
+
+						const entity: any = await this.get(sysCtx, entityId);
 						const val = entity[propName] as number;
 						if (userId === val) {
 							pass = true;
@@ -71,7 +73,7 @@ export function AccessRequires(privilege: string[] | string) {
 				}
 
 				if (!pass) {
-					throw new Error(`User ${userId} does not have the necessary access for "${this.constructor.name}.${method.name}" [${privileges.join(',')}]`);
+					throw new Error(`User ${userId} does not have the necessary access for "${this.constructor.name}[${entityId}].${method.name}", access: [${privileges.join(',')}]`);
 				}
 			}
 

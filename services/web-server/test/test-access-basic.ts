@@ -6,7 +6,7 @@ import * as assert from 'assert';
 let adminCtx: Context;
 let userACtx: Context;
 
-describe("test-access", function () {
+describe('test-access-basic', function () {
 
 	this.beforeAll(async function () {
 		adminCtx = await newContext(1); // admin user
@@ -20,17 +20,17 @@ describe("test-access", function () {
 	});
 
 
-	it('access-user-crud-from-admin', async function () {
+	it('access-basic-user-crud-from-admin', async function () {
 		const users = await userDao.list(adminCtx);
 		const orginalUserCount = users.length;
 
 		// test create user from admin, should work
-		const testUser01Id = await userDao.create(adminCtx, { username: 'text-access-user-01' });
+		const testUser01Id = await userDao.create(adminCtx, { username: 'test-access-basic-user-01' });
 
 		// test update user from admin, should work
-		await userDao.update(adminCtx, testUser01Id, { username: 'text-access-user-01 updated' });
+		await userDao.update(adminCtx, testUser01Id, { username: 'test-access-basic-user-01 updated' });
 		let testUser01: User | null = await userDao.get(adminCtx, testUser01Id);
-		assert.strictEqual(testUser01.username, 'text-access-user-01 updated', 'username');
+		assert.strictEqual(testUser01.username, 'test-access-basic-user-01 updated', 'username');
 
 		// test remove from admin, should work
 		await userDao.remove(adminCtx, testUser01Id);
@@ -48,13 +48,13 @@ describe("test-access", function () {
 	});
 
 
-	it('access-user-crud-from-userA', async function () {
+	it('access-basic-user-crud-from-userA', async function () {
 		const users = await userDao.list(adminCtx);
 		const orginalUserCount = users.length;
 
 
 		// test create user from test-user01 from userA, should fail
-		await assert.rejects(userDao.create(userACtx, { username: 'text-access-user-01' }), (ex: any) => {
+		await assert.rejects(userDao.create(userACtx, { username: 'test-access-basic-user-01' }), (ex: any) => {
 			if (ex.message.includes('does not have the necessary access')) {
 				return true;
 			} else {
@@ -63,10 +63,10 @@ describe("test-access", function () {
 		}, 'creating user form userA');
 
 		// create test user 02 with admin
-		const testUser01Id = await userDao.create(adminCtx, { username: 'text-access-user-01' });
+		const testUser01Id = await userDao.create(adminCtx, { username: 'test-access-basic-user-01' });
 
 		// test update testUser01 from userA, should fail
-		await assert.rejects(userDao.update(userACtx, testUser01Id, { username: 'text-access-user-01 updated' }), (ex: any) => {
+		await assert.rejects(userDao.update(userACtx, testUser01Id, { username: 'test-access-basic-user-01 updated' }), (ex: any) => {
 			if (ex.message.includes('does not have the necessary access')) {
 				return true;
 			} else {
@@ -76,9 +76,9 @@ describe("test-access", function () {
 
 		// test update testUser01 from testUser01, should work
 		const testUser01Ctx = await newContext(testUser01Id);
-		await userDao.update(testUser01Ctx, testUser01Id, { username: 'text-access-user-01 update 2' })
+		await userDao.update(testUser01Ctx, testUser01Id, { username: 'test-access-basic-user-01 update 2' })
 		const testUser01 = await userDao.get(adminCtx, testUser01Id);
-		assert.strictEqual(testUser01.username, 'text-access-user-01 update 2');
+		assert.strictEqual(testUser01.username, 'test-access-basic-user-01 update 2');
 
 
 		// cleanup
