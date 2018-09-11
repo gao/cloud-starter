@@ -1,7 +1,7 @@
 import { PerfContext } from './perf';
 import { User } from 'shared/entities';
 import { oauthDao, userDao } from './da/daos';
-import { getPrivileges } from './role-manager';
+import { getProjectPrivileges } from './role-manager';
 
 // temporary hardcoded (should go to DB with roles)
 
@@ -37,15 +37,16 @@ export interface Context {
 	readonly userType: string;
 	readonly username: string | null;
 	getAccessToken(): Promise<string | null>;
-	hasPrivilege(privilege: string): Promise<boolean>;
+	hasProjectPrivilege(projectId: number, privilege: string): Promise<boolean>;
 	readonly perfContext: PerfContext;
 }
 
 //#region    ---------- Private Implementations ---------- 
+
 class ContextImpl implements Context {
 	readonly userId: number;
 	readonly userType: string;
-	private _privilegeSet: Set<string> | undefined = undefined;
+	private privilegesByProjectId: Map<number, Set<string>> = new Map();
 	private _user?: Partial<User>
 	readonly perfContext = new PerfContext();
 
@@ -85,14 +86,18 @@ class ContextImpl implements Context {
 		return this._accessToken;
 	}
 
-	public async hasPrivilege(privilege: string) {
+	public async hasProjectPrivilege(projectId: number, privilege: string) {
 
-		if (!this._privilegeSet) {
-			const privileges = await getPrivileges(this.userId);
-			this._privilegeSet = new Set(privileges);
+		// first, get the privileges for this user on this project (from context cache)
+		let privileges = this.privilegesByProjectId.get(projectId);
+		// if not found, we load it and set it to the context cache
+		if (privileges == null) {
+			const privilegesArray = await getProjectPrivileges(this.userId, projectId)
+			privileges = new Set(privilegesArray);
+			this.privilegesByProjectId.set(projectId, privileges);
 		}
 
-		return this._privilegeSet.has(privilege);
+		return privileges.has(privilege);
 	}
 
 	// set or get a data for a key
