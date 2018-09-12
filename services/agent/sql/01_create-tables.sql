@@ -12,12 +12,6 @@ CREATE TABLE "user" (
 ALTER SEQUENCE user_id_seq RESTART WITH 1000;
 
 
-CREATE TABLE "user_role" (
-  "userId" bigint NOT NULL,
-  "projectId" bigint NOT NULL,
-  "name" varchar(32) NOT NULL,
-  PRIMARY KEY("userId", "projectId")
-);
 
 CREATE TABLE oauth (
   id bigserial PRIMARY KEY,
@@ -40,6 +34,16 @@ CREATE TABLE "project" (
   "ghFullName" varchar(128)
 );
 ALTER SEQUENCE project_id_seq RESTART WITH 1000;
+
+
+CREATE TABLE "user_prole" (
+  "userId" bigint NOT NULL,
+  "projectId" bigint NOT NULL,
+  "name" varchar(32) NOT NULL,
+  PRIMARY KEY("userId", "projectId"),
+  FOREIGN KEY ("userId") REFERENCES "user" (id) on delete cascade,
+  FOREIGN KEY ("projectId") REFERENCES "project" (id) on delete cascade
+);
 
 
 CREATE TABLE "ticket" (

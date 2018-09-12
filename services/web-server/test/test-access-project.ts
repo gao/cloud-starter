@@ -1,77 +1,58 @@
 import { userDao, projectDao, User, Project } from 'common/da/daos';
 import { newContext, Context } from 'common/context';
 import { closeKnex } from 'common/da/db';
+import { clean, initSuite } from './t-utils'
 import * as assert from 'assert';
 
-let adminCtx: Context;
-let userACtx: Context;
-let userBCtx: Context;
 
-describe("test-access-project", function () {
 
-	this.beforeAll(async function () {
-		adminCtx = await newContext(1); // admin user
-		userACtx = await newContext(await userDao.create(adminCtx, { username: 'test-user-A', type: 'user' }));
-		userBCtx = await newContext(await userDao.create(adminCtx, { username: 'test-user-B', type: 'user' }));
-	});
+const errorNoAccess = /does not have the necessary access/;
 
-	this.afterAll(async function () {
-		await userDao.remove(adminCtx, userACtx.userId);
-		await userDao.remove(adminCtx, userBCtx.userId);
-		await closeKnex();
-	});
+describe("test-access-project", async function () {
 
+
+	const suite = initSuite(this);
 
 	it('access-project-from-userA', async function () {
 
-		// // test create project from userA, should work
-		let testProject01Id = await projectDao.create(userACtx, { name: 'test-access-project-01' });
-		let testProject01: Project | null = await projectDao.get(userACtx, testProject01Id);
+		// create project from userA, should work
+		let testProject01Id = await projectDao.create(suite.userACtx, { name: 'test-access-project-01' });
+
+		// test get, should work
+		let testProject01: Project | null = await projectDao.get(suite.userACtx, testProject01Id);
 		assert.strictEqual(testProject01.name, 'test-access-project-01');
 
 		// test update from userA, should work
-		await projectDao.update(userACtx, testProject01Id, { name: 'test-access-project-01 updated' });
-		testProject01 = await projectDao.get(userACtx, testProject01Id);
+		await projectDao.update(suite.userACtx, testProject01Id, { name: 'test-access-project-01 updated' });
+		testProject01 = await projectDao.get(suite.userACtx, testProject01Id);
 		assert.strictEqual(testProject01.name, 'test-access-project-01 updated');
 
 		// test delete project from userA, should work
-		await projectDao.remove(userACtx, testProject01Id);
-		testProject01 = await projectDao.first(userACtx, { id: testProject01Id });
+		await projectDao.remove(suite.userACtx, testProject01Id);
+		testProject01 = await projectDao.first(suite.userACtx, { id: testProject01Id });
 		assert.strictEqual(testProject01, null, 'project01 should be null');
-
-		// cleanup (always cleanup data). 
-		// testProject01 should be already removed with test above.
 
 	});
 
-	it('access-project-unauthorized-@', async function () {
 
-		// test create project from userA, should work
-		let testProject01Id = await projectDao.create(userACtx, { name: 'test-access-project-01' });
-		let testProject01: Project | null = await projectDao.get(userACtx, testProject01Id);
-		assert.strictEqual(testProject01.name, 'test-access-project-01');
+	it('access-project-viewer', async function () {
 
-		// test update from userA, should fail
-		await assert.rejects(projectDao.update(userBCtx, testProject01Id, { name: 'test-access-project-01 updated' }), (ex: any) => {
-			if (ex.message.includes('does not have the necessary access')) {
-				return true;
-			} else {
-				return false;
-			}
-		}, 'updating userA project from userB should fail');
+		// create project from userA, should work
+		let testProject01Id = await projectDao.create(suite.userACtx, { name: 'test-access-project-01' });
+		suite.toClean('project', testProject01Id);
 
-		// test delete project from userA, should fail
-		await assert.rejects(projectDao.remove(userBCtx, testProject01Id), (ex: any) => {
-			if (ex.message.includes('does not have the necessary access')) {
-				return true;
-			} else {
-				return false;
-			}
-		}, 'removing userA project from userB should fail');
+		// assign 
 
-		// cleanup (always cleanup data). 
-		await projectDao.remove(userACtx, testProject01Id);
+		// test read from userB, should fail
+		await assert.rejects(projectDao.get(suite.userBCtx, testProject01Id), errorNoAccess, 'UserB schould not access to userA project');
 
+		// test write from userB, should fail
+		await assert.rejects(projectDao.update(suite.userBCtx, testProject01Id, { name: 'test-access-project-01 updated' }),
+			errorNoAccess, 'UserB schould not have write access to userA project');
+
+		// test write from userB, should fail
+		await assert.rejects(projectDao.remove(suite.userBCtx, testProject01Id),
+			errorNoAccess, 'UserB schould not have remove access to userA project');
 	});
 
 

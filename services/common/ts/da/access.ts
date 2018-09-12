@@ -28,7 +28,7 @@ export function AccessRequires(privilege: string[] | string) {
 		const method = descriptor.value!;
 		//console.log(`AccessRequires decorator for ${target.constructor.name} ${propertyKey} wrapping ${method.name}`);
 
-		descriptor.value = async function accessRequiresWrapper(this: BaseDao<Object, number>) {
+		descriptor.value = async function accessRequiresWrapper() {
 			const sysCtx = await getSysContext();
 			const isTop = topFinder.isTop(this.constructor, target.constructor, propertyKey);
 
@@ -38,6 +38,13 @@ export function AccessRequires(privilege: string[] | string) {
 				if (!ctx.constructor.name.startsWith('Context')) {
 					throw new Error(`First argument of ${this.constructor.name}.${method.name} must be a "Context" and not a ${ctx.constructor.name}`);
 				}
+
+				// At this point, we support AccessRequires only on Dao, we can broaden the support later (if needed)
+				// This assumption allows to narrow the function parameters possibilities later.
+				if (!(this instanceof BaseDao)) {
+					throw new Error(`ERROR - at this point @AccessRequires only support dao methods. ${this.constructor.name}.${propertyKey} is not of BaseDao`);
+				}
+				const dao: BaseDao<Object, number> = this;
 
 				const userId = ctx.userId;
 				const userType = ctx.userType;
@@ -60,14 +67,33 @@ export function AccessRequires(privilege: string[] | string) {
 						const propName = p.substring(1); // propName to be 
 						entityId = arguments[1] as number; // right now, we assume the second arg is the entityId
 
-						const entity: any = await this.get(sysCtx, entityId);
+						const entity: any = await dao.get(sysCtx, entityId);
 						const val = entity[propName] as number;
 						if (userId === val) {
 							pass = true;
 							break;
 						}
 					} else {
-						// TODO: needs to implement project role base
+						entityId = arguments[1] as number; // right now, we assume the second arg is the entityId
+
+						// TODO: need to make sure that this assumptions are always correct
+						const tableName = dao.tableName;
+						let projectId: number | null;
+						// if it is a project dao, then, the entityId was the projectId
+						if (tableName === 'project') {
+							projectId = entityId; // right now, we assume the second arg is the entityId
+						} else {
+							projectId = (arguments[2]) ? arguments[2].projectId : null;
+						}
+						// 
+						if (projectId == null) {
+							throw new Error(`Cannot check AccessRequires on "${this.constructor.name}.${method.name}" because projectId not found in argument`);
+						}
+						const has = await ctx.hasProjectPrivilege(projectId, p);
+						if (has) {
+							pass = true;
+							break;
+						}
 					}
 
 				}

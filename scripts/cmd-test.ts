@@ -80,9 +80,6 @@ async function watchAndRun(debug: boolean, serviceName: string, testGrep: string
 async function run(debug = false, serviceName: string, testGrep: string, podName: string) {
 	// if debug, we make sure we kill any node process with inspect (to make sure the port is not used)
 	if (debug) {
-		// // TODOto be safe for now, not s
-		// console.log('waiting some before kill the eventual inspec process');
-		// await wait(1000);
 		const args = ['exec', podName];
 		args.push('--', 'pkill', '-f', 'inspec'); // somehow, if we pass "'inpsec'" it fails (ok, because single word)
 		await spawn('kubectl', args, { ignoreFail: true });

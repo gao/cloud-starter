@@ -42,10 +42,11 @@ export async function getKnex() {
 			});
 		} catch (ex) {
 			console.log(`Cannot connect to `, dbOpts, ex);
+			throw ex;
 		}
 	}
 
-	return _knex!; // help the compiler
+	return _knex;
 
 }
 

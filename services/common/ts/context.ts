@@ -36,6 +36,7 @@ export interface Context {
 	readonly userId: number;
 	readonly userType: string;
 	readonly username: string | null;
+	readonly user: Partial<User>;
 	getAccessToken(): Promise<string | null>;
 	hasProjectPrivilege(projectId: number, privilege: string): Promise<boolean>;
 	readonly perfContext: PerfContext;
@@ -47,7 +48,7 @@ class ContextImpl implements Context {
 	readonly userId: number;
 	readonly userType: string;
 	private privilegesByProjectId: Map<number, Set<string>> = new Map();
-	private _user?: Partial<User>
+	private _user: Partial<User>
 	readonly perfContext = new PerfContext();
 
 	_data = new Map<string, any>(); // not used yet. 
@@ -56,6 +57,9 @@ class ContextImpl implements Context {
 		return (this._user && this._user.username) ? this._user.username : null;
 	}
 
+	get user() {
+		return { ...this._user }; // shalow copy (should be enough)
+	}
 
 	constructor(user: Partial<User>) {
 		this.userId = user.id!;
@@ -63,14 +67,14 @@ class ContextImpl implements Context {
 		this._user = user;
 	}
 
+
+	private _accessToken: string | null | undefined = undefined;
 	/**
 	 * On demand github accessToken property get. Tries to get it only once (since a context is per request)
 	 * - undefined means did not try to get it yet. 
 	 * - null means that we tried and nothing was found, so, we can run null later
 	 * - any value means we found it. 
 	 */
-
-	private _accessToken: string | null | undefined = undefined;
 	public async getAccessToken(): Promise<string | null> {
 
 		// if null, attempt to find it
@@ -96,7 +100,6 @@ class ContextImpl implements Context {
 			privileges = new Set(privilegesArray);
 			this.privilegesByProjectId.set(projectId, privileges);
 		}
-
 		return privileges.has(privilege);
 	}
 
