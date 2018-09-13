@@ -71,12 +71,11 @@ export function initSuite(suite: Mocha.Suite) {
 
 
 
-async function clean(toClean: [string, any][]) {
+async function clean(toClean: [string, number][]) {
 	const k = await getKnex();
 	for (const item of toClean) {
 
-		const [tableName, idStr] = item;
-		const id = parseInt(idStr);
+		const [tableName, id] = item;
 		try {
 			await k(tableName).delete().where({ id });
 		} catch (ex) {
