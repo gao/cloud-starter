@@ -5,6 +5,7 @@ import { userDao } from 'common/da/daos';
 
 // Note: need to rename Context CommonContext because Mocha has it own Context
 
+// extend the Mocha.Suite type with some application common test data and function
 declare global {
 	namespace Mocha {
 		interface Suite {
@@ -18,6 +19,8 @@ declare global {
 }
 
 // Note: this needs to be sync and not be awaited, otherwise, should be after the it(...)
+
+// Initialize a test suite for application common test data and behavior
 export function initSuite(suite: Mocha.Suite) {
 
 	let toCleanList: [string, any][] = [];
@@ -63,7 +66,7 @@ export function initSuite(suite: Mocha.Suite) {
 
 
 
-export async function clean(toClean: [string, any][]) {
+async function clean(toClean: [string, any][]) {
 	const k = await getKnex();
 	for (const item of toClean) {
 

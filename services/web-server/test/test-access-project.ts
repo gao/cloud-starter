@@ -1,7 +1,5 @@
-import { userDao, projectDao, User, Project } from 'common/da/daos';
-import { newContext, Context } from 'common/context';
-import { closeKnex } from 'common/da/db';
-import { clean, initSuite } from './t-utils'
+import { projectDao, Project } from 'common/da/daos';
+import { initSuite } from './t-utils'
 import * as assert from 'assert';
 import { saveProle } from 'common/role-manager';
 
