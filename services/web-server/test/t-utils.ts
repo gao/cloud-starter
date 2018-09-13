@@ -10,10 +10,13 @@ declare global {
 	namespace Mocha {
 		interface Suite {
 			toClean: (tableName: string, id: any) => this;
+
 			sysCtx: CommonContext;
 			adminCtx: CommonContext;
 			userACtx: CommonContext;
 			userBCtx: CommonContext;
+
+			errorNoAccess: RegExp
 		}
 	}
 }
@@ -24,6 +27,8 @@ declare global {
 export function initSuite(suite: Mocha.Suite) {
 
 	let toCleanList: [string, any][] = [];
+
+	suite.errorNoAccess = /does not have the necessary access/;
 
 	suite.toClean = function (tableName: string, id: any) {
 		toCleanList.push([tableName, id]);

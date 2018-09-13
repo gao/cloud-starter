@@ -3,8 +3,6 @@ import { newContext } from 'common/context';
 import * as assert from 'assert';
 import { initSuite } from './t-utils';
 
-const errorNoAccess = /does not have the necessary access/;
-
 describe('test-access-basic', async function () {
 
 	const suite = initSuite(this);
@@ -31,14 +29,14 @@ describe('test-access-basic', async function () {
 	it('access-basic-user-crud-from-userA', async function () {
 
 		// test create user from test-user01 from userA, should fail
-		await assert.rejects(userDao.create(suite.userACtx, { username: 'test-access-basic-user-01' }), errorNoAccess, 'creating user form userA');
+		await assert.rejects(userDao.create(suite.userACtx, { username: 'test-access-basic-user-01' }), suite.errorNoAccess, 'creating user form userA');
 
 		// create test user 02 with admin
 		const testUser01Id = await userDao.create(suite.adminCtx, { username: 'test-access-basic-user-01' });
 		suite.toClean('user', testUser01Id);
 
 		// test update testUser01 from userA, should fail
-		await assert.rejects(userDao.update(suite.userACtx, testUser01Id, { username: 'test-access-basic-user-01 updated' }), errorNoAccess, 'updating test-user-01 from userA');
+		await assert.rejects(userDao.update(suite.userACtx, testUser01Id, { username: 'test-access-basic-user-01 updated' }), suite.errorNoAccess, 'updating test-user-01 from userA');
 
 		// test update testUser01 from testUser01, should work
 		const testUser01Ctx = await newContext(testUser01Id);
