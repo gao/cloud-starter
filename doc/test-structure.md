@@ -31,38 +31,7 @@ See:
 
 **Suite initialization**
 
-To minimize repetitive boilerplate code accross while maintaining a flexible and typed test, the approach is to extends the `Mocha.Suite` type with some common test suite functionalities. 
-
-In [services/web-server/test/t-utils.ts](services/web-server/test/t-utils.ts), we extends the `Mocha.Suite` with some application common test object. 
-
-```ts
-
-// extend the Mocha.Suite type with some application common test data and function
-declare global {
-	namespace Mocha {
-		interface Suite {
-			// Add an table row to be deleted after the test is ran (will be called in afterEach)
-			toClean: (tableName: string, id: any) => this; 
-
-			//// default users/context that can be used in tests
-			sysCtx: CommonContext;
-			adminCtx: CommonContext;
-			userACtx: CommonContext;
-			userBCtx: CommonContext;
-		}
-	}
-}
-
-// Note: this needs to be sync and not be awaited, otherwise, should be after the it(...)
-
-// Initialize a test suite for application common test data and behavior
-export function initSuite(suite: Mocha.Suite) {
-	...
-}
-
-```
-
-Each test suite must call the init 
+Each test suite must call the `initSuite` in there describe and assign it to a `suite` variable
 
 ```ts
 describe("test-access-project", async function () {
@@ -71,12 +40,62 @@ describe("test-access-project", async function () {
 
 	// test CRUD  project from same user (i.e. owner)
 	it('access-project-self', async function () {
-		...
-		suite.adminCtx; 
+		
+		// suite has default set of  have a default set of user `context` avail
+		suite.adminCtx
+		suite.userACtx;
+		suite.userCtx;
+
+		const projectId = await daoProject.create(suite.adminCtx, ({name: 'test-project-01'}));
+
+		// suite expose a method to queue entity (tableName/id) that need to be cleanup after this test
 		suite.toClean('project', id);
 	}
 });
 ```	
+
+`initSuite` is from [services/web-server/test/t-utils.ts](services/web-server/test/t-utils.ts) and extends the `Mocha.Suite` with  application common test setup and tear down. Here is the snipet of the `t-utils.ts` 
+
+
+**Test structure**
+
+The naming of the test needs to match the suite/test file (see first sections on naming) and should have the following structure: 
+
+- The first blocks of a test can setup the data (here `create project` and `assign role`), and each block need to have a clear one line comment.
+- When creating new entity, they need to be queued to be cleaned after the test with `suite.toClean(tableName, id)`
+- Each sub test should have a one liner starting with `// test ...` and ending with `, should work` or `, should fail` (consistency is important)
+- When asserting for `assert.rejects` (promise), favor `RegExp` way, as below (use function only if really needed)
+- `assert.rejects` validation `RegExp` and `message` should be in there new line, so that it is easy to see the function called.
+- Each sub-test should have its own block (one line comment, few line of create and asserts) and empty line. 
+- If test need extra cleanup (not provided by `suite.toClean`), the test code needs to be in `try/catch` and the cleanup happen in `finally` (hopefully this is not too needed, we might find a better way later). 
+
+
+Here is an example of a good test: 
+
+```ts
+	// test CRUD project access from a viewer user
+	it('access-project-viewer', async function () {
+
+		// create project from userA, should work
+		let testProject01Id = await projectDao.create(suite.userACtx, { name: 'test-access-project-01' });
+		suite.toClean('project', testProject01Id);
+
+		// assign 'viewer' role to userB
+		await saveProle(suite.userBCtx.userId, testProject01Id, 'viewer');
+
+		// test read from userB, should work
+		const testProject01 = await projectDao.get(suite.userBCtx, testProject01Id);
+		assert.strictEqual(testProject01.name, 'test-access-project-01');
+
+		// test update from userB, should fail
+		await assert.rejects(projectDao.update(suite.userBCtx, testProject01Id, { name: 'test-access-project-01-updated' }),
+			suite.errorNoAccess, 'UserB schould not have write access to userA project');
+
+		// test remove from userB, should fail
+		await assert.rejects(projectDao.remove(suite.userBCtx, testProject01Id),
+			suite.errorNoAccess, 'UserB schould not have remove access to userA project');
+	});
+```
 
 
 
