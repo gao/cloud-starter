@@ -7,13 +7,18 @@ const staticConfigurations: any = {
 	dbHost: "cstar-db-srv"
 }
 
+
+// Type was can be typed by config name (if not, the getConfig return type will be any, thanks to the conditional typing below)
+interface Configs {
+	github: { client_id: string, client_secret: string };
+}
+
 /**
  * Return a configuration from a configuration name. Those configuration could be static, comes from redis, or from DB (and cached).
  * 
- * Note: For now, just support static config.
- * 
- * @param name 
  */
+// NOTE: Conditional typing is only use as declaration, implementation signature should be conditional less (see:  https://stackoverflow.com/a/52144866/686724)
+export async function getConfig<T extends keyof Configs | string>(name: T): Promise<T extends keyof Configs ? Configs[T] : any>;
 export async function getConfig(name: string): Promise<any> {
 	let data: any | undefined;
 
@@ -40,4 +45,8 @@ export async function getConfig(name: string): Promise<any> {
 
 	return data;
 }
+
+
+
+
 

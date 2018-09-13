@@ -6,8 +6,8 @@
 
 ```sql
 insert into config (name, data) values ('github', 
-	'{"client_id":"_your github client_id_", 
-	"client_secret": "_cl_"}');
+	'{"client_id":"_github client_id_", 
+	"client_secret": "_github client_secret_"}');
 ```
 
 ## Build
@@ -34,8 +34,9 @@ npm run kcreate
 # install the DB by going throw the agent service
 npm run recreateDb
 
-# Now can go to http://localhost:8080/
 ```
+
+- Go to http://localhost:8080/ you should see the login / register page. 
 
 ## REPL Dev
 
