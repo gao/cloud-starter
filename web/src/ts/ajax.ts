@@ -5,27 +5,27 @@
 // application APIs. 
 
 // use for get and list
-export function get(path: string, data?: any, opts?: any) {
+export function ajaxGet(path: string, data?: any, opts?: any) {
 	return _ajax('GET', path, data, opts);
 }
 
 // use for create 
-export function post(path: string, data?: any, opts?: any) {
+export function ajaxPost(path: string, data?: any, opts?: any) {
 	return _ajax('POST', path, data, opts);
 }
 
 // use for update
-export function put(path: string, data?: any, opts?: any) {
+export function ajaxPut(path: string, data?: any, opts?: any) {
 	return _ajax('PUT', path, data, opts);
 }
 
 // use for delete
-export function delet(path: string, data?: any) {
+export function ajaxDelete(path: string, data?: any) {
 	return _ajax('DELETE', path, data, null);
 }
 
 // patch
-export function patch(path: string, data?: any) {
+export function ajaxPatch(path: string, data?: any) {
 	return _ajax('PATCH', path, data, null);
 }
 
@@ -48,7 +48,7 @@ function _ajax(type: string, path: string, data?: any, opts?: any): Promise<any>
 		if (data && !asBody) {
 			url += "?" + param(data);
 		}
-
+		console.log(url);
 		xhr.open(type, url);
 		if (!opts.contentType.startsWith("multipart/form-data")) {
 			xhr.setRequestHeader("Content-Type", opts.contentType);

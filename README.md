@@ -48,7 +48,10 @@ As of now, the development environment has been tested on Mac, but it should wor
 docker run -d -p 5000:5000 --restart=unless-stopped --name registry registry:2.6.2
 ```
 
-## Build and run
+## Build, run, and code
+
+For github integration support, create a file at `services/agent/sql/03_seed-github-key.sql` (it will be ran by `npm run recreateDb`) (see [dev](doc/dev.md) for more info)
+
 - `npm install`
 - `npm run dbuild` (this build all of the needed docker images, and push then to the local registry)
 - `npm run kcreate` (this will create all of the kuberenetes resources)
@@ -56,7 +59,12 @@ docker run -d -p 5000:5000 --restart=unless-stopped --name registry registry:2.6
 
 Now, you should be able to go to http://localhost:8080/ and login as **admin** / **welcome**
 
-More [developer workflow](doc/dev-workflow.md)
+- `npm run watch` live dev (REPL) 
+
+## tested
+
+
+More [developer workflow](doc/dev.md)
 
 ## Clean
 

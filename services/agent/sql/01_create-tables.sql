@@ -1,4 +1,9 @@
 
+CREATE TABLE config ( 
+  "name" varchar(32) PRIMARY KEY, 
+  data jsonb
+);
+
 CREATE TABLE "user" (
   id bigserial PRIMARY KEY,
   cid bigint, 

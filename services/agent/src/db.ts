@@ -28,13 +28,15 @@ async function recreateDb() {
 		await psqlImport({ user: "postgres", db: "postgres", host }, [`${sqlDir}/_drop-db.sql`]);
 	}
 
+	const allSqlFiles = await fs.glob('*.sql', sqlDir);
+
 	//// create the cstar_... database / user
 	// local test: psql -U postgres -d postgres -f sql/00_create-db.sql
 	await psqlImport({ user: "postgres", db: "postgres", host }, [`${sqlDir}/00_create-db.sql`]);
 
 	//// Option 1) At the beginning, load from sql
-	await psqlImport(dbOpts, [`${sqlDir}/01_create-tables.sql`]);
-	await psqlImport(dbOpts, [`${sqlDir}/02_seed.sql`]);
+	const sqlFiles = filterNumbered(allSqlFiles, 1);
+	await psqlImport(dbOpts, sqlFiles);
 
 	//// Option 2) When app is in prod, this will take the data from prod
 	//await loadProdDb();
@@ -81,5 +83,23 @@ async function checkRunning(): Promise<boolean> {
 		console.log(`Database not ready (${status.message})`);
 	}
 	return status.accepting;
+}
+
+
+/** Filter a list of file by their starting number (and exclude any file name that does not start with a number) */
+function filterNumbered(allFiles: string[], from = 0, to?: number) {
+	const rgx = /^\d+/;
+	const files: string[] = [];
+	for (const file of allFiles) {
+		const name = basename(file);
+		const m = name.match(rgx);
+		if (m) {
+			const num = parseInt(m[0], 10);
+			if (num >= from && (!to || num <= to)) {
+				files.push(file);
+			}
+		}
+	}
+	return files;
 }
 // --------- /Private Utils --------- //

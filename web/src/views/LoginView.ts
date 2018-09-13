@@ -1,13 +1,14 @@
 import { BaseView, addDomEvents } from 'views/base';
 import { first, pull } from 'mvdom';
 import { login } from 'ts/user-ctx';
-import { post } from 'ts/ajax';
+import { ajaxPost, ajaxGet } from 'ts/ajax';
 
 export class LoginView extends BaseView {
 
 	//// some dom element that will be used in this component view
 	private get fieldset() { return first(this.el, 'section.content')! };
 	private get footerMessage() { return first(this.el, 'footer .message')! };
+	private get ghLink() { return first(this.el, 'a.to-github')! };
 
 	//// the mode getter and setter which is DOM/Class backed, but exposed a simple object property
 	private get mode() {
@@ -67,6 +68,19 @@ export class LoginView extends BaseView {
 	//#endregion  ---------- View Events ---------- 
 
 
+	//#region    ---------- View Lifecycle ---------- 
+	async postDisplay() {
+		const r = await ajaxGet('/gh-auth-href');
+		if (r.success) {
+			const href = r.data;
+			this.ghLink.setAttribute('href', href);
+		} else {
+			// TODO: need to handle when no client_id
+		}
+
+	}
+	//#endregion ---------- /View Lifecycle ---------- 
+
 	private async doLogin() {
 		const data = pull(this.fieldset, 'input');
 
@@ -89,7 +103,7 @@ export class LoginView extends BaseView {
 		const data = pull(this.fieldset, 'input');
 
 		try {
-			const result = await post('/api/register', data);
+			const result = await ajaxPost('/api/register', data);
 
 		} catch (ex) {
 			console.log('error register', ex);

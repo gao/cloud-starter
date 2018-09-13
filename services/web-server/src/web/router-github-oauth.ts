@@ -3,10 +3,15 @@ import { userDao, oauthDao } from 'common/da/daos';
 import { getSysContext } from 'common/context';
 import { setAuth } from '../auth';
 import { getAccessToken, getUserInfo } from '../service/github';
+import { getConfig } from 'common/config';
 
 const _router = srouter();
 
-
+_router.get('/gh-auth-href', async function (req, res, next) {
+	const githubConf = await getConfig('github');
+	const client_id = githubConf.client_id;
+	return { success: true, data: `https://github.com/login/oauth/authorize?client_id=${client_id}&scope=repo%20user:email` };
+});
 
 _router.get('/gh-callback', async function (req, res, next) {
 

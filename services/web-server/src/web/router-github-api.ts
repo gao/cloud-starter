@@ -4,9 +4,7 @@ import { srouter } from '../express-utils';
 import { getUserRepos, getRepo } from '../service/github';
 import { projectDao, paneDao } from 'common/da/daos';
 import { Project } from 'shared/entities';
-import { getProjectFromReq } from './web-commons';
 import { syncIssues, syncLabels } from '../service/github-syncer';
-import { accessSync } from 'fs';
 
 const _router = srouter();
 
@@ -14,10 +12,11 @@ const _router = srouter();
 _router.get('/github/repos', async function (req, res, next) {
 
 	const repos = await getUserRepos(req.context);
-
 	return { success: true, data: repos };
 
 });
+
+
 
 _router.post('/github/import-repo', async function (req, res, next) {
 	const repoName = req.body.repo;

@@ -1,7 +1,7 @@
 import { on, display, first } from 'mvdom';
 import { initRoute } from './route';
 import { MainView } from 'views/MainView';
-import { get } from 'ts/ajax';
+import { ajaxGet } from 'ts/ajax';
 import { LoginView } from 'views/LoginView';
 import { getUserContext } from 'ts/user-ctx';
 

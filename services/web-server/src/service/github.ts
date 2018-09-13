@@ -4,11 +4,11 @@
  */
 import axios from 'axios';
 import { Context } from 'common/context';
+import { getConfig } from 'common/config';
 
-const client_id = 'd4731366d9ef5840db33';
-const client_secret = '018d748a41d2e9cf76d554b2bc8da8dc904419de';
+// const client_id = 'd4731366d9ef5840db33';
+// const client_secret = '018d748a41d2e9cf76d554b2bc8da8dc904419de';
 const apiUrl = 'https://api.github.com/';
-
 
 export async function getUserInfo(access_token: string) {
 	const result = await axios.get(apiUrl + 'user', { params: { access_token } });
@@ -66,6 +66,10 @@ export async function getIssues(ctx: Context, repoFullName: string) {
 /** Get access token */
 export async function getAccessToken(code: string) {
 	const url = `https://github.com/login/oauth/access_token`;
+	const { client_id, client_secret } = await getConfig('github');
+	if (client_id == null || client_secret == null) {
+		throw new Error(`no config found for github (make sure you hae added a services/agent/sql/03_seed-github-key.sql as specified in the readme)`);
+	}
 	const result = await axios.post(url, { client_id, client_secret, code },
 		{ headers: { accept: 'application/json' } });
 

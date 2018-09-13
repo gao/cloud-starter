@@ -7,6 +7,6 @@ echo "Killing node $(pgrep node)"
 kill -9 $(pgrep node)
 sleep .3
 echo "Running npm start.."
-nohup npm dstart >> ./service.log 2>/dev/null 0</dev/null & 
+nohup npm run dstart >> ./service.log 2>/dev/null 0</dev/null & 
 sleep 2 
 echo "done restart"

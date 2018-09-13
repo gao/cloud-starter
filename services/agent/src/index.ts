@@ -1,7 +1,7 @@
 require("../../common/ts/common-alias"); // needs to be full relative path because it will set the alias. Call only once at start file.
 
 
-import { getConf } from 'common/conf';
+import { getConfig } from 'common/config';
 import { getKnex } from 'common/da/db';
 
 //main();
@@ -13,7 +13,7 @@ async function main() {
 	// listenViaBlocking(client);
 	neverEnd();
 
-	const appVersion = await getConf('appVersion');
+	const appVersion = await getConfig('appVersion');
 
 	console.log(`-->> agent (${appVersion}) index.js - main() - started`);
 

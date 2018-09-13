@@ -1,4 +1,4 @@
-import { get as webGet, post as webPost, put as webPut, delet as webDelete, patch as webPatch } from './ajax';
+import { ajaxGet as webGet, ajaxPost as webPost, ajaxPut as webPut, ajaxDelete as webDelete, ajaxPatch as webPatch } from './ajax';
 import { hub } from 'mvdom';
 import { Project, Ticket, Label, Filter, TicketFilter, Pane, ProjectEntityFilter } from 'shared/entities';
 

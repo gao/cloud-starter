@@ -1,9 +1,9 @@
 import { trigger } from 'mvdom';
-import { get } from './ajax';
+import { ajaxGet } from './ajax';
 
 // --------- Load svg icons --------- //
 // NOTE: We start the loading as soon as possible (before the DOMContentLoaded)
-var svgSymbolsPromise = get("/svg/sprite.svg", null, { contentType: "application/xml" });
+var svgSymbolsPromise = ajaxGet("/svg/sprite.svg", null, { contentType: "application/xml" });
 // --------- /Load svg icons --------- //	
 
 

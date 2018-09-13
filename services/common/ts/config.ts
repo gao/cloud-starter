@@ -1,3 +1,4 @@
+import { getKnex } from './da/db';
 
 // IMPORTANT: Do not change this appVersion value manually, change it in the package.json and do a "npm run version"
 const staticConfigurations: any = {
@@ -13,22 +14,30 @@ const staticConfigurations: any = {
  * 
  * @param name 
  */
-export async function getConf(name: string): Promise<any> {
-	let confObj: any | undefined;
+export async function getConfig(name: string): Promise<any> {
+	let data: any | undefined;
 
 	// first we try to get it from the environment
 	// TODO: needs to make sure that works (and remove comments when it does)
-	confObj = process.env[name];
+	data = process.env[name];
 
 	// if not found, try the static value
-	if (confObj == null) {
-		confObj = staticConfigurations[name];
+	if (data == null) {
+		data = staticConfigurations[name];
 	}
 
-	if (!confObj) {
+	if (data == null) {
+		const k = await getKnex();
+		const r = await k('config').where({ name });
+		if (r && r.length === 1) {
+			data = r[0].data; // data is the jsonb
+		}
+	}
+
+	if (!data) {
 		throw new Error(`Code error - getConf for name '${name}' not found.`);
 	}
 
-	return confObj;
+	return data;
 }
 

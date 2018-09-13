@@ -9,8 +9,11 @@
 node_modules/
 npm-debug.log
 
-# Ignore gke-prod
+# Ignore gke-prod (for prod)
 k8s/gke-prod
+
+# Ignore the seed for the github client/secret (each developer needs to set it from team private repo)
+services/agent/sql/03_seed-github-key.sql
 
 # Ignore package-lock.json 
 # (this is debatable, but package-lock.json could pause more issues than anything else in certain scenarios)
