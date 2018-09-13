@@ -2,7 +2,7 @@ import { Project } from 'shared/entities';
 import { Context } from '../context';
 import { BaseDao } from './dao-base';
 import { AccessRequires } from './access';
-import { saveRole } from '../role-manager';
+import { saveProle } from '../role-manager';
 
 export class ProjectDao extends BaseDao<Project, number> {
 	constructor() { super('project', true) }
@@ -10,7 +10,7 @@ export class ProjectDao extends BaseDao<Project, number> {
 	async create(ctx: Context, data: Partial<Project>) {
 		const projectId = await super.create(ctx, data);
 
-		await saveRole(ctx.userId, projectId, 'owner');
+		await saveProle(ctx.userId, projectId, 'owner');
 		return projectId;
 	}
 

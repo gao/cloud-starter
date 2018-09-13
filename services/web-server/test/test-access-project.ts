@@ -3,8 +3,7 @@ import { newContext, Context } from 'common/context';
 import { closeKnex } from 'common/da/db';
 import { clean, initSuite } from './t-utils'
 import * as assert from 'assert';
-
-
+import { saveProle } from 'common/role-manager';
 
 const errorNoAccess = /does not have the necessary access/;
 
@@ -13,7 +12,8 @@ describe("test-access-project", async function () {
 
 	const suite = initSuite(this);
 
-	it('access-project-from-userA', async function () {
+	// test CRUD  project from same user (i.e. owner)
+	it('access-project-self', async function () {
 
 		// create project from userA, should work
 		let testProject01Id = await projectDao.create(suite.userACtx, { name: 'test-access-project-01' });
@@ -23,11 +23,11 @@ describe("test-access-project", async function () {
 		assert.strictEqual(testProject01.name, 'test-access-project-01');
 
 		// test update from userA, should work
-		await projectDao.update(suite.userACtx, testProject01Id, { name: 'test-access-project-01 updated' });
+		await projectDao.update(suite.userACtx, testProject01Id, { name: 'test-access-project-01-updated' });
 		testProject01 = await projectDao.get(suite.userACtx, testProject01Id);
-		assert.strictEqual(testProject01.name, 'test-access-project-01 updated');
+		assert.strictEqual(testProject01.name, 'test-access-project-01-updated');
 
-		// test delete project from userA, should work
+		// test remove project from userA, should work
 		await projectDao.remove(suite.userACtx, testProject01Id);
 		testProject01 = await projectDao.first(suite.userACtx, { id: testProject01Id });
 		assert.strictEqual(testProject01, null, 'project01 should be null');
@@ -35,25 +35,77 @@ describe("test-access-project", async function () {
 	});
 
 
+	// test CRUD project access from a viewer user
 	it('access-project-viewer', async function () {
 
 		// create project from userA, should work
 		let testProject01Id = await projectDao.create(suite.userACtx, { name: 'test-access-project-01' });
 		suite.toClean('project', testProject01Id);
 
-		// assign 
+		// assign 'viewer' role to userB
+		await saveProle(suite.userBCtx.userId, testProject01Id, 'viewer');
 
-		// test read from userB, should fail
-		await assert.rejects(projectDao.get(suite.userBCtx, testProject01Id), errorNoAccess, 'UserB schould not access to userA project');
+		// test read from userB, should work
+		const testProject01 = await projectDao.get(suite.userBCtx, testProject01Id);
+		assert.strictEqual(testProject01.name, 'test-access-project-01');
 
-		// test write from userB, should fail
-		await assert.rejects(projectDao.update(suite.userBCtx, testProject01Id, { name: 'test-access-project-01 updated' }),
+		// test update from userB, should fail
+		await assert.rejects(projectDao.update(suite.userBCtx, testProject01Id, { name: 'test-access-project-01-updated' }),
 			errorNoAccess, 'UserB schould not have write access to userA project');
 
-		// test write from userB, should fail
+		// test remove from userB, should fail
 		await assert.rejects(projectDao.remove(suite.userBCtx, testProject01Id),
 			errorNoAccess, 'UserB schould not have remove access to userA project');
 	});
 
+	// test CRUD project access from member user
+	it('access-project-member', async function () {
+
+		// create project from userA, should work
+		let testProject01Id = await projectDao.create(suite.userACtx, { name: 'test-access-project-01' });
+		suite.toClean('project', testProject01Id);
+
+		// assign 'member' role to userB
+		await saveProle(suite.userBCtx.userId, testProject01Id, 'member');
+
+		// test read from userB, should work
+		const testProject01 = await projectDao.get(suite.userBCtx, testProject01Id);
+		assert.strictEqual(testProject01.name, 'test-access-project-01');
+
+		// test update from userB, should fail
+		await assert.rejects(projectDao.update(suite.userBCtx, testProject01Id, { name: 'test-access-project-01-updated' }),
+			errorNoAccess, 'UserB schould not have write access to userA project');
+
+		// test update from userB, should fail
+		await assert.rejects(projectDao.remove(suite.userBCtx, testProject01Id),
+			errorNoAccess, 'UserB schould not have remove access to userA project');
+
+		// TODO need to test ticket and label when they are implemented
+	});
+
+	// test CRUD project access from manager user
+	it('access-project-manager', async function () {
+
+		// create project from userA, should work
+		let testProject01Id = await projectDao.create(suite.userACtx, { name: 'test-access-project-01' });
+		suite.toClean('project', testProject01Id);
+
+		// assign 'manager' role to userB
+		saveProle(suite.userBCtx.userId, testProject01Id, 'manager');
+
+		// test read from userB, should work
+		let testProject01 = await projectDao.get(suite.userBCtx, testProject01Id);
+		assert.strictEqual(testProject01.name, 'test-access-project-01');
+
+		// test update from userB, should work
+		await projectDao.update(suite.userBCtx, testProject01Id, { name: 'test-access-project-01-updated' }),
+			testProject01 = await projectDao.get(suite.userBCtx, testProject01Id);
+		assert.strictEqual(testProject01.name, 'test-access-project-01-updated');
+
+		// test update from userB, should fail
+		await assert.rejects(projectDao.remove(suite.userBCtx, testProject01Id),
+			errorNoAccess, 'UserB schould not have remove access to userA project');
+
+	});
 
 });

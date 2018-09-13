@@ -4,7 +4,7 @@ import { getKnex } from './da/db';
 
 const viewer = ['project-read', 'ticket-read'];
 const member = [...viewer, 'ticket-write', 'label-assign']; // all viewer privileges, plus ticket writer and label creator
-const manager = [...member, 'label-create'];
+const manager = [...member, 'project-write', 'label-create'];
 const owner = [...manager, 'project-write', 'project-remove'];
 
 const privilegesByProjectRoles: { [role: string]: string[] } = {
@@ -14,8 +14,10 @@ const privilegesByProjectRoles: { [role: string]: string[] } = {
 	owner
 };
 
+type Prole = 'viewer' | 'member' | 'manager' | 'owner';
 
-export async function saveRole(userId: number, projectId: number, name: string) {
+
+export async function saveProle(userId: number, projectId: number, name: Prole) {
 	const k = await getKnex();
 	// insert into user_prole ("userId", "projectId", name) values (1, 1032, 'owner') on conflict on CONSTRAINT user_prole_pkey do update set name = 'owner'
 	const sql = `insert into user_prole ("userId", "projectId", name) values (?, ?, ?) 
