@@ -26,11 +26,11 @@ declare global {
 // Initialize a test suite for application common test data and behavior
 export function initSuite(suite: Mocha.Suite) {
 
-	let toCleanList: [string, any][] = [];
+	let toCleanList: [string, number][] = [];
 
 	suite.errorNoAccess = /does not have the necessary access/;
 
-	suite.toClean = function (tableName: string, id: any) {
+	suite.toClean = function (tableName: string, id: number) {
 		toCleanList.push([tableName, id]);
 		return suite;
 	}
