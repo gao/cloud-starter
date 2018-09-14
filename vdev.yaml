@@ -18,6 +18,7 @@ blocks:
   - db
   - queue
   - agent
+  - gh-syncer
   - name: web
     dir: web/
     baseDistDir: services/web-server/web-folder

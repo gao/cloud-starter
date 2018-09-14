@@ -14,4 +14,6 @@ kubectl exec -it $(kubectl get pods -l run=cstar-agent --no-headers=true -o cust
 ## sh to web-server
 kubectl exec -it $(kubectl get pods -l run=cstar-web-server --no-headers=true -o custom-columns=:metadata.name) -- /bin/ash 
 
+## sh to gh-syncer
+kubectl exec -it $(kubectl get pods -l run=cstar-gh-syncer --no-headers=true -o custom-columns=:metadata.name) -- /bin/ash 
 ```

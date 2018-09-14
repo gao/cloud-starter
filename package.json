@@ -6,6 +6,7 @@
   "main": "start.js",
   "dependencies": {
     "@types/chokidar": "^1.7.5",
+    "@types/module-alias": "^2.0.0",
     "@types/pg": "^7.4.10",
     "d3": "^5.7.0",
     "gtx": "^0.6.0",

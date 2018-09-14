@@ -1,4 +1,5 @@
 
 declare module 'postgres-array' {
-	function parse(val: string, parser?: Function): any[]
+	function parse(source: string): string[];
+	function parse<T>(source: string, transform: (value: string) => T): T[];
 }

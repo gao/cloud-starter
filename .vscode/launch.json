@@ -12,6 +12,15 @@
 			"port": 9229,
 			"localRoot": "${workspaceFolder}/services/web-server/dist/",
 			"remoteRoot": "/service/dist/"
-		}
+		},
+		{
+			"name": "Attach to gh-syncer",
+			"type": "node",
+			"request": "attach",
+			"address": "127.0.0.1",
+			"port": 9220,
+			"localRoot": "${workspaceFolder}/services/gh-syncer/dist/",
+			"remoteRoot": "/service/dist/"
+		}		
 	]
 }
