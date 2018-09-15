@@ -2,7 +2,7 @@ import { srouter } from '../express-utils';
 import { userDao, oauthDao } from 'common/da/daos';
 import { getSysContext } from 'common/context';
 import { setAuth } from '../auth';
-import { getAccessToken, getUserInfo } from '../service/github';
+import { getAccessToken, getUserInfo } from 'common/service/github';
 import { getConfig } from 'common/config';
 
 const _router = srouter();

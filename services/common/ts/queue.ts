@@ -3,13 +3,14 @@ import redis = require('redis');
 import { RedisClient } from 'redis';
 
 
-/** For the for the next message in a queue. 
+/** 
+ * Wait for the next message from a queue (usually used in a for loop)
  * Assumptions: 
  *   - a queue is a redis list
  *   - can wait for a single queue
  *   - assume the message is one json element and can be parsed as such
 */
-export async function waitForNextMessage(queueName: string) {
+export async function queuePop(queueName: string) {
 
 	const client = await getRedisClient();
 
@@ -22,7 +23,14 @@ export async function waitForNextMessage(queueName: string) {
 	return data;
 }
 
+export async function queuePut(queueName: string, message: any) {
+	const client = await getRedisClient();
+	const str = JSON.stringify(message);
+	await client.lpush(queueName, str);
+}
 
+
+//#region    ---------- Redis Client Promise Wrapper ---------- 
 const maxRetry = 100;
 let _predisClient: any | undefined;
 /**
@@ -81,3 +89,4 @@ export async function getRedisClient(host?: string): Promise<any> {
 
 	return _predisClient;
 }
+//#endregion ---------- /Redis Client Promise Wrapper ---------- 

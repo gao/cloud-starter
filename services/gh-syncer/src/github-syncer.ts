@@ -1,11 +1,13 @@
 
-import { getIssues, getLabels } from './github';
+import { getIssues, getLabels } from 'common/service/github';
 import { ticketDao, projectDao, labelDao, ticketLabelDao } from 'common/da/daos';
 import { Ticket, Label } from 'shared/entities';
-import { Context } from 'common/context';
+import { Context, getSysContext } from 'common/context';
 
 
-export async function syncLabels(ctx: Context, projectId: number) {
+export async function syncLabels(projectId: number) {
+	const ctx = await getSysContext();
+
 	const syncedIds: number[] = [];
 
 	const project = await projectDao.get(ctx, projectId);
@@ -46,7 +48,9 @@ export async function syncLabels(ctx: Context, projectId: number) {
 	return syncedIds;
 }
 
-export async function syncIssues(ctx: Context, projectId: number) {
+export async function syncIssues(projectId: number) {
+	const ctx = await getSysContext();
+
 	const syncedIds: number[] = [];
 
 	const project = await projectDao.get(ctx, projectId);

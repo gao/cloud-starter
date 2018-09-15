@@ -3,8 +3,8 @@
  * Currently using the REST / V3 github API. 
  */
 import axios from 'axios';
-import { Context } from 'common/context';
-import { getConfig } from 'common/config';
+import { Context } from '../context';
+import { getConfig } from '../config';
 
 // const client_id = 'd4731366d9ef5840db33';
 // const client_secret = '018d748a41d2e9cf76d554b2bc8da8dc904419de';

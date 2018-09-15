@@ -1,8 +1,6 @@
 
 import { srouter } from '../express-utils';
-import { getProjectFromReq } from './web-commons';
 import { ticketDao, Project } from 'common/da/daos';
-import { getIssues } from '../service/github';
 
 const _router = srouter();
 

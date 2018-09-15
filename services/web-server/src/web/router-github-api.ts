@@ -1,10 +1,10 @@
 
 
 import { srouter } from '../express-utils';
-import { getUserRepos, getRepo } from '../service/github';
+import { getUserRepos, getRepo } from 'common/service/github';
 import { projectDao, paneDao } from 'common/da/daos';
 import { Project } from 'shared/entities';
-import { syncIssues, syncLabels } from '../service/github-syncer';
+import { queuePut } from 'common/queue';
 
 const _router = srouter();
 
@@ -38,9 +38,8 @@ _router.post('/github/import-repo', async function (req, res, next) {
 		// create the first pane. 
 		await paneDao.create(ctx, { projectId, name: "All Open" });
 
-		// sync the data. 
-		await syncLabels(req.context, projectId);
-		await syncIssues(req.context, projectId);
+		// add the to the queue to be synced
+		await queuePut('gh-syncer.toto', { projectId })
 
 		return { success: true, data: newProject };
 
@@ -51,34 +50,15 @@ _router.post('/github/import-repo', async function (req, res, next) {
 });
 
 _router.post('/github/sync', async function (req, res, next) {
-	const repoName = req.body.repo;
-
 
 	const projectId = (req.body.projectId) ? parseInt(req.body.projectId) : null;
 	if (projectId == null) {
 		throw new Error("Cannot sync because no projectId in post request ");
 	}
 
-	// first we sync the labels (so that they are ready when syncing the ticket)
-	const syncedLabelIds = await syncLabels(req.context, projectId);
-	const syncedTicketIds = await syncIssues(req.context, projectId);
+	await queuePut('gh-syncer.todo', { projectId })
 
-	return { success: true, data: { syncedLabelIds, syncedTicketIds } };
-
-});
-
-_router.post('/github/sync-issues', async function (req, res, next) {
-	const repoName = req.body.repo;
-
-
-	const projectId = (req.body.projectId) ? parseInt(req.body.projectId) : null;
-	if (projectId == null) {
-		throw new Error("Cannot sync issues because no projectId in post request ");
-	}
-
-	const syncedIssueIds = await syncIssues(req.context, projectId);
-
-	return { success: true, data: syncedIssueIds };
+	return { success: true };
 
 });
 
