@@ -4,7 +4,7 @@ import { srouter } from '../express-utils';
 import { getUserRepos, getRepo } from 'common/service/github';
 import { projectDao, paneDao } from 'common/da/daos';
 import { Project } from 'shared/entities';
-import { queuePut } from 'common/queue';
+import { queuePush } from 'common/queue';
 
 const _router = srouter();
 
@@ -40,7 +40,7 @@ _router.post('/github/import-repo', async function (req, res, next) {
 		await paneDao.create(ctx, { projectId, name: "All Open" });
 
 		// add the to the queue to be synced
-		await queuePut('gh-syncer.todo', { projectId })
+		await queuePush('gh-syncer.todo', { projectId })
 
 		return { success: true, data: newProject };
 
@@ -57,7 +57,7 @@ _router.post('/github/sync', async function (req, res, next) {
 		throw new Error("Cannot sync because no projectId in post request ");
 	}
 
-	await queuePut('gh-syncer.todo', { projectId })
+	await queuePush('gh-syncer.todo', { projectId })
 
 	return { success: true };
 

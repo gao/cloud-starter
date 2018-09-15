@@ -23,7 +23,7 @@ export async function queuePop(queueName: string) {
 	return data;
 }
 
-export async function queuePut(queueName: string, message: any) {
+export async function queuePush(queueName: string, message: any) {
 	const client = await getRedisClient();
 	const str = JSON.stringify(message);
 	await client.lpush(queueName, str);
