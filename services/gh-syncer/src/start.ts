@@ -16,12 +16,12 @@ async function start() {
 
 		try {
 			const msg: ghSyncerMessage = await queuePop(queueName);
-			console.log(">>>>", msg);
 			const projectId = msg.projectId;
 
 			const syncedLabelIds = await syncLabels(projectId);
 			const syncedTicketIds = await syncIssues(projectId);
-			console.log(`${queueName} done for projectId: ${projectId} ${syncedLabelIds.length} labels synced, ${syncedTicketIds.length} tickets synced`);
+			console.log(`${queueName} done for projectId: , labels synced: ${projectId} ${syncedLabelIds.length}, ticket synced: ${syncedTicketIds.length}`);
+
 		} catch (ex) {
 			console.log('Error in queue ${queueName}', ex);
 		}

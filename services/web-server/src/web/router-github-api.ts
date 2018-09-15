@@ -10,8 +10,8 @@ const _router = srouter();
 
 
 _router.get('/github/repos', async function (req, res, next) {
-
-	const repos = await getUserRepos(req.context);
+	const access_token = (await req.context.getAccessToken())!;
+	const repos = await getUserRepos(access_token);
 	return { success: true, data: repos };
 
 });
@@ -23,7 +23,8 @@ _router.post('/github/import-repo', async function (req, res, next) {
 	const ctx = req.context;
 
 	try {
-		const repo = await getRepo(req.context, repoName);
+		const access_token = (await req.context.getAccessToken())!;
+		const repo = await getRepo(access_token, repoName);
 
 		const projectData: Partial<Project> = {
 			name: repo.name,
@@ -39,7 +40,7 @@ _router.post('/github/import-repo', async function (req, res, next) {
 		await paneDao.create(ctx, { projectId, name: "All Open" });
 
 		// add the to the queue to be synced
-		await queuePut('gh-syncer.toto', { projectId })
+		await queuePut('gh-syncer.todo', { projectId })
 
 		return { success: true, data: newProject };
 

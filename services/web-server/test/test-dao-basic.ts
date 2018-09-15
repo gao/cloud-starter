@@ -1,7 +1,5 @@
-import { projectDao, userDao, Project, ticketDao } from 'common/da/daos';
+import { projectDao, Project, ticketDao } from 'common/da/daos';
 import { wait } from 'common/utils';
-import { newContext, Context, getSysContext } from 'common/context';
-import { closeKnex } from 'common/da/db';
 import * as assert from 'assert';
 import { initSuite } from './t-utils';
 
@@ -55,8 +53,7 @@ describe("test-dao-basic", async function () {
 	it('dao-basic-crud-ticket', async function () {
 		try {
 
-			// SETUP
-			let project: Project | undefined;
+			//// SETUP
 			// create project (container object)
 			const projectId = await projectDao.create(suite.adminCtx, { name: 'test-dao-basic-crud-ticket_project-01' });
 			suite.toClean('project', projectId);
@@ -73,10 +70,6 @@ describe("test-dao-basic", async function () {
 			// test list (Note: list is a little different than projectDao.list, because the filter is different)
 			const tickets = await ticketDao.list(suite.adminCtx, { projectId });
 			assert.strictEqual(tickets[0].title, 'test-dao-basic-crud-ticket_ticket-01');
-
-			// CLEANUP
-			await ticketDao.remove(suite.adminCtx, ticketId);
-			await projectDao.remove(suite.adminCtx, projectId);
 
 		} catch (ex) {
 			throw ex;

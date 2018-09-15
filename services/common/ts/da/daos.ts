@@ -5,6 +5,7 @@ import { BaseDao, ProjectEntityDao } from './dao-base';
 import { TicketDao } from './dao-TicketDao';
 import { ProjectDao } from './dao-project';
 
+
 export * from 'shared/entities';
 
 class UserDao extends BaseDao<User, number>{
@@ -15,6 +16,9 @@ class UserDao extends BaseDao<User, number>{
 	async getByUsername(ctx: Context, username: string) {
 		return super.first(ctx, { username });
 	}
+
+
+	//#region    ---------- BaseDao Overrides ---------- 
 
 	// For now, we allow anybody to call this for registration. 
 	@AccessRequires(['#sys', '#admin'])
@@ -34,6 +38,9 @@ class UserDao extends BaseDao<User, number>{
 	async update(ctx: Context, id: number, data: Partial<User>) {
 		return super.update(ctx, id, data);
 	}
+	//#endregion ---------- /BaseDao Overrides ---------- 
+
+
 
 }
 export const userDao = new UserDao();

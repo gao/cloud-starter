@@ -3,7 +3,6 @@
  * Currently using the REST / V3 github API. 
  */
 import axios from 'axios';
-import { Context } from '../context';
 import { getConfig } from '../config';
 
 // const client_id = 'd4731366d9ef5840db33';
@@ -15,9 +14,7 @@ export async function getUserInfo(access_token: string) {
 	return result.data;
 }
 
-export async function getUserRepos(ctx: Context) {
-	const username = ctx.username; // TODO: we will need to get the github username (for now the same)
-	const access_token = await ctx.getAccessToken();
+export async function getUserRepos(access_token: string) {
 	const type = 'all';
 	const sort = 'pushed';
 	const data: any[] = [];
@@ -36,27 +33,21 @@ export async function getUserRepos(ctx: Context) {
 	return data;
 }
 
-export async function getRepo(ctx: Context, repoFullName: string) {
-	const username = ctx.username; // TODO: we will need to get the github username (for now the same)
-	const access_token = await ctx.getAccessToken();
+export async function getRepo(access_token: string, repoFullName: string) {
 
 	const url = apiUrl + `repos/${repoFullName}`;
 	const result = await axios.get(url, { params: { access_token } });
 	return result.data;
 }
 
-export async function getLabels(ctx: Context, repoFullName: string) {
-	const access_token = await ctx.getAccessToken();
-
+export async function getLabels(access_token: string, repoFullName: string) {
 	const per_page = 100;
 	const url = apiUrl + `repos/${repoFullName}/labels`;
 	const result = await axios.get(url, { params: { access_token, per_page } });
 	return result.data;
 }
 
-export async function getIssues(ctx: Context, repoFullName: string) {
-	const access_token = await ctx.getAccessToken();
-
+export async function getIssues(access_token: string, repoFullName: string) {
 	const url = apiUrl + `repos/${repoFullName}/issues`;
 	const result = await axios.get(url, { params: { access_token } });
 	return result.data;
